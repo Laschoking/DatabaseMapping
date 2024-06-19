@@ -22,6 +22,19 @@ def calculate_pairwise_occurance_within_DB(db):
 
 
     for term_pair in term_pairs:
-        if term_pairs[term_pair] > 5:
+        if term_pairs[term_pair] > 2:
             print(term_pair, term_pairs[term_pair])
     return
+
+def order_node_by_count(db):
+    terms = dict()
+    for file in db.files:
+        for row in db.data_rows[file]:
+            for term in row:
+                if term not in terms:
+                    terms[term] = 1
+                else:
+                    terms[term] += 1
+
+    l = {k: v for k, v in sorted(terms.items(), key=lambda item: item[1])}
+    return l
