@@ -1,0 +1,16 @@
+Simple_Pointer	Simple_Pointer
+Cat	Cat
+java.io.BufferedReader	java.io.BufferedReader
+java.io.InputStreamReader	java.io.InputStreamReader
+java.lang.StringBuilder	java.lang.StringBuilder
+java.lang.Object	Simple_Pointer
+java.lang.Object	Animal
+java.lang.Object	Cat
+java.lang.Object	Dog
+Simple_Pointer	Simple_Pointer
+Animal	Animal
+Animal	Cat
+Animal	Dog
+Cat	Cat
+Dog	Dog
+java.lang.String[]	java.lang.String[]

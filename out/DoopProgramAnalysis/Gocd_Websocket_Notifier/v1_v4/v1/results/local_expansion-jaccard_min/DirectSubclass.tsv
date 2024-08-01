@@ -1,0 +1,4 @@
+com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin	java.lang.Object
+com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer	org.java_websocket.server.WebSocketServer
+com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener	java.lang.Object
+com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1	com.thoughtworks.go.plugin.api.response.GoPluginApiResponse

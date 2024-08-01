@@ -1,0 +1,2 @@
+java.lang.Exception	<com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener: void notify(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>
+java.net.UnknownHostException	<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void <init>(int)>

@@ -1,0 +1,14 @@
+Robert	Alice
+Robert	David
+Carols	Robert
+Carols	John
+Carols	Alice
+Carols	David
+John	Carols
+John	David
+Alice	Robert
+Alice	Carols
+Alice	John
+Alice	David
+David	Carols
+David	Alice

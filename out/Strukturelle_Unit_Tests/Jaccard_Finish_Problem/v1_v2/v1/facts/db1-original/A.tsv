@@ -1,0 +1,10 @@
+A	B	H
+A	B	I
+A	H	G
+A	G	K
+
+
+A	B	I			v
+A	B	H1			v
+A	I				x
+A	H2	G1			v

@@ -1,0 +1,8 @@
+Das Vervollständigen von Atomen sollte Priorität über der
+Expansion neuer Mappings haben.
+Nachdem A gemappt wird sollte C1 -> C2 erfolgen, weil es 2 Atom-Mapping in Stufe 2 bringt.
+Erwartetes Mapping
+A1 -> A2
+C1 -> C2
+B1 -> B2
+...

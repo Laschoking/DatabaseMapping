@@ -1,0 +1,8 @@
+<org.springframework.boot.loader.net.protocol.jar.UrlJarFileFactory: java.util.jar.JarFile createJarFileForStream(java.io.InputStream,java.lang.Runtime$Version,java.util.function.Consumer)>/assign/4	0	0
+<org.springframework.boot.loader.net.protocol.jar.UrlJarFileFactory: java.util.jar.JarFile createJarFileForStream(java.io.InputStream,java.lang.Runtime$Version,java.util.function.Consumer)>/assign/6	0	1
+<org.springframework.boot.loader.launch.Launcher: java.lang.ClassLoader createClassLoader(java.util.Collection)>/assign/2	0	0
+<org.springframework.boot.loader.launch.Launcher: void launch(java.lang.ClassLoader,java.lang.String,java.lang.String[])>/assign/6	0	1
+<org.springframework.boot.loader.launch.Launcher: void launch(java.lang.ClassLoader,java.lang.String,java.lang.String[])>/assign/8	0	1
+<org.springframework.boot.loader.net.protocol.jar.Handler: java.lang.String extractContextPath(java.net.URL,java.lang.String,int)>/assign/9	0	1
+<org.springframework.boot.loader.net.protocol.jar.Handler: java.lang.String extractContextPath(java.net.URL,java.lang.String,int)>/assign/16	0	1
+<org.springframework.boot.loader.net.protocol.jar.Handler: void assertInnerUrlIsNotMalformed(java.lang.String,java.lang.String)>/assign/8	0	2

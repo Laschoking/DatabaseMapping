@@ -1,0 +1,27 @@
+Unit-Typ: Veränderung der Struktur
+Das Vervollständigen von Atomen führt dazu dass weniger Atome gemappt werden können
+ Priorität über der
+Expansion neuer Mappings haben.
+A & B werden gemappt. Dann sollte ein Mapping geschehen, dass ein Atom schließt,
+anstatt neue anzufangen
+
+Erwartes Mapping:
+Stufe 1 : (A1,A2,4,0)
+Stufe 2: (B1,B2,1,2)
+x L1 -> C2
+
+Jaccard:
+(A,A)
+(B,B)
+(L,C2)
+{(M,R),(M,M),(R,R),(R,M),(X,X),(Y,Y)}
+
+(C,new_var)
+-> 4/6 Atomen matchen
+
+Atom-Finish-First:
+(A,A)
+(C,C2)
+(B,B) | (F,F)
+3/6
+

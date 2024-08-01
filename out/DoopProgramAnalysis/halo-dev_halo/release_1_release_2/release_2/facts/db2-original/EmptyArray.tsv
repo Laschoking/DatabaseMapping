@@ -1,0 +1,2 @@
+<org.springframework.boot.loader.net.protocol.jar.UrlJarFileFactory: java.util.jar.JarFile createJarFileForStream(java.io.InputStream,java.lang.Runtime$Version,java.util.function.Consumer)>/new java.nio.file.attribute.FileAttribute[]/0
+<org.springframework.boot.loader.launch.Launcher: java.lang.ClassLoader createClassLoader(java.util.Collection)>/new java.net.URL[]/0

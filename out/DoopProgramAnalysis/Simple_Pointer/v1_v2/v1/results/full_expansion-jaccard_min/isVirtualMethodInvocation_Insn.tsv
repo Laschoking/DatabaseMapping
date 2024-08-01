@@ -1,0 +1,14 @@
+<Simple_Pointer: void main(java.lang.String[])>/java.io.PrintStream.println/0
+<Simple_Pointer: void test(int)>/Cat.setParent/0
+<Simple_Pointer: void main(java.lang.String[])>/java.lang.StringBuilder.append/0
+<Simple_Pointer: void main(java.lang.String[])>/java.lang.StringBuilder.append/1
+<Simple_Pointer: void main(java.lang.String[])>/java.lang.StringBuilder.toString/0
+<Simple_Pointer: void test(int)>/Simple_Pointer.morePlay/0
+<Simple_Pointer: void main(java.lang.String[])>/Simple_Pointer.test/0
+<Animal: Animal playWith(Animal)>/Animal.play/0
+<Simple_Pointer: void main(java.lang.String[])>/java.io.BufferedReader.readLine/0
+<Simple_Pointer: void morePlay(Cat)>/Cat.getParent/0
+<Simple_Pointer: void morePlay(Cat)>/Cat.play/0
+<Simple_Pointer: void morePlay(Cat)>/Cat.playWith/0
+<Simple_Pointer: void morePlay(Cat)>/Cat.playWith/1
+<Simple_Pointer: void test(int)>/Animal.play/0

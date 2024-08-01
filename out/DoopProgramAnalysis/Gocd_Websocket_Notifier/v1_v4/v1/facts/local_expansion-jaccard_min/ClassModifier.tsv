@@ -1,0 +1,3 @@
+public	com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener
+public	com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer
+public	com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin

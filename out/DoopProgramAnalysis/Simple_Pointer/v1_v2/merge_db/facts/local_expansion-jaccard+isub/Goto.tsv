@@ -1,0 +1,4 @@
+<Simple_Pointer: void test(int)>/goto/0	6	10	<Simple_Pointer: void test(int)>	10
+<Simple_Pointer: void test(int)>/goto/0	6	11	<Simple_Pointer: void test(int)>	10
+<Simple_Pointer: void test(int)>/goto/0	new_var_32	10	<Simple_Pointer: void test(int)>	1
+<Simple_Pointer: void test(int)>/goto/0	new_var_32	11	<Simple_Pointer: void test(int)>	1

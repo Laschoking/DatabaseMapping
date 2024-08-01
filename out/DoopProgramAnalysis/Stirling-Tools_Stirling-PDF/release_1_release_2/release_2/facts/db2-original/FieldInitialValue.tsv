@@ -1,0 +1,3 @@
+<org.springframework.boot.loader.launch.JarFileArchive: java.lang.String UNPACK_MARKER>	\\"UNPACK:\\"
+<org.springframework.boot.loader.zip.ZipLocalFileHeaderRecord: int SIGNATURE>	67324752
+<org.springframework.boot.loader.zip.ZipLocalFileHeaderRecord: int MINIMUM_SIZE>	30

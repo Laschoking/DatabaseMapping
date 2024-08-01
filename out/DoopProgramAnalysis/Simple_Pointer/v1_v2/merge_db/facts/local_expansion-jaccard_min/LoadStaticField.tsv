@@ -1,0 +1,4 @@
+<Simple_Pointer: void main(java.lang.String[])>/read-field-in/0	7	<Simple_Pointer: void main(java.lang.String[])>/$stack8	<java.lang.System: java.io.InputStream in>	<Simple_Pointer: void main(java.lang.String[])>	10
+<Simple_Pointer: void main(java.lang.String[])>/read-field-in/0	7	<Simple_Pointer: void main(java.lang.String[])>/$stack8	<java.lang.System: java.io.PrintStream out>	<Simple_Pointer: void main(java.lang.String[])>	1
+<Simple_Pointer: void main(java.lang.String[])>/read-field-out/0	18	<Simple_Pointer: void main(java.lang.String[])>/$stack13	<java.lang.System: java.io.InputStream in>	<Simple_Pointer: void main(java.lang.String[])>	1
+<Simple_Pointer: void main(java.lang.String[])>/read-field-out/0	18	<Simple_Pointer: void main(java.lang.String[])>/$stack13	<java.lang.System: java.io.PrintStream out>	<Simple_Pointer: void main(java.lang.String[])>	10

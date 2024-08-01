@@ -1,0 +1,21 @@
+<Animal: Animal playWith(Animal)>/Animal.play/0	<Animal: Animal playWith(Animal)>/other#_0	1
+<Animal: Animal playWith(Animal)>/Animal.play/0	<Animal: Animal playWith(Animal)>/other#_0	10
+<Simple_Pointer: void main(java.lang.String[])>/Simple_Pointer.test/0	<Simple_Pointer: void main(java.lang.String[])>/$stack4	1
+<Simple_Pointer: void main(java.lang.String[])>/Simple_Pointer.test/0	<Simple_Pointer: void main(java.lang.String[])>/$stack4	10
+<Simple_Pointer: void main(java.lang.String[])>/java.io.BufferedReader.readLine/0	<Simple_Pointer: void main(java.lang.String[])>/$stack6	0
+<Simple_Pointer: void main(java.lang.String[])>/java.io.PrintStream.println/0	<Simple_Pointer: void main(java.lang.String[])>/$stack13	0
+<Simple_Pointer: void main(java.lang.String[])>/java.lang.StringBuilder.append/0	<Simple_Pointer: void main(java.lang.String[])>/$stack9	0
+<Simple_Pointer: void main(java.lang.String[])>/java.lang.StringBuilder.append/1	<Simple_Pointer: void main(java.lang.String[])>/$stack11	0
+<Simple_Pointer: void main(java.lang.String[])>/java.lang.StringBuilder.toString/0	<Simple_Pointer: void main(java.lang.String[])>/$stack12	0
+<Simple_Pointer: void morePlay(Cat)>/Cat.getParent/0	<Simple_Pointer: void morePlay(Cat)>/c#_0	1
+<Simple_Pointer: void morePlay(Cat)>/Cat.getParent/0	<Simple_Pointer: void morePlay(Cat)>/c#_0	10
+<Simple_Pointer: void morePlay(Cat)>/Cat.play/0	<Simple_Pointer: void morePlay(Cat)>/p#_38	1
+<Simple_Pointer: void morePlay(Cat)>/Cat.play/0	<Simple_Pointer: void morePlay(Cat)>/p#_38	10
+<Simple_Pointer: void morePlay(Cat)>/Cat.playWith/0	<Simple_Pointer: void morePlay(Cat)>/p#_38	1
+<Simple_Pointer: void morePlay(Cat)>/Cat.playWith/0	<Simple_Pointer: void morePlay(Cat)>/p#_38	10
+<Simple_Pointer: void morePlay(Cat)>/Cat.playWith/1	<Simple_Pointer: void morePlay(Cat)>/c#_0	1
+<Simple_Pointer: void morePlay(Cat)>/Cat.playWith/1	<Simple_Pointer: void morePlay(Cat)>/c#_0	10
+<Simple_Pointer: void test(int)>/Animal.play/0	<Simple_Pointer: void test(int)>/a_$$A_2#_29	0
+<Simple_Pointer: void test(int)>/Simple_Pointer.morePlay/0	<Simple_Pointer: void test(int)>/this#_0	1
+<Simple_Pointer: void test(int)>/Simple_Pointer.morePlay/0	<Simple_Pointer: void test(int)>/this#_0	10
+new_var_41	new_var_39	1

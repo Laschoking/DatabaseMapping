@@ -1,0 +1,1 @@
+org.java_websocket.WebSocket	<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void sendToAll(java.lang.String)>/$stack10	<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void sendToAll(java.lang.String)>/c#_43	<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void sendToAll(java.lang.String)>

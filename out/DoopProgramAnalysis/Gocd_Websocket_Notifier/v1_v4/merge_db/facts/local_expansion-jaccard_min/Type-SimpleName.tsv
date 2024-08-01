@@ -1,0 +1,6 @@
+com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin	GoNotificationPlugin	0
+com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1	GoNotificationPlugin$1	0
+com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator	PipelineDetailsPopulator	10
+com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer	PipelineWebSocketServer	0
+com.matt_richardson.gocd.websocket_notifier.PluginConfig	PluginConfig	10
+com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener	WebSocketPipelineListener	0

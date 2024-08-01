@@ -1,0 +1,5 @@
+<BasicMethod: void <init>()>/assign/0	0	<BasicMethod: void <init>()>/@this	<BasicMethod: void <init>()>/this#_0	<BasicMethod: void <init>()>
+<BasicMethod: void main(java.lang.String[])>/assign/0	0	<BasicMethod: void main(java.lang.String[])>/@parameter0	<BasicMethod: void main(java.lang.String[])>/args#_0	<BasicMethod: void main(java.lang.String[])>
+<BasicMethod: void sanitize(java.lang.Object)>/assign/0	0	<BasicMethod: void sanitize(java.lang.Object)>/@parameter0	<BasicMethod: void sanitize(java.lang.Object)>/o#_0	<BasicMethod: void sanitize(java.lang.Object)>
+<BasicMethod: void test(int)>/assign/0	0	<BasicMethod: void test(int)>/@this	<BasicMethod: void test(int)>/this#_0	<BasicMethod: void test(int)>
+<BasicMethod: void test(int)>/assign/1	1	<BasicMethod: void test(int)>/@parameter0	<BasicMethod: void test(int)>/l#_0	<BasicMethod: void test(int)>

@@ -1,0 +1,13 @@
+<Cat: Cat parent>	Cat	parent	Cat	0
+<Cat: Cat parent>	Cat	parent	Cat	0
+<Cat: Cat parent>	Cat	parent	Cat	0
+<Cat: Cat parent>	Cat	parent	Cat	0
+<Cat: Cat parent>	Cat	parent	Cat	0
+<Cat: Cat parent>	Cat	parent	Cat	0
+<Cat: Cat parent>	Cat	parent	Cat	0
+<Cat: Cat parent>	Cat	parent	Cat	0
+<Cat: Cat parent>	Cat	parent	Cat	0
+<java.lang.System: java.io.InputStream in>	java.lang.System	in	java.io.InputStream	10
+<java.lang.System: java.io.InputStream in>	java.lang.System	in	new_var_47	1
+<java.lang.System: java.io.PrintStream out>	java.lang.System	out	java.io.PrintStream	10
+<java.lang.System: java.io.PrintStream out>	java.lang.System	out	new_var_49	1

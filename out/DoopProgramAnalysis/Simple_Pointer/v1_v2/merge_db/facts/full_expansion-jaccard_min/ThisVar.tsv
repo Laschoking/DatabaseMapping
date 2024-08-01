@@ -1,0 +1,14 @@
+<Animal: Animal playWith(Animal)>	<Animal: Animal playWith(Animal)>/@this	0
+<Animal: void <init>()>	<Animal: void <init>()>/@this	10
+<Animal: void <init>()>	<Cat: void <init>()>/@this	1
+<Animal: void play()>	<Animal: void play()>/@this	0
+<Cat: Cat getParent()>	<Cat: Cat getParent()>/@this	0
+<Cat: void <init>()>	<Animal: void <init>()>/@this	1
+<Cat: void <init>()>	<Cat: void <init>()>/@this	10
+<Cat: void play()>	<Cat: void play()>/@this	0
+<Cat: void setParent(Cat)>	<Cat: void setParent(Cat)>/@this	0
+<Dog: void <init>()>	<Dog: void <init>()>/@this	0
+<Dog: void play()>	<Dog: void play()>/@this	0
+<Simple_Pointer: void <init>()>	<Simple_Pointer: void <init>()>/@this	0
+<Simple_Pointer: void morePlay(Cat)>	<Simple_Pointer: void morePlay(Cat)>/@this	0
+<Simple_Pointer: void test(int)>	<Simple_Pointer: void test(int)>/@this	0

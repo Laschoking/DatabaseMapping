@@ -1,0 +1,10 @@
+	Date	SHA	MergeDB	Mapping ID	Expansion	Metric	Unique Records DB1	Unique Records DB2	Mutual Records	Overlap in %
+0	2024-07-25 16:10:03.154016	262664d18526fe22f559d5e0980ab318628f4fbc	Simple_Pointer_v1_v2	local_expansion-jaccard_min	iterative_anchor_expansion	jaccard_term_overlap	198	180	300	44.25%
+1	2024-07-26 15:01:00.859275	4775395eb04241ae9bb271e6b8fb15b7efc384c1	Simple_Pointer_v1_v2	local_expansion-jaccard_min	iterative_anchor_expansion	jaccard_term_overlap	199	181	296	43.79%
+2	2024-07-26 15:01:00.859275	4775395eb04241ae9bb271e6b8fb15b7efc384c1	Simple_Pointer_v1_v2	full_expansion-term_equality	full_expansion_strategy	term_equality	73	55	422	76.73%
+3	2024-07-26 15:01:00.859275	4775395eb04241ae9bb271e6b8fb15b7efc384c1	Simple_Pointer_v1_v2	full_expansion-jaccard_min	full_expansion_strategy	jaccard_min	150	132	348	55.24%
+4	2024-07-26 15:01:00.859275	4775395eb04241ae9bb271e6b8fb15b7efc384c1	Simple_Pointer_v1_v2	full_expansion-isub	full_expansion_strategy	isub_sequence_matcher	273	255	222	29.6%
+5	2024-07-26 15:01:00.859275	4775395eb04241ae9bb271e6b8fb15b7efc384c1	Simple_Pointer_v1_v2	full_expansion-jaccard+isub	full_expansion_strategy	jaccard_isub_mix	273	255	222	29.6%
+6	2024-07-26 15:01:00.859275	4775395eb04241ae9bb271e6b8fb15b7efc384c1	Simple_Pointer_v1_v2	local_expansion-term_equality	iterative_anchor_expansion	term_equality	87	69	408	72.34%
+7	2024-07-26 15:01:00.859275	4775395eb04241ae9bb271e6b8fb15b7efc384c1	Simple_Pointer_v1_v2	local_expansion-isub	iterative_anchor_expansion	isub_sequence_matcher	288	270	207	27.06%
+8	2024-07-26 15:01:00.859275	4775395eb04241ae9bb271e6b8fb15b7efc384c1	Simple_Pointer_v1_v2	local_expansion-jaccard+isub	iterative_anchor_expansion	jaccard_isub_mix	288	270	207	27.06%

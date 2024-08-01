@@ -1,0 +1,10 @@
+(java.lang.Object)boolean	1	boolean	java.lang.Object
+(java.lang.Object)boolean	1	boolean	java.lang.Object
+(java.lang.Object)java.lang.Object	1	java.lang.Object	java.lang.Object
+(java.lang.Object)java.nio.file.FileSystem	1	java.nio.file.FileSystem	java.lang.Object
+(java.lang.Object)void	1	void	java.lang.Object
+(java.nio.file.FileSystem)void	1	void	java.nio.file.FileSystem
+()java.util.jar.Manifest	0	java.util.jar.Manifest	
+()java.util.jar.Manifest	0	java.util.jar.Manifest	
+(java.lang.Object,java.lang.Object)void	2	void	java.lang.Object,java.lang.Object
+(java.lang.String,java.util.jar.Attributes)void	2	void	java.lang.String,java.util.jar.Attributes

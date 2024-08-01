@@ -1,0 +1,4 @@
+<BasicMethod: void main(java.lang.String[])>/assign/1	1	<BasicMethod: void main(java.lang.String[])>/new BasicMethod/0	<BasicMethod: void main(java.lang.String[])>/$stack4	<BasicMethod: void main(java.lang.String[])>	8
+<BasicMethod: void main(java.lang.String[])>/assign/4	6	<BasicMethod: void main(java.lang.String[])>/new java.io.InputStreamReader/0	<BasicMethod: void main(java.lang.String[])>/$stack7	<BasicMethod: void main(java.lang.String[])>	9
+<BasicMethod: void main(java.lang.String[])>/assign/3	5	<BasicMethod: void main(java.lang.String[])>/new java.io.BufferedReader/0	<BasicMethod: void main(java.lang.String[])>/$stack6	<BasicMethod: void main(java.lang.String[])>	9
+<BasicMethod: void main(java.lang.String[])>/assign/6	12	<BasicMethod: void main(java.lang.String[])>/new java.lang.StringBuilder/0	<BasicMethod: void main(java.lang.String[])>/$stack9	<BasicMethod: void main(java.lang.String[])>	14

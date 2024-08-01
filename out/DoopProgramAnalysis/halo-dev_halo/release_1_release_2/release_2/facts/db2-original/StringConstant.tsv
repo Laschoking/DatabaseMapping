@@ -1,0 +1,115 @@
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/halo-dev_halo/release_2/halo-dev_halo.jar
+build.version
+2.17.2
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/halo-dev_halo/release_2/halo-dev_halo.jar
+build.group
+run.halo.app
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/halo-dev_halo/release_2/halo-dev_halo.jar
+build.name
+halo
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/halo-dev_halo/release_2/halo-dev_halo.jar
+build.artifact
+halo
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/halo-dev_halo/release_2/halo-dev_halo.jar
+build.time
+2024-07-15T10:19:54.651406108Z
+Provider and JarPath must not be null
+./
+\u0001\u0001
+makeConcatWithConstants
+java.lang.Stringjava.lang.String,java.lang.String
+/../
+\u0001\u0001
+makeConcatWithConstants
+java.lang.Stringjava.lang.String,java.lang.String
+/./
+\u0001\u0001
+makeConcatWithConstants
+java.lang.Stringjava.lang.String,java.lang.String
+jar:nested:\u0001/!\u0001
+/.
+makeConcatWithConstants
+java.lang.Stringjava.lang.String,java.lang.String
+/..
+/..
+newFileSystem
+base
+file
+~
+localhost
+test
+java.util.function.Predicatejava.lang.Class
+jar_cache
+apply
+java.util.function.Functionjava.lang.Class
+accept
+java.util.function.Consumerorg.springframework.boot.loader.nio.file.NestedFileSystem
+nested
+/!
+Multi-Release
+Nested paths must contain a single element
+\\"${\\"
+\\"}\\"
+\\":\\"
+Nested paths do not support path matchers
+Nested paths do not have a user principal lookup service
+Nested paths do not support the WatchService
+${
+${
+Circular placeholder reference \'\u0001\' in property definitions
+makeConcatWithConstants
+java.lang.Stringjava.lang.String
+:
+:
+}
+${
+basic
+}
+${
+<<\\"\\">>
+Could not resolve key \'\u0001\' in \'\u0001\' as system property or in environment: \u0001
+makeConcatWithConstants
+java.lang.Stringjava.lang.Throwable,java.lang.String,java.lang.String
+getManifest
+org.springframework.boot.loader.net.protocol.jar.UrlJarManifest$ManifestSupplierorg.springframework.boot.loader.net.protocol.jar.UrlNestedJarFile
+${
+}
+}
+${
+WEB-INF/
+WEB-INF/classes/
+WEB-INF/lib/
+jarmode
+WEB-INF/lib-provided/
+main
+Error decoding percent encoded characters
+\\"jar\\"
+\\"!/\\"
+accept
+java.util.function.BiConsumerjava.util.jar.Manifest,org.springframework.boot.loader.net.protocol.jar.UrlJarManifest
+jar:
+Nested JAR URLs are not supported
+jar
+<<\\"\\">>
+jar:
+no !/ in spec
+\u0001\u0001
+makeConcatWithConstants
+java.lang.Stringjava.lang.String,java.lang.String
+/
+malformed context url:%s: no !/
+malformed context url:%s
+Loading LocalFileHeaderRecord from position %s
+Zip \'Local File Header Record\' not found at position \u0001
+makeConcatWithConstants
+java.lang.Stringlong
+nested:
+versionNeededToExtract;generalPurposeBitFlag;compressionMethod;lastModFileTime;lastModFileDate;crc32;compressedSize;uncompressedSize;fileNameLength;extraFieldLength
+invalid url: %s (%s)
+!/
+jar
+jar
+!/
+!/
+Loading ZipDataDescriptorRecord from position %s
+includeSignature;crc32;compressedSize;uncompressedSize

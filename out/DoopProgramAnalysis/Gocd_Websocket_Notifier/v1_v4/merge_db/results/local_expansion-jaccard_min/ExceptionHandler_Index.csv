@@ -1,0 +1,9 @@
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handle(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>/catch java.lang.Exception/0	33	10
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handle(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>/catch java.lang.Exception/1	33	10
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handle(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>/catch java.lang.Exception/2	33	10
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handleStageNotification(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>/catch java.lang.Exception/0	16	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void initializeGoApplicationAccessor(com.thoughtworks.go.plugin.api.GoApplicationAccessor)>/catch java.net.UnknownHostException/0	41	10
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void initializeGoApplicationAccessor(com.thoughtworks.go.plugin.api.GoApplicationAccessor)>/catch java.net.UnknownHostException/0	76	1
+<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: java.lang.String extendMessageToIncludePipelineDetails(java.lang.String)>/catch java.io.IOException/0	22	10
+<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void sendToAll(java.lang.String)>/catch java.lang.Throwable/0	24	0
+<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void sendToAll(java.lang.String)>/catch java.lang.Throwable/1	24	0

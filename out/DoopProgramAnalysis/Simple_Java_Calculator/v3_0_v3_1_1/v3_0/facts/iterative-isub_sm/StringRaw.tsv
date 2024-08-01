@@ -1,0 +1,153 @@
+test.src.dir	test.src.dir
+javac.compilerargs	javac.compilerargs
+javadoc.additionalparam	javadoc.additionalparam
+tan	tan
+squareRoot	squareRoot
+test	test
+**	**
+x%	x%
+Tan	Tan
+javac.processorpath	javac.processorpath
+${build.dir}/classes	${build.dir}/classes
+Sin	Sin
+Bin	Bin
+${build.dir}/generated	${build.dir}/generated
+${dist.dir}/SimpleJavaCalculator.jar	${dist.dir}/SimpleJavaCalculator.jar
+<simplejavacalculator.Calculator: java.lang.Double calculateEqual(java.lang.Double)>	<simplejavacalculator.Calculator: java.lang.Double calculateEqual(java.lang.Double)>
+javadoc.nonavbar	javadoc.nonavbar
+<simplejavacalculator.Calculator$MonoOperatorModes: simplejavacalculator.Calculator$MonoOperatorModes[] values()>	<simplejavacalculator.Calculator$MonoOperatorModes: simplejavacalculator.Calculator$MonoOperatorModes[] values()>
+false	false
+meta.inf.dir	meta.inf.dir
+javac.target	javac.target
+sin	sin
+javac.source	javac.source
+javadoc.encoding	javadoc.encoding
+normal	normal
+<simplejavacalculator.Calculator$MonoOperatorModes: void <clinit>()>	<simplejavacalculator.Calculator$MonoOperatorModes: void <clinit>()>
+javadoc.private	javadoc.private
+src.dir	src.dir
+run.test.classpath	run.test.classpath
+javac.deprecation	javac.deprecation
+debug.test.classpath	debug.test.classpath
+<simplejavacalculator.UI: void <init>()>	<simplejavacalculator.UI: void <init>()>
+build.sysclasspath	build.sysclasspath
+<simplejavacalculator.Calculator$BiOperatorModes: simplejavacalculator.Calculator$BiOperatorModes[] values()>	<simplejavacalculator.Calculator$BiOperatorModes: simplejavacalculator.Calculator$BiOperatorModes[] values()>
+<simplejavacalculator.Calculator: java.lang.Double calculateBi(simplejavacalculator.Calculator$BiOperatorModes,java.lang.Double)>	<simplejavacalculator.Calculator: java.lang.Double calculateBi(simplejavacalculator.Calculator$BiOperatorModes,java.lang.Double)>
+"<<\\""\\"">>"	"<<\\""\\"">>"
+log	log
+${build.generated.sources.dir}/ap-source-output	${build.generated.sources.dir}/ap-source-output
+run.jvmargs	run.jvmargs
+${javac.test.classpath}:${build.test.classes.dir}	${javac.test.classpath}:${build.test.classes.dir}
+multiply	multiply
+<simplejavacalculator.Calculator: java.lang.Double calculateBiImpl()>	<simplejavacalculator.Calculator: java.lang.Double calculateBiImpl()>
+x*x	x*x
+ignore	ignore
+src	src
+includes	includes
+xpowerofy	xpowerofy
+Error while parse to binary.	Error while parse to binary.
+divide	divide
+add	add
+build.classes.excludes	build.classes.excludes
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Simple_Java_Calculator/v3_0/Simple_Java_Calculator.jar	/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Simple_Java_Calculator/v3_0/Simple_Java_Calculator.jar
+1/x	1/x
+Cos	Cos
+oneDevidedBy	oneDevidedBy
+debug.classpath	debug.classpath
+javac.test.processorpath	javac.test.processorpath
+1.8	1.8
+<simplejavacalculator.Calculator$BiOperatorModes: simplejavacalculator.Calculator$BiOperatorModes valueOf(java.lang.String)>	<simplejavacalculator.Calculator$BiOperatorModes: simplejavacalculator.Calculator$BiOperatorModes valueOf(java.lang.String)>
+annotation.processing.enabled	annotation.processing.enabled
+javac.test.classpath	javac.test.classpath
+javadoc.windowtitle	javadoc.windowtitle
+manifest.file	manifest.file
+javadoc.notree	javadoc.notree
+abs(x)	abs(x)
+<simplejavacalculator.UI: void init()>	<simplejavacalculator.UI: void init()>
+${build.dir}/generated-sources	${build.dir}/generated-sources
+excludes	excludes
+Consolas	Consolas
+mkdist.disabled	mkdist.disabled
+Calculator PH	Calculator PH
+<simplejavacalculator.UI: void writer(java.lang.Double)>	<simplejavacalculator.UI: void writer(java.lang.Double)>
+abs	abs
+javac.classpath	javac.classpath
+dist	dist
+build.test.classes.dir	build.test.classes.dir
+${javac.classpath}	${javac.classpath}
+annotation.processing.enabled.in.editor	annotation.processing.enabled.in.editor
+build.classes.dir	build.classes.dir
+annotation.processing.processors.list	annotation.processing.processors.list
+annotation.processing.processor.options	annotation.processing.processor.options
+dist.archive.excludes	dist.archive.excludes
+<simplejavacalculator.UI: java.lang.Double reader()>	<simplejavacalculator.UI: java.lang.Double reader()>
+<simplejavacalculator.Calculator$BiOperatorModes: void <init>(java.lang.String,int)>	<simplejavacalculator.Calculator$BiOperatorModes: void <init>(java.lang.String,int)>
+<simplejavacalculator.UI: void parsetoBinary()>	<simplejavacalculator.UI: void parsetoBinary()>
+${build.dir}/test/results	${build.dir}/test/results
+<simplejavacalculator.Calculator$MonoOperatorModes: void <init>(java.lang.String,int)>	<simplejavacalculator.Calculator$MonoOperatorModes: void <init>(java.lang.String,int)>
+**/*.java,**/*.form	**/*.java,**/*.form
+run.classpath	run.classpath
+${run.classpath}	${run.classpath}
+dist.jar	dist.jar
+javadoc.version	javadoc.version
+build	build
+dist.dir	dist.dir
+jar.compress	jar.compress
+annotation.processing.source.output	annotation.processing.source.output
+build.dir	build.dir
+javadoc.author	javadoc.author
+source.encoding	source.encoding
+<simplejavacalculator.SimpleJavaCalculator: void <init>()>	<simplejavacalculator.SimpleJavaCalculator: void <init>()>
+<simplejavacalculator.Calculator$MonoOperatorModes: simplejavacalculator.Calculator$MonoOperatorModes valueOf(java.lang.String)>	<simplejavacalculator.Calculator$MonoOperatorModes: simplejavacalculator.Calculator$MonoOperatorModes valueOf(java.lang.String)>
+annotation.processing.run.all.processors	annotation.processing.run.all.processors
+manifest.mf	manifest.mf
+<simplejavacalculator.Calculator: java.lang.Double calculateMono(simplejavacalculator.Calculator$MonoOperatorModes,java.lang.Double)>	<simplejavacalculator.Calculator: java.lang.Double calculateMono(simplejavacalculator.Calculator$MonoOperatorModes,java.lang.Double)>
+${javac.test.classpath}	${javac.test.classpath}
+<simplejavacalculator.UI: void actionPerformed(java.awt.event.ActionEvent)>	<simplejavacalculator.UI: void actionPerformed(java.awt.event.ActionEvent)>
+build.generated.dir	build.generated.dir
+default_platform	default_platform
+${source.encoding}	${source.encoding}
+rate	rate
+<simplejavacalculator.SimpleJavaCalculator: void main(java.lang.String[])>	<simplejavacalculator.SimpleJavaCalculator: void main(java.lang.String[])>
+platform.active	platform.active
+x^y	x^y
+${javac.classpath}:${build.classes.dir}	${javac.classpath}:${build.classes.dir}
+${build.dir}/test/classes	${build.dir}/test/classes
+javadoc.splitindex	javadoc.splitindex
+javadoc.noindex	javadoc.noindex
+main.class	main.class
+${src.dir}/META-INF	${src.dir}/META-INF
+build.test.results.dir	build.test.results.dir
+<simplejavacalculator.Calculator: void <init>()>	<simplejavacalculator.Calculator: void <init>()>
+sqrt	sqrt
+minus	minus
+UTF-8	UTF-8
+square	square
+build.generated.sources.dir	build.generated.sources.dir
+log10(x)	log10(x)
+true	true
+${dist.dir}/javadoc	${dist.dir}/javadoc
+simplejavacalculator.SimpleJavaCalculator	simplejavacalculator.SimpleJavaCalculator
+javadoc.use	javadoc.use
+cos	cos
+dist.javadoc.dir	dist.javadoc.dir
+<simplejavacalculator.Calculator$BiOperatorModes: void <clinit>()>	<simplejavacalculator.Calculator$BiOperatorModes: void <clinit>()>
+${run.test.classpath}	${run.test.classpath}
+<simplejavacalculator.Calculator: java.lang.Double reset()>	<simplejavacalculator.Calculator: java.lang.Double reset()>
+2	2
+*	*
++	+
+icon/icon.png	icon/icon.png
+9	9
+3	3
+-	-
+/	/
+C	C
+6	6
+0	0
+5	5
+=	=
+4	4
+7	7
+8	8
+1	1

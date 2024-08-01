@@ -1,0 +1,14 @@
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	2	0	name	name	stdout
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	2	1	class	class	ch.qos.logback.core.ConsoleAppender
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	3	0	class	class	ch.qos.logback.classic.encoder.PatternLayoutEncoder
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	5	0	name	name	file
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	5	1	class	class	ch.qos.logback.core.rolling.RollingFileAppender
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	6	0	class	class	ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	9	0	class	class	ch.qos.logback.classic.encoder.PatternLayoutEncoder
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	11	0	level	level	ERROR
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	12	0	ref	ref	file
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	13	0	name	name	org.springframework.boot.web.embedded.tomcat.TomcatWebServer
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	13	1	level	level	DEBUG
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	13	2	additivity	additivity	false
+/tmp/xml-file6473117899789424127/boot-inf_classes_logback-prd.xml	14	0	ref	ref	stdout
+/tmp/xml-file8685772688765050696/meta-inf_maven_org.pdown.gui_main_pom.xml	1	0	schemaLocation	xsi:schemaLocation	http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd

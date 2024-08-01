@@ -1,0 +1,69 @@
+/tmp/xml-file16041130029686359784/plugin.xml	1	-1		go-plugin	go-plugin
+/tmp/xml-file16041130029686359784/plugin.xml	2	1		about	about
+/tmp/xml-file16041130029686359784/plugin.xml	3	2		name	name
+/tmp/xml-file16041130029686359784/plugin.xml	4	2		version	version
+/tmp/xml-file16041130029686359784/plugin.xml	5	2		target-go-version	target-go-version
+/tmp/xml-file16041130029686359784/plugin.xml	6	2		description	description
+/tmp/xml-file16041130029686359784/plugin.xml	7	2		vendor	vendor
+/tmp/xml-file16041130029686359784/plugin.xml	8	7		name	name
+/tmp/xml-file16041130029686359784/plugin.xml	9	7		url	url
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	1	-1	http://maven.apache.org/POM/4.0.0	project	project
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	2	1	http://maven.apache.org/POM/4.0.0	modelVersion	modelVersion
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	3	1	http://maven.apache.org/POM/4.0.0	groupId	groupId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	4	1	http://maven.apache.org/POM/4.0.0	artifactId	artifactId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	5	1	http://maven.apache.org/POM/4.0.0	version	version
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	6	1	http://maven.apache.org/POM/4.0.0	packaging	packaging
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	7	1	http://maven.apache.org/POM/4.0.0	properties	properties
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	8	7	http://maven.apache.org/POM/4.0.0	project.build.sourceEncoding	project.build.sourceEncoding
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	9	7	http://maven.apache.org/POM/4.0.0	go.version	go.version
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	10	1	http://maven.apache.org/POM/4.0.0	dependencies	dependencies
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	11	10	http://maven.apache.org/POM/4.0.0	dependency	dependency
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	12	11	http://maven.apache.org/POM/4.0.0	groupId	groupId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	13	11	http://maven.apache.org/POM/4.0.0	artifactId	artifactId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	14	11	http://maven.apache.org/POM/4.0.0	version	version
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	15	11	http://maven.apache.org/POM/4.0.0	scope	scope
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	16	10	http://maven.apache.org/POM/4.0.0	dependency	dependency
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	17	16	http://maven.apache.org/POM/4.0.0	groupId	groupId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	18	16	http://maven.apache.org/POM/4.0.0	artifactId	artifactId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	19	16	http://maven.apache.org/POM/4.0.0	version	version
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	20	10	http://maven.apache.org/POM/4.0.0	dependency	dependency
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	21	20	http://maven.apache.org/POM/4.0.0	groupId	groupId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	22	20	http://maven.apache.org/POM/4.0.0	artifactId	artifactId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	23	20	http://maven.apache.org/POM/4.0.0	version	version
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	24	10	http://maven.apache.org/POM/4.0.0	dependency	dependency
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	25	24	http://maven.apache.org/POM/4.0.0	groupId	groupId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	26	24	http://maven.apache.org/POM/4.0.0	artifactId	artifactId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	27	24	http://maven.apache.org/POM/4.0.0	version	version
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	28	10	http://maven.apache.org/POM/4.0.0	dependency	dependency
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	29	28	http://maven.apache.org/POM/4.0.0	groupId	groupId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	30	28	http://maven.apache.org/POM/4.0.0	artifactId	artifactId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	31	28	http://maven.apache.org/POM/4.0.0	version	version
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	32	28	http://maven.apache.org/POM/4.0.0	scope	scope
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	33	10	http://maven.apache.org/POM/4.0.0	dependency	dependency
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	34	33	http://maven.apache.org/POM/4.0.0	groupId	groupId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	35	33	http://maven.apache.org/POM/4.0.0	artifactId	artifactId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	36	33	http://maven.apache.org/POM/4.0.0	version	version
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	37	33	http://maven.apache.org/POM/4.0.0	scope	scope
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	38	10	http://maven.apache.org/POM/4.0.0	dependency	dependency
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	39	38	http://maven.apache.org/POM/4.0.0	groupId	groupId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	40	38	http://maven.apache.org/POM/4.0.0	artifactId	artifactId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	41	38	http://maven.apache.org/POM/4.0.0	version	version
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	42	38	http://maven.apache.org/POM/4.0.0	scope	scope
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	43	1	http://maven.apache.org/POM/4.0.0	build	build
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	44	43	http://maven.apache.org/POM/4.0.0	plugins	plugins
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	45	44	http://maven.apache.org/POM/4.0.0	plugin	plugin
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	46	45	http://maven.apache.org/POM/4.0.0	groupId	groupId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	47	45	http://maven.apache.org/POM/4.0.0	artifactId	artifactId
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	48	45	http://maven.apache.org/POM/4.0.0	version	version
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	49	45	http://maven.apache.org/POM/4.0.0	executions	executions
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	50	49	http://maven.apache.org/POM/4.0.0	execution	execution
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	51	50	http://maven.apache.org/POM/4.0.0	id	id
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	52	50	http://maven.apache.org/POM/4.0.0	phase	phase
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	53	50	http://maven.apache.org/POM/4.0.0	goals	goals
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	54	53	http://maven.apache.org/POM/4.0.0	goal	goal
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	55	50	http://maven.apache.org/POM/4.0.0	configuration	configuration
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	56	55	http://maven.apache.org/POM/4.0.0	outputDirectory	outputDirectory
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	57	55	http://maven.apache.org/POM/4.0.0	includeScope	includeScope
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	58	55	http://maven.apache.org/POM/4.0.0	overWriteReleases	overWriteReleases
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	59	55	http://maven.apache.org/POM/4.0.0	overWriteSnapshots	overWriteSnapshots
+/tmp/xml-file9646008096921982215/meta-inf_maven_com.matt-richardson_gocd-websocket-notifier_pom.xml	60	55	http://maven.apache.org/POM/4.0.0	overWriteIfNewer	overWriteIfNewer

@@ -1,0 +1,33 @@
+<Animal: Animal playWith(Animal)>/Animal.play/0	<Animal: void play()>	0
+<Simple_Pointer: void main(java.lang.String[])>/Simple_Pointer.test/0	<Simple_Pointer: void test(int)>	0
+<Simple_Pointer: void main(java.lang.String[])>/java.io.BufferedReader.readLine/0	<java.io.BufferedReader: java.lang.String readLine()>	0
+<Simple_Pointer: void main(java.lang.String[])>/java.io.PrintStream.println/0	<java.io.PrintStream: void println(java.lang.String)>	0
+<Simple_Pointer: void main(java.lang.String[])>/java.lang.StringBuilder.append/0	<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>	0
+<Simple_Pointer: void main(java.lang.String[])>/java.lang.StringBuilder.append/1	<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>	0
+<Simple_Pointer: void main(java.lang.String[])>/java.lang.StringBuilder.toString/0	<java.lang.StringBuilder: java.lang.String toString()>	0
+<Simple_Pointer: void morePlay(Cat)>/Cat.getParent/0	<Cat: Cat getParent()>	0
+<Simple_Pointer: void morePlay(Cat)>/Cat.play/0	<Cat: void play()>	1
+<Simple_Pointer: void morePlay(Cat)>/Cat.play/0	<Cat: void play()>	10
+<Simple_Pointer: void morePlay(Cat)>/Cat.playWith/0	<Animal: Animal playWith(Animal)>	1
+<Simple_Pointer: void morePlay(Cat)>/Cat.playWith/0	<Animal: Animal playWith(Animal)>	10
+<Simple_Pointer: void morePlay(Cat)>/Cat.playWith/1	<Animal: Animal playWith(Animal)>	0
+<Simple_Pointer: void test(int)>/Animal.play/0	<Animal: void play()>	0
+<Simple_Pointer: void test(int)>/Simple_Pointer.morePlay/0	<Simple_Pointer: void morePlay(Cat)>	1
+<Simple_Pointer: void test(int)>/Simple_Pointer.morePlay/0	<Simple_Pointer: void morePlay(Cat)>	10
+new_var_16	<Cat: void setParent(Cat)>	1
+<Animal: void <init>()>/java.lang.Object.<init>/0	<java.lang.Object: void <init>()>	0
+<Cat: void <init>()>/Animal.<init>/0	<Animal: void <init>()>	0
+<Dog: void <init>()>/Animal.<init>/0	<Animal: void <init>()>	0
+<Simple_Pointer: void <init>()>/java.lang.Object.<init>/0	<java.lang.Object: void <init>()>	0
+<Simple_Pointer: void main(java.lang.String[])>/Simple_Pointer.<init>/0	<Simple_Pointer: void <init>()>	0
+<Simple_Pointer: void main(java.lang.String[])>/java.io.BufferedReader.<init>/0	<java.io.BufferedReader: void <init>(java.io.Reader)>	0
+<Simple_Pointer: void main(java.lang.String[])>/java.io.InputStreamReader.<init>/0	<java.io.InputStreamReader: void <init>(java.io.InputStream)>	0
+<Simple_Pointer: void main(java.lang.String[])>/java.lang.StringBuilder.<init>/0	<java.lang.StringBuilder: void <init>()>	0
+<Simple_Pointer: void test(int)>/Cat.<init>/0	<Cat: void <init>()>	1
+<Simple_Pointer: void test(int)>/Cat.<init>/0	<Cat: void <init>()>	10
+<Simple_Pointer: void test(int)>/Cat.<init>/1	<Cat: void <init>()>	1
+<Simple_Pointer: void test(int)>/Cat.<init>/1	<Cat: void <init>()>	10
+<Simple_Pointer: void test(int)>/Dog.<init>/0	<Dog: void <init>()>	1
+<Simple_Pointer: void test(int)>/Dog.<init>/0	<Dog: void <init>()>	10
+new_var_15	<Cat: void <init>()>	1
+<Simple_Pointer: void main(java.lang.String[])>/Simple_Pointer.sanitize/0	<Simple_Pointer: void sanitize(java.lang.Object)>	0

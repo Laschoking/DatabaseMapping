@@ -1,0 +1,4 @@
+<BasicMethod: void main(java.lang.String[])>	main	java.lang.String[]	BasicMethod	void	([Ljava/lang/String;)V	1	0
+<BasicMethod: void test(int)>	test	int	BasicMethod	void	(I)V	1	0
+<BasicMethod: void <init>()>	<init>		BasicMethod	void	()V	0	0
+<BasicMethod: void sanitize(java.lang.Object)>	sanitize	java.lang.Object	BasicMethod	void	(Ljava/lang/Object;)V	1	0

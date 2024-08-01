@@ -1,0 +1,44 @@
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_1/Gocd_Websocket_Notifier.jar
+groupId
+com.matt-richardson
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_1/Gocd_Websocket_Notifier.jar
+artifactId
+gocd-websocket-notifier
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_1/Gocd_Websocket_Notifier.jar
+version
+0.1
+notify called with request name \'
+\' and requestBody \'
+\'
+<<\\"new connection: \\">>
+<<\\" entered the room!\\">>
+<<\\" has left the room!\\">>
+<<\\" has left the room!\\">>
+<<\\": \\">>
+sending \'
+<<\\"\' to \\">>
+\\"notification\\"
+\\"notifications-interested-in\\"
+\\"stage-status\\"
+initializeGoApplicationAccessor called
+pipelineListener is null - creating a new one
+<<\\"Starting WebSocket server started on port: \\">>
+<<\\"WebSocket server started on port: \\">>
+<<\\"Failed to launch WebSocket server on port: \\">>
+pipelineListener is not null - reusing the old one
+<<\\"received go plugin api request \\">>
+notifications-interested-in
+stage-status
+received pluginIdentifier request
+notification
+stage-status
+notifications
+requesting details of stage-status notifications
+handling stage notification
+status
+success
+failed to notify pipeline listener
+status
+failure
+messages
+1.0

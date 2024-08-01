@@ -1,0 +1,10 @@
+<BasicMethod: void main(java.lang.String[])>/assign/1	<BasicMethod: void main(java.lang.String[])>/$stack4
+<BasicMethod: void main(java.lang.String[])>/assign/4	<BasicMethod: void main(java.lang.String[])>/$stack7
+<BasicMethod: void main(java.lang.String[])>/assign/3	<BasicMethod: void main(java.lang.String[])>/$stack6
+<BasicMethod: void main(java.lang.String[])>/assign/6	<BasicMethod: void main(java.lang.String[])>/$stack9
+<BasicMethod: void test(int)>/assign/1	<BasicMethod: void test(int)>/l#_0
+<BasicMethod: void test(int)>/assign/0	<BasicMethod: void test(int)>/this#_0
+<BasicMethod: void main(java.lang.String[])>/assign/0	<BasicMethod: void main(java.lang.String[])>/args#_0
+<BasicMethod: void <init>()>/assign/0	<BasicMethod: void <init>()>/this#_0
+<BasicMethod: void sanitize(java.lang.Object)>/assign/0	<BasicMethod: void sanitize(java.lang.Object)>/o#_0
+<BasicMethod: void main(java.lang.String[])>/assign/2	<BasicMethod: void main(java.lang.String[])>/$stack5

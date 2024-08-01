@@ -1,0 +1,4 @@
+<BasicMethod: void main(java.lang.String[])>/return-void/0	20	<BasicMethod: void main(java.lang.String[])>	0
+<BasicMethod: void test(int)>/return-void/0	2	<BasicMethod: void test(int)>	0
+<BasicMethod: void <init>()>/return-void/0	2	<BasicMethod: void <init>()>	0
+<BasicMethod: void sanitize(java.lang.Object)>/return-void/0	1	<BasicMethod: void sanitize(java.lang.Object)>	0

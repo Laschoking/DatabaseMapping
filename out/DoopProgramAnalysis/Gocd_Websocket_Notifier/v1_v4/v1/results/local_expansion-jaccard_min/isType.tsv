@@ -1,0 +1,12 @@
+java.lang.StringBuilder
+com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin
+com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer
+com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener
+com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1
+java.lang.String[]
+com.thoughtworks.go.plugin.api.GoPluginIdentifier
+java.lang.StringBuilder
+java.util.HashMap
+java.util.ArrayList
+com.google.gson.GsonBuilder
+java.net.InetSocketAddress

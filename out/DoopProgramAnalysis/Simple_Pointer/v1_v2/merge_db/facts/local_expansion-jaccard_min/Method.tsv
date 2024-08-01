@@ -1,0 +1,16 @@
+<Animal: Animal playWith(Animal)>	playWith	Animal	Animal	Animal	(LAnimal;)LAnimal;	1	0
+<Animal: void <init>()>	<init>		Animal	void	()V	0	0
+<Animal: void play()>	play		Animal	void	()V	0	0
+<Cat: Cat getParent()>	getParent		Cat	Cat	()LCat;	0	0
+<Cat: void <init>()>	<init>		Cat	void	()V	0	0
+<Cat: void play()>	play		Cat	void	()V	0	0
+<Cat: void setParent(Cat)>	setParent	Cat	Cat	void	(LCat;)V	1	0
+<Dog: void <init>()>	<init>		Dog	void	()V	0	0
+<Dog: void play()>	play		Dog	void	()V	0	0
+<Simple_Pointer: void <init>()>	<init>		Simple_Pointer	void	()V	0	0
+<Simple_Pointer: void main(java.lang.String[])>	main	java.lang.String[]	Simple_Pointer	void	([Ljava/lang/String;)V	1	0
+<Simple_Pointer: void morePlay(Cat)>	morePlay	Cat	Simple_Pointer	void	(LCat;)V	1	0
+<Simple_Pointer: void sanitize(java.lang.Object)>	sanitize	java.lang.Object	Simple_Pointer	void	(I)V	1	1
+<Simple_Pointer: void sanitize(java.lang.Object)>	sanitize	java.lang.Object	Simple_Pointer	void	(Ljava/lang/Object;)V	1	10
+<Simple_Pointer: void test(int)>	test	int	Simple_Pointer	void	(I)V	1	10
+<Simple_Pointer: void test(int)>	test	int	Simple_Pointer	void	(Ljava/lang/Object;)V	1	1

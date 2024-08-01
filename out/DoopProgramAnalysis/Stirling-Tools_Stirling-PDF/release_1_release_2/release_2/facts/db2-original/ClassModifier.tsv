@@ -1,0 +1,12 @@
+public	org.springframework.boot.loader.zip.ZipContent$Kind
+final	org.springframework.boot.loader.zip.ZipContent$Kind
+enum	org.springframework.boot.loader.zip.ZipContent$Kind
+final	org.springframework.boot.loader.zip.VirtualZipDataBlock$DataPart
+public	org.springframework.boot.loader.ref.Cleaner
+abstract	org.springframework.boot.loader.ref.Cleaner
+interface	org.springframework.boot.loader.ref.Cleaner
+final	org.springframework.boot.loader.launch.PropertiesLauncher$Instantiator
+public	org.springframework.boot.loader.jarmode.JarMode
+abstract	org.springframework.boot.loader.jarmode.JarMode
+interface	org.springframework.boot.loader.jarmode.JarMode
+final	org.springframework.boot.loader.zip.ZipLocalFileHeaderRecord

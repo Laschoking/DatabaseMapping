@@ -1,0 +1,5 @@
+com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin
+com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer
+com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener
+com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1
+java.lang.String[]

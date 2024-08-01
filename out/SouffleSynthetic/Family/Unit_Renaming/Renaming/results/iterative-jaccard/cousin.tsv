@@ -1,0 +1,14 @@
+Robert	Alice	0
+Robert	Mike	0
+Carols	Robert	0
+Carols	John	0
+Carols	Alice	0
+Carols	Mike	0
+John	Carols	0
+John	Mike	0
+Alice	Robert	0
+Alice	Carols	0
+Alice	John	0
+Alice	Mike	0
+Mike	Carols	0
+Mike	Alice	0

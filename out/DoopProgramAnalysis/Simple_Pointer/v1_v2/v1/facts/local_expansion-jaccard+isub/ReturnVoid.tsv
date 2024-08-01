@@ -1,0 +1,13 @@
+<Dog: void <init>()>/return-void/0	new_var_15	<Dog: void <init>()>
+<Dog: void play()>/return-void/0	new_var_14	<Dog: void play()>
+<Cat: void <init>()>/return-void/0	new_var_15	<Cat: void <init>()>
+<Cat: void setParent(Cat)>/return-void/0	new_var_18	<Cat: void setParent(Cat)>
+<Cat: void play()>/return-void/0	new_var_14	<Cat: void play()>
+<Animal: void <init>()>/return-void/0	new_var_15	<Animal: void <init>()>
+<Animal: void play()>/return-void/0	new_var_14	<Animal: void play()>
+<Simple_Pointer: void <init>()>/return-void/0	new_var_15	<Simple_Pointer: void <init>()>
+<Simple_Pointer: void main(java.lang.String[])>/return-void/0	20	<Simple_Pointer: void main(java.lang.String[])>
+<Simple_Pointer: void sanitize(java.lang.Object)>/return-void/0	new_var_14	<Simple_Pointer: void sanitize(java.lang.Object)>
+<Simple_Pointer: void test(int)>/return-void/0	19	<Simple_Pointer: void test(int)>
+<Simple_Pointer: void morePlay(Cat)>/return-void/0	new_var_34	<Simple_Pointer: void morePlay(Cat)>
+<Simple_Pointer: void morePlay(Cat)>/return-void/1	new_var_36	<Simple_Pointer: void morePlay(Cat)>

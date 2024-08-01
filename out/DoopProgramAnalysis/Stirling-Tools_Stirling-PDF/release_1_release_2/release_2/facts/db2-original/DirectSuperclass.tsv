@@ -1,0 +1,8 @@
+org.springframework.boot.loader.nio.file.NestedByteChannel$Resources	java.lang.Object
+org.springframework.boot.loader.zip.ZipContent$Kind	java.lang.Enum
+org.springframework.boot.loader.zip.VirtualZipDataBlock$DataPart	java.lang.Object
+org.springframework.boot.loader.launch.JarFileArchive	java.lang.Object
+org.springframework.boot.loader.launch.PropertiesLauncher$Instantiator	java.lang.Record
+org.springframework.boot.loader.jar.NestedJarFile$RawZipDataInputStream	java.io.FilterInputStream
+org.springframework.boot.loader.zip.ByteArrayDataBlock	java.lang.Object
+org.springframework.boot.loader.zip.ZipLocalFileHeaderRecord	java.lang.Record

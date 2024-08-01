@@ -1,0 +1,17 @@
+/tmp/xml-file12984505486232813596/boot-inf_classes_static_browserconfig.xml	4	0	src	src	/mstile-150x150.png
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	2	0	name	name	CONSOLE
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	2	1	class	class	ch.qos.logback.core.ConsoleAppender
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	5	0	name	name	AUTHLOG
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	5	1	class	class	ch.qos.logback.core.rolling.RollingFileAppender
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	9	0	class	class	ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	12	0	name	name	GENERAL
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	12	1	class	class	ch.qos.logback.core.rolling.RollingFileAppender
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	16	0	class	class	ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	19	0	level	level	INFO
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	20	0	ref	ref	CONSOLE
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	21	0	ref	ref	GENERAL
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	22	0	name	name	stirling.software.SPDF.config.security.CustomAuthenticationFailureHandler
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	22	1	level	level	ERROR
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	22	2	additivity	additivity	false
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	23	0	ref	ref	CONSOLE
+/tmp/xml-file17897865628904312283/boot-inf_classes_logback.xml	24	0	ref	ref	AUTHLOG

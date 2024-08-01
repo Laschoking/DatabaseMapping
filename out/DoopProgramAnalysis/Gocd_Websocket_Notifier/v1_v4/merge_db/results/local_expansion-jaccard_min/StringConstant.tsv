@@ -1,0 +1,61 @@
+received pluginIdentifier request	0
+notification	0
+"<<\\""received go plugin api request \\"">>"	0
+notifications-interested-in	0
+stage-status	0
+"<<\\""Invalid request name: \\"">>"	10
+"<<\\""Failed to handle request with name: %s , and body: %s \\"">>"	10
+notifications	0
+requesting details of stage-status notifications	0
+handling stage notification	0
+status	0
+success	0
+failed to notify pipeline listener	0
+failure	0
+messages	0
+1.0	0
+http://localhost:	0
+user.home	0
+"<<\\""Starting WebSocket server started on port: \\"">>"	0
+"<<\\""WebSocket server started on port: \\"">>"	0
+"<<\\""Failed to launch WebSocket server on port: \\"">>"	0
+/go/api/pipelines/	10
+/history	10
+:	10
+"<<\\""Basic \\"">>"	10
+Authorization	10
+pipelines	10
+pipeline-name	10
+pipeline	10
+name	10
+Failed to download pipeline instance details for requestBody \'	10
+\'	0
+x-pipeline-instance-details	10
+"<<\\"" has disconnected\\"">>"	0
+gocd-websocket-notifier.conf	0
+websocket error	10
+"<<\\"" connected\\"">>"	0
+"<<\\"" entered the room!\\"">>"	1
+sending \'	0
+"<<\\""\' to \\"">>"	0
+"<<\\""\\"">>"	10
+host	10
+goHttpPort	0
+goUser	10
+goPassword	10
+Config file %s was not found in %s. Using default values.	10
+port	10
+notify called with request name \'	0
+\' and requestBody \'	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+0.1	1
+0.4.2+build.60.sha.7d0b8bc	10
+"\\""gocd-websocket-notifier.conf\\"""	10
+"\\""notification\\"""	0
+"\\""notifications-interested-in\\"""	0
+"\\""stage-status\\"""	0
+artifactId	0
+com.matt-richardson	0
+gocd-websocket-notifier	0
+groupId	0
+version	0

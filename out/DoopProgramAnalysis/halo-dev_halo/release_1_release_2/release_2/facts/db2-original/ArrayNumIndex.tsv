@@ -1,0 +1,7 @@
+<org.springframework.boot.loader.net.protocol.jar.UrlJarFileFactory: java.util.jar.JarFile createJarFileForStream(java.io.InputStream,java.lang.Runtime$Version,java.util.function.Consumer)>/write-array-idx/0	0
+<org.springframework.boot.loader.launch.Launcher: void launch(java.lang.ClassLoader,java.lang.String,java.lang.String[])>/write-array-idx/0	0
+<org.springframework.boot.loader.launch.Launcher: void launch(java.lang.ClassLoader,java.lang.String,java.lang.String[])>/write-array-idx/1	0
+<org.springframework.boot.loader.net.protocol.jar.Handler: java.lang.String extractContextPath(java.net.URL,java.lang.String,int)>/write-array-idx/0	0
+<org.springframework.boot.loader.net.protocol.jar.Handler: java.lang.String extractContextPath(java.net.URL,java.lang.String,int)>/write-array-idx/1	0
+<org.springframework.boot.loader.net.protocol.jar.Handler: void assertInnerUrlIsNotMalformed(java.lang.String,java.lang.String)>/write-array-idx/0	0
+<org.springframework.boot.loader.net.protocol.jar.Handler: void assertInnerUrlIsNotMalformed(java.lang.String,java.lang.String)>/write-array-idx/1	1

@@ -1,0 +1,5 @@
+public	<BasicMethod: void main(java.lang.String[])>	0
+public	<BasicMethod: void <init>()>	0
+static	<BasicMethod: void main(java.lang.String[])>	0
+static	<BasicMethod: void sanitize(java.lang.Object)>	0
+	<BasicMethod: void test(int)>	0

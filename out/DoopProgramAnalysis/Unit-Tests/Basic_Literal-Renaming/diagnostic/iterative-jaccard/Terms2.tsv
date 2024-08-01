@@ -1,0 +1,135 @@
+<BasicMethod: void <init>()>/assign/0
+0
+<BasicMethod: void <init>()>/@this
+<BasicMethod: void <init>()>/this#_0
+<BasicMethod: void <init>()>
+<BasicMethod: void main(java.lang.String[])>/assign/0
+<BasicMethod: void main(java.lang.String[])>/@parameter0
+<BasicMethod: void main(java.lang.String[])>/args#_0
+<BasicMethod: void main(java.lang.String[])>
+<BasicMethod: void sanitize(java.lang.Object)>/assign/0
+<BasicMethod: void sanitize(java.lang.Object)>/@parameter0
+<BasicMethod: void sanitize(java.lang.Object)>/o#_0
+<BasicMethod: void sanitize(java.lang.Object)>
+<BasicMethod: void test(int)>/assign/0
+<BasicMethod: void test(int)>/@this
+<BasicMethod: void test(int)>/this#_0
+<BasicMethod: void test(int)>
+<BasicMethod: void test(int)>/assign/1
+1
+<BasicMethod: void test(int)>/@parameter0
+<BasicMethod: void test(int)>/l#_0
+<BasicMethod: void main(java.lang.String[])>/assign/2
+len
+public
+static
+""
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Unit-Tests/Literal-Renaming/BasicMethod
+<class BasicMethod>
+BasicMethod
+java.lang.String[]
+java.lang.String
+<BasicMethod: void main(java.lang.String[])>/BasicMethod.sanitize/0
+11
+<BasicMethod: void main(java.lang.String[])>/read-array-idx/0
+14
+<BasicMethod: void main(java.lang.String[])>/$stack10
+<BasicMethod: void main(java.lang.String[])>/java.io.BufferedReader.readLine/0
+<BasicMethod: void main(java.lang.String[])>/s#_12
+<BasicMethod: void main(java.lang.String[])>/java.lang.StringBuilder.append/0
+<BasicMethod: void main(java.lang.String[])>/$stack11
+<BasicMethod: void main(java.lang.String[])>/java.lang.StringBuilder.append/1
+<BasicMethod: void main(java.lang.String[])>/$stack12
+<BasicMethod: void main(java.lang.String[])>/java.lang.StringBuilder.toString/0
+<BasicMethod: void main(java.lang.String[])>/ret#_14
+<BasicMethod: void <init>()>/java.lang.Object.<init>/0
+5
+<BasicMethod: void main(java.lang.String[])>/BasicMethod.<init>/0
+8
+<BasicMethod: void main(java.lang.String[])>/BasicMethod.test/0
+<BasicMethod: void main(java.lang.String[])>/java.io.InputStreamReader.<init>/0
+9
+<BasicMethod: void main(java.lang.String[])>/java.io.BufferedReader.<init>/0
+12
+13
+<BasicMethod: void main(java.lang.String[])>/java.lang.StringBuilder.<init>/0
+<BasicMethod: void main(java.lang.String[])>/java.io.PrintStream.println/0
+15
+<BasicMethod: void main(java.lang.String[])>/$stack5
+<BasicMethod: void main(java.lang.String[])>/$stack8
+<BasicMethod: void main(java.lang.String[])>/$stack7
+<java.lang.Object: void <init>()>
+2
+<BasicMethod: void main(java.lang.String[])>/$stack4
+<java.io.InputStreamReader: void <init>(java.io.InputStream)>
+<java.io.BufferedReader: void <init>(java.io.Reader)>
+<BasicMethod: void main(java.lang.String[])>/$stack6
+<java.lang.StringBuilder: void <init>()>
+<BasicMethod: void main(java.lang.String[])>/$stack9
+<BasicMethod: void main(java.lang.String[])>/$stack13
+<java.lang.System: java.io.InputStream in>
+java.lang.System
+in
+java.io.InputStream
+<java.lang.System: java.io.PrintStream out>
+out
+java.io.PrintStream
+this#_0
+$stack4
+args#_0
+$stack5
+$stack6
+$stack7
+$stack8
+s#_12
+$stack9
+$stack10
+$stack11
+$stack12
+ret#_14
+$stack13
+o#_0
+l#_0
+<BasicMethod: void main(java.lang.String[])>/new BasicMethod/0
+<BasicMethod: void main(java.lang.String[])>/new java.io.BufferedReader/0
+java.io.BufferedReader
+<BasicMethod: void main(java.lang.String[])>/new java.io.InputStreamReader/0
+java.io.InputStreamReader
+<BasicMethod: void main(java.lang.String[])>/new java.lang.StringBuilder/0
+java.lang.StringBuilder
+3
+<BasicMethod: void main(java.lang.String[])>/assign/1
+<BasicMethod: void main(java.lang.String[])>/assign/3
+<BasicMethod: void main(java.lang.String[])>/assign/4
+6
+<BasicMethod: void main(java.lang.String[])>/assign/6
+<BasicMethod: void main(java.lang.String[])>/read-field-in/0
+7
+<BasicMethod: void main(java.lang.String[])>/read-field-out/0
+18
+<BasicMethod: void <init>()>/return-void/0
+<BasicMethod: void main(java.lang.String[])>/return-void/0
+20
+<BasicMethod: void sanitize(java.lang.Object)>/return-void/0
+<BasicMethod: void test(int)>/return-void/0
+int
+java.lang.Object
+<init>
+void
+()V
+main
+([Ljava/lang/String;)V
+sanitize
+(Ljava/lang/Object;)V
+test
+(I)V
+4
+10
+<java.io.BufferedReader: java.lang.String readLine()>
+<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>
+16
+17
+<java.lang.StringBuilder: java.lang.String toString()>
+19
+<java.io.PrintStream: void println(java.lang.String)>
+java.io.IOException

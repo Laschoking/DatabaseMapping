@@ -1,0 +1,82 @@
+/go/api/pipelines/	10
+/history	10
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+0.4.2+build.60.sha.7d0b8bc	0
+1.0	0
+:	0
+"<<\\"" connected\\"">>"	0
+"<<\\"" has disconnected\\"">>"	10
+"<<\\""Basic \\"">>"	10
+"<<\\""Failed to handle request with name: %s , and body: %s \\"">>"	10
+"<<\\""Failed to launch WebSocket server on port: \\"">>"	0
+"<<\\""Invalid request name: \\"">>"	10
+"<<\\""Starting WebSocket server started on port: \\"">>"	0
+"<<\\""WebSocket server started on port: \\"">>"	0
+"<<\\""\' to \\"">>"	0
+"<<\\""\\"">>"	10
+"<<\\""received go plugin api request \\"">>"	0
+Authorization	10
+Config file %s was not found in %s. Using default values.	10
+Failed to download pipeline instance details for requestBody \'	10
+\'	0
+\'	0
+\' and requestBody \'	0
+"\\""gocd-websocket-notifier.conf\\"""	10
+"\\""notification\\"""	0
+"\\""notifications-interested-in\\"""	0
+"\\""stage-status\\"""	0
+artifactId	0
+com.matt-richardson	0
+failed to notify pipeline listener	0
+failure	0
+goHttpPort	0
+goHttpPort	0
+goPassword	10
+goPassword	10
+goUser	10
+goUser	10
+gocd-websocket-notifier	0
+gocd-websocket-notifier.conf	0
+gocd-websocket-notifier.conf	0
+gocd-websocket-notifier.conf	0
+gocd-websocket-notifier.conf	0
+groupId	0
+handling stage notification	0
+host	10
+host	10
+http://localhost:	10
+messages	0
+name	10
+notification	0
+notifications	0
+notifications-interested-in	0
+notify called with request name \'	0
+pipeline	0
+pipeline-name	10
+pipelines	10
+port	10
+port	10
+received pluginIdentifier request	0
+requesting details of stage-status notifications	0
+sending \'	0
+stage-status	0
+stage-status	0
+stage-status	0
+stage-status	0
+status	0
+status	0
+status	0
+status	0
+success	0
+user.home	0
+version	0
+websocket error	0
+x-pipeline-instance-details	10

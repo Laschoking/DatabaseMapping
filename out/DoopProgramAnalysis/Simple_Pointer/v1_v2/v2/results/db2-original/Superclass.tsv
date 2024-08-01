@@ -1,0 +1,6 @@
+Simple_Pointer	java.lang.Object
+Cat	java.lang.Object
+Cat	Animal
+Animal	java.lang.Object
+Dog	java.lang.Object
+Dog	Animal

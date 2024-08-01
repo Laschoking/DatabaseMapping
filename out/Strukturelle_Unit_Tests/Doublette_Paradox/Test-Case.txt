@@ -1,0 +1,8 @@
+Für Jaccard-Differenz haben alle mappings die gleiche Wkt.
+obwohl das Mapping B -> E oder B -> F zu 0 gleichen Atomen führen würde.
+Dieser Fall existiert auch beim Einbeziehen der Nachbarmappings.
+
+D -> A
+M -> B
+E -> I / J
+F -> I / J
