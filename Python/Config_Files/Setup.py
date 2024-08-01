@@ -17,13 +17,14 @@ import time
 
 update_terms = False
 hub_recompute = False
+debug = False
 #concat_occ_cols = True
 
 
 if __name__ == "__main__":
 
     # specify Java-files & Programm Analysis
-    db_config = Doop_Simple_Java_Calculator
+    db_config = Doop_Simple_Pointer
     program_config = Doop_PointerAnalysis
 
     gen_new_facts = False  # if true, run doop again for new fact-gen, otherwise just copy from doop/out

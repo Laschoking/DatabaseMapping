@@ -40,6 +40,12 @@ Doop_PointerAnalysis = DatalogProgram("DoopProgramAnalysis","PointerAnalysis","P
 Unit_Tests_Doublette = DB_Config("Strukturelle_Unit_Tests","Doublette_Paradox","v1","v2")
 Unit_Tests_Jacc_Finsish = DB_Config("Strukturelle_Unit_Tests","Jaccard_Finish_Problem","v1","v2")
 
+DOOP_GH1_alibaba = DB_Config("DoopProgramAnalysis","alibaba_arthas","release_1","release_2")
+DOOP_GH1_halo = DB_Config("DoopProgramAnalysis","halo-dev_halo","release_1","release_2")
+DOOP_GH1_proxee = DB_Config("DoopProgramAnalysis","proxyee-down-org_proxyee-down","release_1","release_2")
+DOOP_GH1_selenium = DB_Config("DoopProgramAnalysis","SeleniumHQ_selenium","release_1","release_2")
+DOOP_GH1_stirling = DB_Config("DoopProgramAnalysis","Stirling-Tools_Stirling-PDF","release_1","release_2")
+
 
 
 Syn_Family_Fold_DL = DatalogProgram("SouffleSynthetic","Family","Family_separate.rls","Family_merge_fold.rls", {})

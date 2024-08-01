@@ -10,7 +10,7 @@ NEMO_ENGINE = Path("/home/kotname/Documents/Diplom/Code/nemo/nemo")
 #
 
 # this path will be the base for all of our file manipulation
-base_diff_path = Path("/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis")
+base_diff_path = Path("/home/kotname/Documents/Diplom/Code/DatabaseMapping")
 datalog_programs_path = base_diff_path.joinpath("Datalog-Programs")
 base_out_path = base_diff_path.joinpath("out")
 java_source_dir = base_diff_path.joinpath("Java")

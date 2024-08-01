@@ -6,7 +6,7 @@ import pandas as pd
 from sortedcontainers import SortedList, SortedDict
 import itertools
 import Python.Config_Files.Setup as setup
-debug = True
+
 
 # blocked terms only if DL-computation
 def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_terms, similarity_metric):
@@ -54,7 +54,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
     while 1:
         if prio_dict and not new_hubs_flag:  # pop last item = with the highest similarity
             sim, tuples = prio_dict.peekitem(index=-1)
-            #if debug: print(prio_dict)
+            #if setup.debug: print(prio_dict)
 
             # data could be empty because of deletion of obsolete term-tuples
             if not tuples:
@@ -92,7 +92,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
 
             # add new mapping
             mapping_dict.append((term_name1,term_name2))
-            if debug: print(term_name1 + " -> " + term_name2)
+            if setup.debug: print(term_name1 + " -> " + term_name2)
 
             # make terms "blocked"
             free_term_names1.discard(term_name1)
@@ -107,7 +107,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
             uncertain_mapping_flag = delete_from_prio_dict(terms1_pq_mirror[term_name1], prio_dict, sim)
             uncertain_mapping_flag += delete_from_prio_dict(terms2_pq_mirror[term_name2], prio_dict, sim)
             l = sum(len(val) for val in prio_dict.values())
-            if debug:
+            if setup.debug:
                 print("reduced length: " + str(l))
             watch_prio_len.append(l)
 
@@ -129,7 +129,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
                 df1 = db1.files[file_name]
                 df2 = db2.files[file_name]
                 cols = unpack_multi_columns(map_term_col)
-                #if debug: print(file_name,col)
+                #if setup.debug: print(file_name,col)
 
                 # the mapped tuple (term_obj1, term_obj2) has the same key =  "file_name" & position "col"
                 # this could have been multiple times (db1_row_ids & db2_row_ids) for the same key
@@ -166,7 +166,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
                 print("now accepted: " + str(sim))
 
             l = sum(len(val) for val in prio_dict.values())
-            if debug:
+            if setup.debug:
                 print("new length: " + str(l))
             watch_prio_len.append(l)
 
@@ -183,7 +183,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
             add_mappings_to_pq(terms1,terms2,new_mapping_tuples, tuples_loc_sim, terms1_pq_mirror, terms2_pq_mirror, prio_dict,
                                processed_mapping_tuples, watch_exp_sim, similarity_metric)
             l = sum(len(val) for val in prio_dict.values())
-            if debug:
+            if setup.debug:
                 print("new length hubs: " + str(l))
             watch_prio_len.append(l)
 
@@ -267,7 +267,7 @@ def add_mappings_to_pq(terms1,terms2, new_mapping_tuples, tuples_loc_sim, terms1
                     prio_dict[sim] = list([term_name_tuple])
                 else:
                     prio_dict[sim].append(term_name_tuple)
-                #if debug: print(sim, term_name_tuple)
+                #if setup.debug: print(sim, term_name_tuple)
 
                 processed_mapping_tuples.add(term_name_tuple)
 
@@ -336,7 +336,7 @@ def find_hubs_std(free_term_names, terms_occ):
 
 def find_hubs_quantile(free_term_names, terms):
     nodes = [terms[term_name].degree for term_name in free_term_names]
-    #if debug: print(
+    #if setup.debug: print(
     #    "node degree mean: " + str(round(np.mean(nodes), 2)) + " standard deviation: " + str(round(np.std(nodes), 2)))
     quantile = np.quantile(nodes, q=0.95)
     # returns termobjects
