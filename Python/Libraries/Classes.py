@@ -1,3 +1,4 @@
+import itertools
 from enum import Enum
 from pathlib import Path
 
@@ -33,6 +34,64 @@ class Term:
         else:
             self.occurrence[key] = [row_nr]
         self.degree += 1
+
+# this will be 1 potential mapping
+class TermTuple:
+    def __init__(self,term_obj1, term_obj2,similiarity_metric):
+        self.term_obj1 = term_obj1
+        self.term_obj2 = term_obj2
+        self.rids1 = dict()
+        self.rids2 = dict()
+        self.similiarity_metric = similiarity_metric
+        self.sim = 0
+
+
+    def compute_similarity(self):
+        self.sim = self.similiarity_metric(self.term_obj1, self.term_obj2, self.rids1, self.rids2)
+
+    def occurrence_overlap(self,active_rid_combinations):
+        # TODO reduce active combinations
+        # intersection saves the key (file,col_nr):  which is the minimum of occurrences for this key
+        intersection = self.term_obj1.occurrence_c & self.term_obj2.occurrence_c
+
+        for file_name, col in intersection():
+            l_ids1 = self.term_obj1.occurrence[(file_name, col)]
+            l_ids2 = self.term_obj2.occurrence[(file_name, col)]
+            rid_combs = set(itertools.product(l_ids1, l_ids2))
+
+            # both rids1 & rids2 should point to the same object (the set)
+            self.rids1.setdefault((file_name,col),set()).union(rid_combs)
+            self.rids2.setdefault((file_name,col),set()).union(rid_combs)
+
+        self.compute_similarity()
+
+    def remove_rid_comb(self,file_name,col,rid_comb):
+        self.rids1[file_name,col].delete(rid_comb)
+        self.rids2[file_name, col].delete(rid_comb)
+        return self.compute_similarity()
+
+    def get_similarity(self):
+        return self.sim,self.rids1,self.rids2
+
+
+
+
+
+class RecordTuple:
+    def __init__(self,rid1,rid2,col_len):
+        self.rid1 = rid1
+        self.rid2 = rid2
+        self.col_len = col_len
+        self.vacant_cols = list(range(col_len))
+        self.subscribers = set()
+
+    def mark_filled_cell(self, filled_cell):
+        self.vacant_cols.remove(filled_cell)
+        # return True if the record is finished (no terms are vacant anymore)
+        if len(self.vacant_cols) == 0:
+            return True
+        else:
+            return False
 
 
 class DB_Instance:
