@@ -26,6 +26,7 @@ class DatalogProgram():
 
 DOOP_Unit_Test_Renamed_Literals = DB_Config("DoopProgramAnalysis","Unit-Tests", "Basic", "Literal-Renaming","BasicMethod" ,"BasicMethod")
 DOOP_Unit_Test_Renamed_Method = DB_Config("DoopProgramAnalysis","Unit-Tests", "Basic", "Method-Renaming","BasicMethod" ,"Renamed")
+Unit_Test_Renamed_Method = DB_Config("Strukturelle_Unit_Tests","Unit-Tests", "Basic", "Method-Renaming","BasicMethod" ,"Renamed")
 
 
 Doop_Constants = DB_Config("DoopProgramAnalysis","Constants", "v1", "v2")
@@ -38,7 +39,7 @@ Doop_CFG = DatalogProgram("DoopProgramAnalysis","CFG","CFG_separate.rls","CFG_me
 Doop_PointerAnalysis = DatalogProgram("DoopProgramAnalysis","PointerAnalysis","PointerAnalyse_separate.rls","PointerAnalyse_merge_no_fold.rls",{'',' ',"<clinit>", "void()","public","static","main","void(java.lang.String[])","java.io.Serializable","java.lang.Cloneable","java.lang.Object","abstract"})
 
 Unit_Tests_Doublette = DB_Config("Strukturelle_Unit_Tests","Doublette_Paradox","v1","v2")
-Unit_Tests_Jacc_Finsish = DB_Config("Strukturelle_Unit_Tests","Jaccard_Finish_Problem","v1","v2")
+Unit_Test_Finish_Records = DB_Config("Strukturelle_Unit_Tests","Finish_Records","v1","v2")
 
 DOOP_GH1_alibaba = DB_Config("DoopProgramAnalysis","alibaba_arthas","release_1","release_2")
 DOOP_GH1_halo = DB_Config("DoopProgramAnalysis","halo-dev_halo","release_1","release_2")

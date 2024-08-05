@@ -10,6 +10,7 @@ from Python.Libraries.SimilarityMetric.Term_Equality import *
 from Python.Libraries.SimilarityMetric.Jaccard_Term_Overlap import *
 from Python.Libraries.SimilarityMetric.Jaccard_Min import *
 from Python.Libraries.SimilarityMetric.Jaccard_ISUB_Mix import *
+from Python.Libraries.SimilarityMetric.Dynamic_Jaccard_Index import *
 from Python.Libraries.ExpansionStrategies.Crossproduct_Mapping_Queue import *
 import git
 
@@ -17,14 +18,14 @@ import time
 
 update_terms = False
 hub_recompute = False
-debug = False
+debug = True
 #concat_occ_cols = True
 
 
 if __name__ == "__main__":
 
     # specify Java-files & Programm Analysis
-    db_config = Doop_Simple_Pointer
+    db_config = Unit_Test_Finish_Records
     program_config = Doop_PointerAnalysis
 
     gen_new_facts = False  # if true, run doop again for new fact-gen, otherwise just copy from doop/out
@@ -80,7 +81,7 @@ if __name__ == "__main__":
     data.add_mapping(Mapping(data.paths, "full_expansion", full_expansion_strategy, "jaccard+isub",  jaccard_isub_mix))
     '''
     #data.add_mapping(Mapping(data.paths, "local_expansion", iterative_anchor_expansion, "term_equality", term_equality))
-    data.add_mapping(Mapping(data.paths, "local_expansion", iterative_anchor_expansion, "jaccard_min", jaccard_term_overlap))
+    data.add_mapping(Mapping(data.paths, "local_expansion", iterative_anchor_expansion, "jaccard_min", dynamic_jaccard_index))
     #data.add_mapping(Mapping(data.paths, "local_expansion", iterative_anchor_expansion, "isub", isub_sequence_matcher))
     #data.add_mapping(Mapping(data.paths,"local_expansion",iterative_anchor_expansion,"jaccard+isub",jaccard_isub_mix))
 

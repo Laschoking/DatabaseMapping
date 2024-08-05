@@ -193,8 +193,8 @@ def occurrence_overlap(term_obj1, term_obj2):
     # on the other hand: when including the neighbour sim we need this info here
     # overlap consists of file, col_nr
     for overlap in intersection:
-        term1_record_ids.append(term_obj1.occurrence[overlap])
-        term2_record_ids.append(term_obj2.occurrence[overlap])
+        term1_record_ids.append(term_obj1.occurrences[overlap])
+        term2_record_ids.append(term_obj2.occurrences[overlap])
     return intersection, term1_record_ids, term2_record_ids
 
 
