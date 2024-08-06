@@ -10,32 +10,60 @@ from collections import Counter
 import os
 
 
-class FileRecordIds:
-    def __init__(self,file_name):
-        self.name = file_name
-        self.rids = set()
-        self.rids1 = dict()
-        self.rids2 = dict()
+class Record:
+    def __init__(self, rid, col_len,file_name):
+        self.rid = rid
+        self.file_name = file_name
+        self.col_len = col_len
+        self.vacant_cols = list(range(col_len))
+        self.record_tuples = set()
+        self.active = False
+        self.active_records_tuples = dict()
+        self.expanded_record_tuples = dict() # is a dict of other record to object
 
-    def add_record_tuples(self,tuples):
-        for tuple in tuples:
-            self.add_record_tuple(tuple)
+    def is_active(self):
+        return self.active
 
-    def add_record_tuple(self,rid_tuple):
-        self.rids.add(rid_tuple)
-        self.rids1.setdefault(rid_tuple.rid1,list()).append(rid_tuple)
-        self.rids2.setdefault(rid_tuple.rid2, list()).append(rid_tuple)
+    def set_active(self):
+        if not self.active:
+            raise ValueError(f"boolean was active already: {self.rid,self.file_name}")
+        self.active = True
+    def add_record_tuple(self, rid_tuple):
+        self.record_tuples.add(rid_tuple)
+    def subscribe_exp_tuple(self,other_rec_obj,rec_tuple_obj):
+        self.expanded_record_tuples[other_rec_obj] = rec_tuple_obj
 
-    def remove_record_tuple(self,rid_tuple):
-        self.rids.remove(rid_tuple)
-        self.rids1[rid_tuple.rid1].remove(rid_tuple)
-        self.rids2[rid_tuple.rid2].remove(rid_tuple)
+    def subscribe_active_tuple(self,other_rec_obj,rec_tuple_obj):
+        self.expanded_record_tuples[other_rec_obj] = rec_tuple_obj
 
-        # remove the record-id from the mapping, if the record-combination was the onliest in the set
-        if not self.rids1[rid_tuple.rid1] :
-            del self.rids1[rid_tuple.rid1]
-        if not self.rids2[rid_tuple.rid2] :
-            del self.rids2[rid_tuple.rid2]
+
+class RecordTuple:
+    def __init__(self, rec_obj1, rec_obj2):
+        self.rec_obj1 = rec_obj1
+        self.rec_obj2 = rec_obj2
+        self.subscribers = dict()
+
+    def mark_filled_cell(self, filled_cells):
+        for cells in filled_cells:
+            self.rec_obj1.vacant_cols.remove(cells)
+            self.rec_obj2.vacant_cols.remove(cells)
+
+        # return True if the record is finished (no terms are vacant anymore)
+        if len(self.rec_obj1.vacant_cols) == 0:
+            return True
+        else:
+            return False
+
+    def add_subscriber(self, term_tuple, mapped_col):
+        self.subscribers[term_tuple] = mapped_col
+
+    def get_subscribers(self):
+        return self.subscribers
+
+    def remove_subscriber(self,term_tuple):
+        if term_tuple not in self.subscribers:
+            KeyError(" Term Tuple does not exist: " + str(term_tuple))
+        del self.subscribers[term_tuple]
 
 
 class Term:
@@ -69,100 +97,83 @@ class TermTuple:
         term_obj1.attached_tuples.add(self)
         term_obj2.attached_tuples.add(self)
         self.term_obj2 = term_obj2
-        self.rec_ids = dict()
+        self.sub_rids1 = set() # everybody holds a different amount of record_objects, so you know where you are subscribed
+        self.sub_rids2 = set()
+        self.sub_rids = set()
         self.similiarity_metric = similiarity_metric
         self.sim = 0
 
 
     def compute_similarity(self):
-        self.sim = self.similiarity_metric(self.term_obj1, self.term_obj2, self.rec_ids)
-
+        self.sim = self.similiarity_metric(self.term_obj1, self.term_obj2, self.sub_rids1,self.sub_rids2)
 
     # expanded_rid_tuples holds all tuples, that have been considered already
-    def occurrence_overlap(self,expanded_rid_tuples,active_rid_tuples,db_files):
+    def occurrence_overlap(self,records1,records2):
         # intersection saves the key (file,cols):  which is the minimum of occurrences for this key
         intersection = self.term_obj1.occurrence_c & self.term_obj2.occurrence_c
 
         for file_name, mapped_cols in intersection:
 
-            col_len = db_files[file_name].shape[1]
-            self.rec_ids.setdefault(file_name,FileRecordIds(file_name))
-
-
             l_ids1 = self.term_obj1.occurrences[(file_name,mapped_cols)]
             l_ids2 = self.term_obj2.occurrences[(file_name,mapped_cols)]
             for rid1 in l_ids1:
+                rec_obj1 = records1[(rid1,file_name)]
 
                 for rid2 in l_ids2:
-                    b_rid1_active = rid1 in active_rid_tuples[file_name].rids1
-                    b_rid2_active = rid2 in active_rid_tuples[file_name].rids2
-                    if b_rid1_active != b_rid2_active:
+                    rec_obj2 = records2[rid2, file_name]
+
+                    if rec_obj1.is_active() != rec_obj2.is_active():
                         # this means we would expand a record-tuple, where one side of the record-tuple is already activated by a mapping
-                        # but the other side not (i.e. active-mapping(1,2) and we want to introduce new mapping (3,2) will never work
+                        # but the other side not (i.e. is_active-mapping(1,2) and we want to introduce new mapping (3,2) will never work
                         continue
 
                     # both record-id1 and record-id2 point to the same object Record-Tuple (consisting of record-id1 and record-id2, etc.)
 
-                    if (file_name,rid1,rid2) not in expanded_rid_tuples:
-                        rid_obj = RecordTuple(rid1,rid2,col_len)
-                        expanded_rid_tuples[(file_name,rid1,rid2)] = rid_obj
+                    if rec_obj2 not in rec_obj1.expanded_record_tuples.keys():
+                        rec_tuple_obj = RecordTuple(rec_obj1,rec_obj2)
+                        rec_obj1.subscribe_exp_tuple(rec_obj2,rec_tuple_obj)
+                        rec_obj2.subscribe_exp_tuple(rec_obj1,rec_tuple_obj)
                     else:
                         # get access to the existing record-tuple-object
-                        rid_obj = expanded_rid_tuples[(file_name,rid1,rid2)]
-                    rid_obj.add_subscriber(self,mapped_cols)
-                    print(f"{self.term_obj1.name},{self.term_obj2.name} subscribe to record {rid_obj.rid1},{rid_obj.rid2}")
-                    self.rec_ids[file_name].add_record_tuple(rid_obj)
+                        rec_tuple_obj = rec_obj1.expanded_record_tuples[rec_obj2]
+                    rec_tuple_obj.add_subscriber(self,mapped_cols)
+                    print(f"{self.term_obj1.name},{self.term_obj2.name} subscribe to record {rec_tuple_obj.rec_obj1.rid},{rec_tuple_obj.rec_obj2.rid}")
+                    self.sub_rids1.add(rec_obj1)
+                    self.sub_rids2.add(rec_obj2)
+                    self.sub_rids.add(rec_tuple_obj)
 
         self.compute_similarity()
 
-    def remove_rid_comb(self,file_name,rid_tuple):
-        self.rec_ids[file_name].remove_record_tuple(rid_tuple)
-        # if this was the only red-tuple combination for the term tuple, we need to detach the TermTuple from the termObjects
-        if not self.rec_ids[file_name].rids:
-            del self.rec_ids[file_name]
-            if not self.rec_ids:
-                self.term_obj1.attached_tuples.remove(self)
-                self.term_obj2.attached_tuples.remove(self)
+
 
     # if we want to destroy the term tuple, we need to make sure it is not linked to any thing anymore
-    def prepare_self_destroy(self):
-        #print(f"remove {self} from {self.term_obj1} and from {self.term_obj2}")
+    def unlink_from_term_parents(self):
+        # pre
         self.term_obj1.attached_tuples.remove(self)
         self.term_obj2.attached_tuples.remove(self)
-        for rid_objs in self.rec_ids.values():
 
-            for rid_tuple in rid_objs.rids:
-                print(f"self destroy: {self.term_obj1.name},{self.term_obj2.name} from {rid_tuple.rid1},{rid_tuple.rid2}")
-                del rid_tuple.subscribers[self]
+    def unlink_from_all_rid_tuples(self):
+        for rid_obj in self.sub_rids:
+            print(f"self destroy: {self.term_obj1.name},{self.term_obj2.name} from {rid_obj.rec_obj1.rid},{rid_obj.rec_obj2.rid}")
+            rid_obj.remove_subscriber(self)
 
+    '''def remove_subscription(self,rid_tuple):
+        if rid_tuple.term_obj1 not in self.sub_rids1:
+            raise  KeyError(rid_tuple.term_obj1)
+        if rid_tuple.term_obj2 not in self.sub_rids2:
+            raise KeyError(rid_tuple.term_obj2)
+        
+        self.sub_rids1[rid_tuple.rec_obj1].remove(rid_tuple)        
+        self.sub_rids2[rid_tuple.rec_obj2].remove(rid_tuple)
 
+        self.term_obj1.attached_tuples.remove(self)
+        self.term_obj2.attached_tuples.remove(self)
+    '''
     def get_similarity(self):
         return self.sim
 
     def get_records(self):
-        return self.rec_ids
-
-class RecordTuple:
-    def __init__(self,rid1,rid2,col_len):
-        self.rid1 = rid1
-        self.rid2 = rid2
-        self.col_len = col_len
-        self.vacant_cols = list(range(col_len))
-        self.subscribers = dict()
-
-    def mark_filled_cell(self, filled_cells):
-        for cells in filled_cells:
-            self.vacant_cols.remove(cells)
-        # return True if the record is finished (no terms are vacant anymore)
-        if len(self.vacant_cols) == 0:
-            return True
-        else:
-            return False
-# add column to the subscriber?
-    def add_subscriber(self,term_tuple,mapped_col):
-        self.subscribers[term_tuple] = mapped_col
-    def get_subscribers(self):
-        return self.subscribers
+        return self.sub_rids1,self.sub_rids2,self.sub_rids
 
 
 class DB_Instance:

@@ -19,10 +19,23 @@ def recompute_hubs(accepted_sim):
     return low_outlier
 
 
+def initialize_records(db):
+    records = dict()
+    for file_name,df in db.files.items():
+        col_len = df.shape[1]
+        for rid in range(len(df)):
+            records[rid,file_name] = Record(rid, col_len,file_name)
+    return records
+
+
 def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_terms, similarity_metric):
     prio_dict = SortedDict()
-    active_rid_tuples = {file_name : FileRecordIds(file_name) for file_name in db1.files.keys()} # (file_name) [{rid1 :obj1,rid2:obj2}, {rid22 :obj1,rid23:obj3}]
-    expanded_rid_tuples = dict() # (file_name, rid1, rid2) : obj
+    #active_rid_tuples = {file_name : FileRecordIds(file_name) for file_name in db1.files.keys()} # (file_name) [{rid1 :obj1,rid2:obj2}, {rid22 :obj1,rid23:obj3}]
+    #expanded_rid_tuples = dict() # (file_name, rid1, rid2) : obj
+
+    records1 = initialize_records(db1)
+    records2 = initialize_records(db2)
+
 
     # those lists hold all terms, that are still mappable
     for term in terms1.keys():
@@ -72,7 +85,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
             mapped_tuple = tuples.pop(0)
             term_name1, term_name2 = mapped_tuple.term_obj1.name,mapped_tuple.term_obj2.name
             sim = mapped_tuple.get_similarity()
-            rid_tuple_files = mapped_tuple.get_records()
+            sub_rids1,sub_rids2,sub_rids = mapped_tuple.get_records()
 
             # last tuple in similarity bin -> delete empty bin
 
@@ -105,36 +118,46 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
             free_term_names2.discard(term_name2)
 
 
-            # remove tuple from prio_dict that are not possible after the current mapping (i.e accept: A -> A , can never match B-> A )
+            # find all term-tuplesthat are not possible after the current mapping (i.e accept: A -> A , can never match B-> A )
+            # remove them from prio_dict & unattatch them
             remove_term_tuples = set()
             remove_term_tuples |= mapped_tuple.term_obj1.attached_tuples
             remove_term_tuples |= mapped_tuple.term_obj2.attached_tuples
             remove_term_tuples.remove(mapped_tuple)
 
-            # delete all tuples from priority queue, that contain term_obj1 or term_obj2, since the current mapping was removed from prio-dict we exclude it
             delete_from_prio_dict(remove_term_tuples, prio_dict)
             for del_term_tuple in remove_term_tuples.copy():
                 print(f"del Term-Tuple: {del_term_tuple.term_obj1.name},{del_term_tuple.term_obj2.name}")
-                del_term_tuple.prepare_self_destroy()
-                #del del_term_tuple
+                del_term_tuple.unlink_from_term_parents()
+                del_term_tuple.unlink_from_all_rid_tuples()
 
 
             l = sum(len(val) for val in prio_dict.values())
-            #if setup.debug:
-            #    print("reduced length: " + str(l))
             watch_prio_len.append(l)
-
             accepted_sim.append(sim)
 
             # can be used later in the expansion
-            expansion_rid_tuples = dict() # filename {ridtuples}
+            expansion_rid_tuples = set() # filename {ridtuples}
+
+            # all tuples that are not active will be expanded & made active
+            for rec_obj1 in sub_rids1:
+                # both indiviual sides are active so the record tuple is active too (in fact one check would be enough)
+                if rec_obj1.is_active():
+                    rid1 = rid_tuple.rid_ibj1.rid
+                    rid2 = rid_tuple.rid_ibj2.rid
+
+                # record-tuple was not active -> expand it in the discovery phase
+                else:
+                    expansion_rid_tuples.add(rec_obj1.)
+                    rid_tuple.set_active()
+
+
 
 
             # dynamic record matching
-            for file_records_obj in rid_tuple_files.values():
-                active_rid_obj = active_rid_tuples[file_records_obj.name]
+                #active_rid_obj = active_rid_tuples[file_records_obj.name]
                 # expanded rid-tuples are those that are not active
-                expansion_rid_tuples[file_records_obj.name] = file_records_obj.rids - active_rid_obj.rids
+                #expansion_rid_tuples[file_records_obj.name] = file_records_obj.rids - active_rid_obj.rids
                 # all rid-tuples that are active and come from mapping will be kept & updated
                 
                 # all records (from one side) that come from the mapping & were active already 
@@ -171,7 +194,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
                         # unsubscribe each term-tuple from the record-obj that will be deleted
                         if setup.debug: print(
                             f"unsubscribe {sub_term_tuple.term_obj1.name},{sub_term_tuple.term_obj2.name} from {rid_tuple.rid1},{rid_tuple.rid2}")
-                        sub_term_tuple.remove_rid_comb(file_name, rid_tuple)
+                        sub_term_tuple.unsubscribe_from_rec_tuple(file_name, rid_tuple)
 
 
                 # delete unsafe record-tuples from active (bc. they were canceled)
@@ -214,7 +237,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
             #    print("new length: " + str(l))
             watch_prio_len.append(l)
 
-            mapped_tuple.prepare_self_destroy()
+            mapped_tuple.unlink_from_term_parents()
 
 
         # add new hubs, if prio_dict is empty
@@ -227,8 +250,8 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
             hub_objs2 = find_hubs_quantile(free_term_names2, terms2)
 
             new_mapping_tuples = find_crossproduct_mappings(hub_objs1, hub_objs2)
-            add_mappings_to_pq(db1,new_mapping_tuples,
-                               prio_dict,processed_mapping_tuples, watch_exp_sim, similarity_metric,expanded_rid_tuples,active_rid_tuples)
+            add_mappings_to_pq(new_mapping_tuples,
+                               prio_dict,processed_mapping_tuples, watch_exp_sim, similarity_metric,records1,records2)
 
             l = sum(len(val) for val in prio_dict.values())
             if setup.debug:
@@ -300,18 +323,17 @@ def find_crossproduct_mappings(hub_objs1, hub_objs2):
 
 
 # poss_mappings is a set of tuple
-def add_mappings_to_pq(db1,new_mapping_tuples,
-                       prio_dict,processed_mapping_tuples, watch_exp_sim, similarity_metric,expanded_rid_tuples,active_rid_tuples):
+def add_mappings_to_pq(new_mapping_tuples,
+                       prio_dict,processed_mapping_tuples, watch_exp_sim, similarity_metric,records1,records2):
 
     for term_obj1, term_obj2 in new_mapping_tuples:
         new_tuple = classes.TermTuple(term_obj1, term_obj2,similarity_metric)
         
         # active rid_combinations may reduce the overlap, because of our knowledge about the state of the mapping
-        new_tuple.occurrence_overlap(expanded_rid_tuples,active_rid_tuples,db1.files)
+        new_tuple.occurrence_overlap(records1,records2)
 
         sim = new_tuple.get_similarity()
         # this check is currently not necessary but later, when adding struc-sim we need it
-
         # add tuple to priority_queue
         if sim > 0:
             if setup.debug: print(f"expanded tuple: {new_tuple.term_obj1.name},{new_tuple.term_obj2.name}, sim: {sim}")
@@ -322,27 +344,7 @@ def add_mappings_to_pq(db1,new_mapping_tuples,
             watch_exp_sim.append(sim)
 
 
-
-def find_hubs_std(free_term_names, terms_occ):
-    degrees = []
-    nodes = []
-    for term in free_term_names:
-        degrees.append(len(terms_occ[term]))
-        nodes.append(term)
-    mean = np.mean(degrees)
-    std_dev = np.std(degrees)
-    threshold = mean + std_dev
-    # print("mean: "  + str(mean))
-    # print("std_dev: " + str(std_dev))
-    hubs = [nodes[i] for i in range(len(degrees)) if degrees[i] > threshold]
-    # print("anzahl der hubs: " + str(len(hubs)))
-    # print("anzahl der Terme: " + str(len(nodes)))
-    return hubs
-
-
 def find_hubs_quantile(free_term_names, terms):
     nodes = [terms[term_name].degree for term_name in free_term_names]
-    # if setup.debug: print(
-    #    "node degree mean: " + str(round(np.mean(nodes), 2)) + " standard deviation: " + str(round(np.std(nodes), 2)))
     quantile = np.quantile(nodes, q=0.95)
     return set(terms[free_term_names[iter]] for iter in range(len(free_term_names)) if nodes[iter] >= quantile)
