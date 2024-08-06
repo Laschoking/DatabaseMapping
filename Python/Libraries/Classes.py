@@ -1,6 +1,7 @@
 import itertools
 from enum import Enum
 from pathlib import Path
+#import Python.Config_Files.Setup as setup
 import pandas as pd
 from Python.Libraries import PathLib
 from Python.Libraries import ShellLib
@@ -18,20 +19,21 @@ class Record:
         self.vacant_cols = list(range(col_len))
         self.record_tuples = set()
         self.active = False
-        self.active_records_tuples = dict()
+        self.active_records_tuples = set() # set of all record-tuple-objects that are active atm and contain (self)
         self.expanded_record_tuples = dict() # is a dict of other record to object
 
     def is_active(self):
         return self.active
 
     def set_active(self):
-        if not self.active:
+        print(f"activate record Tuple {self.rid}")
+        if self.active:
             raise ValueError(f"boolean was active already: {self.rid,self.file_name}")
         self.active = True
+
     def add_record_tuple(self, rid_tuple):
         self.record_tuples.add(rid_tuple)
-    def subscribe_exp_tuple(self,other_rec_obj,rec_tuple_obj):
-        self.expanded_record_tuples[other_rec_obj] = rec_tuple_obj
+
 
     def subscribe_active_tuple(self,other_rec_obj,rec_tuple_obj):
         self.expanded_record_tuples[other_rec_obj] = rec_tuple_obj
@@ -43,17 +45,31 @@ class RecordTuple:
         self.rec_obj2 = rec_obj2
         self.subscribers = dict()
 
-    def mark_filled_cell(self, filled_cells):
-        for cells in filled_cells:
-            self.rec_obj1.vacant_cols.remove(cells)
-            self.rec_obj2.vacant_cols.remove(cells)
+    def mark_filled_cols(self, term_tuple):
+        if term_tuple not in self.subscribers:
+            raise KeyError(f"{term_tuple.term_obj1.name}, {term_tuple.term_obj2.name} is not {self.rec_obj1.rid},{self.rec_obj2.rid}")
+        mapped_cols = self.subscribers[term_tuple]
+        # one Term Tuple can satisfy several cols of the same record-combination (i.e. A1(a,a,b)  & A2(a,a,c))
+        for cells in mapped_cols:
+            # since we iterate over term-tuples, we may iterate several times over the same single record, so mb. the col is already marked
+            if cells in self.rec_obj1.vacant_cols:
+                self.rec_obj1.vacant_cols.remove(cells)
+            if cells in self.rec_obj1.vacant_cols:
+                self.rec_obj2.vacant_cols.remove(cells)
 
         # return True if the record is finished (no terms are vacant anymore)
         if len(self.rec_obj1.vacant_cols) == 0:
             return True
         else:
             return False
-
+    # the Record Tuple is activated, bc a mapping was accepted, that features this Record Tuple
+    '''def make_active(self):
+        for rec_obj in self.rec_obj1, self.rec_obj2:
+            rec_obj.set_active()
+            if self in rec_obj.active_records_tuples:
+                raise ValueError(f"Record Tuple {self.rec_obj1.rid},{self.rec_obj2.rid} was active already")
+            rec_obj.active_records_tuples.add(self)
+    '''
     def add_subscriber(self, term_tuple, mapped_col):
         self.subscribers[term_tuple] = mapped_col
 
@@ -64,6 +80,18 @@ class RecordTuple:
         if term_tuple not in self.subscribers:
             KeyError(" Term Tuple does not exist: " + str(term_tuple))
         del self.subscribers[term_tuple]
+
+    def make_inactive(self):
+        altered_subscribers = set()
+        for sub_term in self.subscribers.copy():
+            sub_term.unlink_from_rid_tuple(self)
+            altered_subscribers.add(sub_term)
+        self.subscribers = dict()
+        for rec_obj in self.rec_obj1, self.rec_obj2:
+            if self not in rec_obj.active_records_tuples:
+                raise KeyError(f" Record Tuple {rec_obj.rid},{rec_obj.rid} does not occur in active records")
+            rec_obj.active_records_tuples.remove(self)
+        return altered_subscribers
 
 
 class Term:
@@ -97,8 +125,8 @@ class TermTuple:
         term_obj1.attached_tuples.add(self)
         term_obj2.attached_tuples.add(self)
         self.term_obj2 = term_obj2
-        self.sub_rids1 = set() # everybody holds a different amount of record_objects, so you know where you are subscribed
-        self.sub_rids2 = set()
+        self.sub_rids1 = dict() # {rec_obj : set(rec_tuple1,rec_tuple2,...) }
+        self.sub_rids2 = dict()
         self.sub_rids = set()
         self.similiarity_metric = similiarity_metric
         self.sim = 0
@@ -106,9 +134,10 @@ class TermTuple:
 
     def compute_similarity(self):
         self.sim = self.similiarity_metric(self.term_obj1, self.term_obj2, self.sub_rids1,self.sub_rids2)
+        return self.sim
 
     # expanded_rid_tuples holds all tuples, that have been considered already
-    def occurrence_overlap(self,records1,records2):
+    def occurrence_overlap(self,records1,records2,expanded_record_tuples):
         # intersection saves the key (file,cols):  which is the minimum of occurrences for this key
         intersection = self.term_obj1.occurrence_c & self.term_obj2.occurrence_c
 
@@ -127,48 +156,48 @@ class TermTuple:
                         # but the other side not (i.e. is_active-mapping(1,2) and we want to introduce new mapping (3,2) will never work
                         continue
 
+
+
                     # both record-id1 and record-id2 point to the same object Record-Tuple (consisting of record-id1 and record-id2, etc.)
 
-                    if rec_obj2 not in rec_obj1.expanded_record_tuples.keys():
+                    if (rec_obj1,rec_obj2) not in expanded_record_tuples.keys():
                         rec_tuple_obj = RecordTuple(rec_obj1,rec_obj2)
-                        rec_obj1.subscribe_exp_tuple(rec_obj2,rec_tuple_obj)
-                        rec_obj2.subscribe_exp_tuple(rec_obj1,rec_tuple_obj)
+                        expanded_record_tuples[(rec_obj1,rec_obj2)] = rec_tuple_obj
                     else:
                         # get access to the existing record-tuple-object
-                        rec_tuple_obj = rec_obj1.expanded_record_tuples[rec_obj2]
+                        rec_tuple_obj = expanded_record_tuples[(rec_obj1,rec_obj2)]
                     rec_tuple_obj.add_subscriber(self,mapped_cols)
-                    print(f"{self.term_obj1.name},{self.term_obj2.name} subscribe to record {rec_tuple_obj.rec_obj1.rid},{rec_tuple_obj.rec_obj2.rid}")
-                    self.sub_rids1.add(rec_obj1)
-                    self.sub_rids2.add(rec_obj2)
+                    print(f"{self.term_obj1.name},{self.term_obj2.name}  subscribes to (active={rec_tuple_obj.rec_obj1.is_active()}) ({rec_tuple_obj.rec_obj1.rid},{rec_tuple_obj.rec_obj2.rid})")
+                    if rec_obj1.is_active() == rec_obj2.is_active():
+                        rec_obj1.active_records_tuples.add(rec_tuple_obj)
+                        rec_obj2.active_records_tuples.add(rec_tuple_obj)
+                    self.sub_rids1.setdefault(rec_obj1,set()).add(rec_tuple_obj)
+                    self.sub_rids2.setdefault(rec_obj2, set()).add(rec_tuple_obj)
                     self.sub_rids.add(rec_tuple_obj)
-
-        self.compute_similarity()
 
 
 
     # if we want to destroy the term tuple, we need to make sure it is not linked to any thing anymore
     def unlink_from_term_parents(self):
-        # pre
         self.term_obj1.attached_tuples.remove(self)
         self.term_obj2.attached_tuples.remove(self)
+        print(f" delete {self.term_obj1.name},{self.term_obj2.name}")
 
     def unlink_from_all_rid_tuples(self):
-        for rid_obj in self.sub_rids:
-            print(f"self destroy: {self.term_obj1.name},{self.term_obj2.name} from {rid_obj.rec_obj1.rid},{rid_obj.rec_obj2.rid}")
-            rid_obj.remove_subscriber(self)
+        for rid_obj in self.sub_rids.copy():
+            self.unlink_from_rid_tuple(rid_obj)
 
-    '''def remove_subscription(self,rid_tuple):
-        if rid_tuple.term_obj1 not in self.sub_rids1:
-            raise  KeyError(rid_tuple.term_obj1)
-        if rid_tuple.term_obj2 not in self.sub_rids2:
-            raise KeyError(rid_tuple.term_obj2)
-        
-        self.sub_rids1[rid_tuple.rec_obj1].remove(rid_tuple)        
-        self.sub_rids2[rid_tuple.rec_obj2].remove(rid_tuple)
+    def unlink_from_rid_tuple(self,rid_obj):
+        print(f"unlink ({self.term_obj1.name},{self.term_obj2.name}) from  ({rid_obj.rec_obj1.rid},{rid_obj.rec_obj2.rid})")
+        rid_obj.remove_subscriber(self)
+        self.sub_rids.remove(rid_obj)
+        self.sub_rids1[rid_obj.rec_obj1].remove(rid_obj)
+        self.sub_rids2[rid_obj.rec_obj2].remove(rid_obj)
+        if not self.sub_rids1[rid_obj.rec_obj1]:
+            del self.sub_rids1[rid_obj.rec_obj1]
+        if not self.sub_rids2[rid_obj.rec_obj2]:
+            del self.sub_rids2[rid_obj.rec_obj2]
 
-        self.term_obj1.attached_tuples.remove(self)
-        self.term_obj2.attached_tuples.remove(self)
-    '''
     def get_similarity(self):
         return self.sim
 
