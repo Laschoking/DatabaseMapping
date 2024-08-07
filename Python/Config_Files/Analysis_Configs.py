@@ -40,6 +40,13 @@ Doop_PointerAnalysis = DatalogProgram("DoopProgramAnalysis","PointerAnalysis","P
 
 Unit_Tests_Doublette = DB_Config("Strukturelle_Unit_Tests","Doublette_Paradox","v1","v2")
 Unit_Test_Finish_Records = DB_Config("Strukturelle_Unit_Tests","Finish_Records","v1","v2")
+Unit_Test_Del_Rec1 = DB_Config("Strukturelle_Unit_Tests","Test_Del_Record_Tuple1","v1","v2")
+Unit_Test_Del_Rec2 = DB_Config("Strukturelle_Unit_Tests","Test_Del_Record_Tuple2","v1","v2")
+Unit_Test_Del_Record1 = DB_Config("Strukturelle_Unit_Tests","Test_Del_Record1","v1","v2")
+Unit_Test_Del_Record2 = DB_Config("Strukturelle_Unit_Tests","Test_Del_Record2","v1","v2")
+
+
+
 
 DOOP_GH1_alibaba = DB_Config("DoopProgramAnalysis","alibaba_arthas","release_1","release_2")
 DOOP_GH1_halo = DB_Config("DoopProgramAnalysis","halo-dev_halo","release_1","release_2")

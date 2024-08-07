@@ -25,7 +25,7 @@ debug = True
 if __name__ == "__main__":
 
     # specify Java-files & Programm Analysis
-    db_config = Unit_Test_Finish_Records
+    db_config = Unit_Test_Del_Record1
     program_config = Doop_PointerAnalysis
 
     gen_new_facts = False  # if true, run doop again for new fact-gen, otherwise just copy from doop/out
@@ -49,9 +49,7 @@ if __name__ == "__main__":
 
     # load facts into data-object
     data.db1_original_facts.read_db_relations()
-    data.read_terms_from_db(data.terms1, data.db1_original_facts)
     data.db2_original_facts.read_db_relations()
-    data.read_terms_from_db(data.terms2, data.db2_original_facts)
 
 
     # compute & evaluate equality base line
@@ -93,15 +91,18 @@ if __name__ == "__main__":
     time_tab = PrettyTable()
     time_tab.field_names = ["Mapping", "#blocked Mappings", "# 1:1 Mappings", "#synthetic Terms", "# hub comp.", "uncertain mappings", "# comp. tuples", "comp. tuples in %", "run-time"]
 
-    c_max_tuples = len(data.terms1) * len(data.terms2)
     # iterate through all selected mapping functions
     for mapping in data.mappings:
         print("--------------------------")
         print(mapping.name)
+        mapping.initialize_records_terms_db1(data.db1_original_facts)
+        mapping.init_records_terms_db2(data.db2_original_facts)
+        c_max_tuples = len(mapping.terms1) * len(mapping.terms2)
+
         # calculate similarity_matrix & compute maximal mapping from db1_facts to db2_facts
         if comp_new_mapping:
             t0 = time.time()
-            mapping.compute_mapping(db1_facts,data.terms1, db2_facts, data.terms2, program_config.blocked_terms)
+            mapping.compute_mapping(db1_facts,program_config.blocked_terms)
             t1 = time.time()
             mapping.db1_renamed_facts.log_db_relations()
             mapping_rt = round(t1 - t0, 4)
@@ -165,5 +166,5 @@ if __name__ == "__main__":
 
     print(eval_tab)
 
-    data.log_terms()
+    #data.log_terms()
     global_log.saveResults()

@@ -19,23 +19,15 @@ def recompute_hubs(accepted_sim):
     return low_outlier
 
 
-def initialize_records(db):
-    records = dict()
-    for file_name,df in db.files.items():
-        col_len = df.shape[1]
-        for rid in range(len(df)):
-            records[rid,file_name] = Record(rid, col_len,file_name)
-    return records
 
 
 
 
 
-def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_terms, similarity_metric):
+
+def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, blocked_terms, similarity_metric):
     prio_dict = SortedDict()
 
-    records1 = initialize_records(db1)
-    records2 = initialize_records(db2)
     expanded_record_tuples = dict()
 
     # those lists hold all terms, that are still mappable
@@ -86,23 +78,25 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
             # removes first data-item ( tuples appended later i.e. by hub recomputation are at the end)
             mapped_tuple = tuples.pop(0)
             term_name1, term_name2 = mapped_tuple.term_obj1.name,mapped_tuple.term_obj2.name
-            sim = mapped_tuple.get_similarity()
+            mapped_sim = mapped_tuple.get_similarity()
+            mapped_tuple.term_obj1.set_vacant(False)
+            mapped_tuple.term_obj2.set_vacant(False)
             sub_rids1,sub_rids2,sub_rids = mapped_tuple.get_records()
 
             # last tuple in similarity bin -> delete empty bin
 
             if term_name1 not in free_term_names1 or term_name2 not in free_term_names2:
-                ValueError("Term should not be vacant anymore: " + term_name1 + " " + term_name2)
+                ValueError(f"Term should not be vacant anymore:  ({term_name1},{term_name2})")
 
             # if value is too bad - find new Hubs
             if setup.hub_recompute and accepted_sim and local_approval:
                 low_outlier = recompute_hubs(accepted_sim)
-                if sim < low_outlier:
+                if mapped_sim < low_outlier:
                     # trigger new hub detection
                     new_hubs_flag = True
-                    # insert sim & tuple back to dictionary
-                    prio_dict[sim].append(mapped_tuple)
-                    print("denied: " + str(sim))
+                    # insert mapped_sim & tuple back to dictionary
+                    prio_dict[mapped_sim].append(mapped_tuple)
+                    print("denied: " + str(mapped_sim))
                     # mark as false so at least 1 new mapping has to be added before we can trigger recomputation again
                     local_approval = False
                     continue
@@ -114,7 +108,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
 
             if setup.debug:
                 print("-----------------------------")
-                print(term_name1 + " -> " + term_name2 )#+ " " +  str(mapped_tuple))
+                print(f"{term_name1}  -> {term_name2} with sim: {mapped_sim}")
 
             # make terms "blocked"
             free_term_names1.discard(term_name1)
@@ -123,8 +117,8 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
             # find all term-tuplesthat are not possible after the current mapping (i.e accept: A -> A , can never match B-> A )
             # remove them from prio_dict & unattatch them
             remove_term_tuples = set()
-            remove_term_tuples |= mapped_tuple.term_obj1.attached_tuples
-            remove_term_tuples |= mapped_tuple.term_obj2.attached_tuples
+            remove_term_tuples |= mapped_tuple.term_obj1.attached_term_tuples
+            remove_term_tuples |= mapped_tuple.term_obj2.attached_term_tuples
             remove_term_tuples.remove(mapped_tuple)
 
             delete_from_prio_dict(remove_term_tuples, prio_dict)
@@ -135,7 +129,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
 
             l = sum(len(val) for val in prio_dict.values())
             watch_prio_len.append(l)
-            accepted_sim.append(sim)
+            accepted_sim.append(mapped_sim)
 
             # can be used later in the expansion
             expansion_rid_tuples = set() # filename {ridtuples}
@@ -161,7 +155,12 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
             # make rid-tuples that are now invalid inactive & find Term Tuples that need to be updated
             for outdated_rid_tuple in outdated_rid_tuples.copy():
                 altered_tuples = outdated_rid_tuple.make_inactive()
-                altered_term_tuples.update(altered_tuples)
+                altered_term_tuples |= altered_tuples
+
+            for unfitting_record in mapped_tuple.destroy_record_objs:
+                if unfitting_record.is_active():
+                    if setup.debug: print(f"deactivated record {unfitting_record.rid}")
+                    altered_term_tuples |= unfitting_record.deactivate_self(mapped_tuple)
 
             # update confidence value & possibly change position of mapping in the prio queue
             # this will delete the Term Tuple if it now has a similarity of 0 (hence we dont need to delete Term Tuples midway)
@@ -171,17 +170,13 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
             # current state: consider only terms, that occur in same colum of merged records
             new_mapping_tuples = set()
             for rec_tuple in expansion_rid_tuples:
-                # TODO ggf. alles in Record Object reinladen, & auf dataframes verzichten
-                file_name = rec_tuple.rec_obj1.file_name
-                df1 = db1.files[file_name]
-                df2 = db2.files[file_name]
                 new_cols = rec_tuple.rec_obj1.vacant_cols # has the same result as rec_obj2.vacant_cols, because both are updated at the same time
                 for col in new_cols:
-                    term_name1 = df1.iat[rec_tuple.rec_obj1.rid,col]
-                    term_name2 = df2.iat[rec_tuple.rec_obj2.rid, col]
-                    new_mapping_tuples.add((terms1[term_name1],terms2[term_name2]))
+                    term_obj1 = rec_tuple.rec_obj1.terms[col]
+                    term_obj2 = rec_tuple.rec_obj2.terms[col]
+                    new_mapping_tuples.add((term_obj1,term_obj2))
                     #if setup.debug: print(f"term1: {term_name1} , term2:  {term_name2}")
-            new_mapping_tuples -= processed_mapping_tuples
+            #new_mapping_tuples -= processed_mapping_tuples
 
             add_mappings_to_pq(new_mapping_tuples,prio_dict,processed_mapping_tuples,
                                watch_exp_sim, similarity_metric,records1,records2,expanded_record_tuples)
@@ -192,7 +187,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
             # allow new hub-recomputation
             if not local_approval:
                 local_approval = True
-                print("now accepted: " + str(sim))
+                #print("now accepted: " + str(mapped_sim))
 
             l = sum(len(val) for val in prio_dict.values())
             watch_prio_len.append(l)
@@ -236,7 +231,7 @@ def iterative_anchor_expansion(mapping_obj, db1, terms1, db2, terms2, blocked_te
 
             break
     mapping_obj.mapping = pd.DataFrame.from_records(mapping_dict, columns=None)
-    plot_statistics(similarity_metric.__name__,watch_prio_len,watch_exp_sim,accepted_sim)
+    #plot_statistics(similarity_metric.__name__,watch_prio_len,watch_exp_sim,accepted_sim)
 
     return uncertain_mapping_tuples, count_hub_recomp, len(tuples_loc_sim.keys())
 
@@ -250,8 +245,9 @@ def update_tuples_prio_dict(sub_term_tuples,prio_dict):
         # similarity stayed the same
         if setup.debug: print(f"recompute sim : ({sub_term_tuple.term_obj1.name},{sub_term_tuple.term_obj2.name}) old sim: {old_sim}, new sim: {new_sim}")
 
+        # this tuple stays the same, so no need to update the priority_dict
         if old_sim == new_sim:
-            return
+            continue
         prio_dict[old_sim].remove(sub_term_tuple)
         if new_sim == 0:
             # the tuple does not fulfil any potential record tuple anymore so its useless
@@ -282,10 +278,10 @@ def add_mappings_to_pq(new_mapping_tuples,
                        prio_dict,processed_mapping_tuples, watch_exp_sim, similarity_metric,records1,records2,expanded_record_tuples):
 
     for term_obj1, term_obj2 in new_mapping_tuples:
-        new_tuple = classes.TermTuple(term_obj1, term_obj2,similarity_metric)
+        new_tuple = classes.TermTuple(term_obj1, term_obj2,records1, records2, expanded_record_tuples ,similarity_metric)
         
         # active rid_combinations may reduce the overlap, because of our knowledge about the state of the mapping
-        new_tuple.occurrence_overlap(records1,records2,expanded_record_tuples)
+        #new_tuple.calc_initial_record_tuples()
 
         sim = new_tuple.compute_similarity()
         # this check is currently not necessary but later, when adding struc-sim we need it

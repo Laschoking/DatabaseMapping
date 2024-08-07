@@ -12,15 +12,20 @@ import os
 
 
 class Record:
-    def __init__(self, rid, col_len,file_name):
+    def __init__(self, rid, file_name):
         self.rid = rid
         self.file_name = file_name
-        self.col_len = col_len
-        self.vacant_cols = list(range(col_len))
+        self.col_len = 0
+        self.vacant_cols = list()
         self.record_tuples = set()
         self.active = False
-        self.active_records_tuples = set() # set of all record-tuple-objects that are active atm and contain (self)
-        self.expanded_record_tuples = dict() # is a dict of other record to object
+        self.active_records_tuples = set()  # set of all record-tuple-objects that are active atm and contain (self)
+        self.terms = list()  # we note all term_objs that contribute to the record
+
+    def add_term(self,term):
+        self.terms.append(term)
+        self.vacant_cols.append(self.col_len)
+        self.col_len += 1
 
     def is_active(self):
         return self.active
@@ -34,10 +39,30 @@ class Record:
     def add_record_tuple(self, rid_tuple):
         self.record_tuples.add(rid_tuple)
 
+    # if a record can not be matched anymore due to a recent mapping, we want to delete the occurrences of the terms within
+    def deactivate_self(self,mapped_tuple):
+        self.active = False
+        altered_term_tuples = set()
+        term_cols = dict()
+        i = 0
+        for term_obj in self.terms:
+            # makes sure we only update term_objs that are free (not mapped already)
+            if term_obj.is_vacant():
+                term_cols.setdefault(term_obj, list()).append(i)
+            i += 1
 
-    def subscribe_active_tuple(self,other_rec_obj,rec_tuple_obj):
-        self.expanded_record_tuples[other_rec_obj] = rec_tuple_obj
+            # denotes all record_objs where the term is subscribed
+            # we want to remove this (self) record from the occurrences
+        # self.terms == mapped_tuple.term_obj1
 
+        for term_obj,cols in term_cols.items():
+            # remove this record_obj from the occurrences of the term, because it is now obsolete
+            print(f"delete occurrence ({self.file_name},{self.rid}) from {term_obj.name} at col {cols}")
+            term_obj.occurrences[self.file_name,tuple(cols)].remove(self)
+
+            # those terms will later receive a new similarity based on the deleted occurrences
+            altered_term_tuples |= term_obj.attached_term_tuples
+        return altered_term_tuples
 
 class RecordTuple:
     def __init__(self, rec_obj1, rec_obj2):
@@ -63,18 +88,14 @@ class RecordTuple:
         else:
             return False
     # the Record Tuple is activated, bc a mapping was accepted, that features this Record Tuple
-    '''def make_active(self):
-        for rec_obj in self.rec_obj1, self.rec_obj2:
-            rec_obj.set_active()
-            if self in rec_obj.active_records_tuples:
-                raise ValueError(f"Record Tuple {self.rec_obj1.rid},{self.rec_obj2.rid} was active already")
-            rec_obj.active_records_tuples.add(self)
-    '''
+
     def add_subscriber(self, term_tuple, mapped_col):
         self.subscribers[term_tuple] = mapped_col
 
     def get_subscribers(self):
         return self.subscribers
+
+
 
     def remove_subscriber(self,term_tuple):
         if term_tuple not in self.subscribers:
@@ -95,92 +116,107 @@ class RecordTuple:
 
 
 class Term:
-    def __init__(self, term_name, file_name,col_ind,row_ind):
+    def __init__(self, term_name, file_name,col_ind,rec_obj):
         self.name = term_name
         self.occurrences = dict()
-        self.occurrence_c = Counter()
-        self.attached_tuples = set()
+        self.attached_term_tuples = set()
         self.type = "int" if type(term_name) is int else "string"
         self.degree = 0
+        self.vacant = True
 
-        self.update(file_name,col_ind,row_ind)
+        self.update(file_name,col_ind,rec_obj)
 
+    def is_vacant(self):
+        return self.vacant
+    def set_vacant(self,b):
+        self.vacant = b
     # one occurence has the following structure: file_name,cols,row_nr
     # the collection is of following structure {(file_name,cols) : [row_nr1,row_nr2, ...]}
     # this way, all row_nr are stored together, but with file_name,cols as keys
     # those keys can be used for later set-operations while mapping
-    def update(self,file_name,cols,row_nr):
+    def update(self,file_name,cols,rec_obj):
+        # cols needs to be of type tuple bc. list is mutable object
+        if type(cols) is list:
+            cols = tuple(cols)
         key = (file_name,cols)
-        self.occurrence_c.update([key])
-        if key in self.occurrences:
-            self.occurrences[key].append(row_nr)
-        else:
-            self.occurrences[key] = [row_nr]
+        self.occurrences.setdefault(key,set()).add(rec_obj)
         self.degree += 1
+
+    def set_inactive(self):
+        self.is_vacant = False
+
 
 # this will be 1 potential mapping
 class TermTuple:
-    def __init__(self,term_obj1, term_obj2,similiarity_metric):
+    def __init__(self,term_obj1, term_obj2,records1, records2, expanded_record_tuples,similiarity_metric):
         self.term_obj1 = term_obj1
-        term_obj1.attached_tuples.add(self)
-        term_obj2.attached_tuples.add(self)
+        term_obj1.attached_term_tuples.add(self)
+        term_obj2.attached_term_tuples.add(self)
         self.term_obj2 = term_obj2
         self.sub_rids1 = dict() # {rec_obj : set(rec_tuple1,rec_tuple2,...) }
         self.sub_rids2 = dict()
         self.sub_rids = set()
+        self.destroy_record_objs = set() # keeps all record-objects that are destroyed (never matched) after applying this mapping
         self.similiarity_metric = similiarity_metric
         self.sim = 0
+        self.calc_initial_record_tuples(records1, records2, expanded_record_tuples)
+
+
+
+    # this function is comes up with all record tuples, that a term pair could fulfill
+    # it is only called once, when initialising the term-tuple
+    def calc_initial_record_tuples(self, records1, records2, expanded_record_tuples):
+        # intersection saves the key (file,cols):  which is the minimum of occurrences for this key
+        intersection = set(self.term_obj1.occurrences.keys()) & set(self.term_obj2.occurrences.keys())
+        destroy_records1 = set(self.term_obj1.occurrences.keys()) - intersection
+        destroy_records2 = set(self.term_obj2.occurrences.keys()) - intersection
+        # take (file_name,col) that will not get matched, find all record-identifier belonging to it & return the record_object for each combination
+        for (file_name, col) in destroy_records1:
+            self.destroy_record_objs.update(self.term_obj1.occurrences[file_name, col])
+        #self.destroy_record_objs.update(self.term_obj1.occurrences[file_name,col] for (file_name,col) in destroy_records1)
+
+        for (file_name, col) in destroy_records2:
+            self.destroy_record_objs.update(self.term_obj2.occurrences[file_name, col])
+        #self.destroy_record_objs.update(self.term_obj2.occurrences[file_name,col] for file_name,col in destroy_records2)
+
+        for file_name, mapped_cols in intersection:
+
+            rec_objs1 = self.term_obj1.occurrences[(file_name,mapped_cols)]
+            rec_objs2 = self.term_obj2.occurrences[(file_name,mapped_cols)]
+
+            for rec_obj1,rec_obj2 in itertools.product(rec_objs1,rec_objs2):
+
+                if rec_obj1.is_active() != rec_obj2.is_active():
+                    # this means we would expand a record-tuple, where one side of the record-tuple is already activated by a mapping
+                    # but the other side not (i.e. is_active-mapping(1,2) and we want to introduce new mapping (3,2) will never work
+                    continue
+
+                # both record-id1 and record-id2 point to the same object Record-Tuple (consisting of record-id1 and record-id2, etc.)
+                if (rec_obj1,rec_obj2) not in expanded_record_tuples.keys():
+                    rec_tuple_obj = RecordTuple(rec_obj1,rec_obj2)
+                    # expanded_record_tuples is a global dictionary linking rec_obj1,rec_obj2 to the record-tuple
+                    expanded_record_tuples[(rec_obj1,rec_obj2)] = rec_tuple_obj
+                else:
+                    # get access to the existing record-tuple-object
+                    rec_tuple_obj = expanded_record_tuples[(rec_obj1,rec_obj2)]
+                rec_tuple_obj.add_subscriber(self,mapped_cols)
+                print(f"{self.term_obj1.name},{self.term_obj2.name}  subscribes to (active={rec_tuple_obj.rec_obj1.is_active()}) ({rec_tuple_obj.rec_obj1.rid},{rec_tuple_obj.rec_obj2.rid})")
+                if rec_obj1.is_active() == rec_obj2.is_active():
+                    rec_obj1.active_records_tuples.add(rec_tuple_obj)
+                    rec_obj2.active_records_tuples.add(rec_tuple_obj)
+                self.sub_rids1.setdefault(rec_obj1,set()).add(rec_tuple_obj)
+                self.sub_rids2.setdefault(rec_obj2, set()).add(rec_tuple_obj)
+                self.sub_rids.add(rec_tuple_obj)
 
 
     def compute_similarity(self):
         self.sim = self.similiarity_metric(self.term_obj1, self.term_obj2, self.sub_rids1,self.sub_rids2)
         return self.sim
 
-    # expanded_rid_tuples holds all tuples, that have been considered already
-    def occurrence_overlap(self,records1,records2,expanded_record_tuples):
-        # intersection saves the key (file,cols):  which is the minimum of occurrences for this key
-        intersection = self.term_obj1.occurrence_c & self.term_obj2.occurrence_c
-
-        for file_name, mapped_cols in intersection:
-
-            l_ids1 = self.term_obj1.occurrences[(file_name,mapped_cols)]
-            l_ids2 = self.term_obj2.occurrences[(file_name,mapped_cols)]
-            for rid1 in l_ids1:
-                rec_obj1 = records1[(rid1,file_name)]
-
-                for rid2 in l_ids2:
-                    rec_obj2 = records2[rid2, file_name]
-
-                    if rec_obj1.is_active() != rec_obj2.is_active():
-                        # this means we would expand a record-tuple, where one side of the record-tuple is already activated by a mapping
-                        # but the other side not (i.e. is_active-mapping(1,2) and we want to introduce new mapping (3,2) will never work
-                        continue
-
-
-
-                    # both record-id1 and record-id2 point to the same object Record-Tuple (consisting of record-id1 and record-id2, etc.)
-
-                    if (rec_obj1,rec_obj2) not in expanded_record_tuples.keys():
-                        rec_tuple_obj = RecordTuple(rec_obj1,rec_obj2)
-                        expanded_record_tuples[(rec_obj1,rec_obj2)] = rec_tuple_obj
-                    else:
-                        # get access to the existing record-tuple-object
-                        rec_tuple_obj = expanded_record_tuples[(rec_obj1,rec_obj2)]
-                    rec_tuple_obj.add_subscriber(self,mapped_cols)
-                    print(f"{self.term_obj1.name},{self.term_obj2.name}  subscribes to (active={rec_tuple_obj.rec_obj1.is_active()}) ({rec_tuple_obj.rec_obj1.rid},{rec_tuple_obj.rec_obj2.rid})")
-                    if rec_obj1.is_active() == rec_obj2.is_active():
-                        rec_obj1.active_records_tuples.add(rec_tuple_obj)
-                        rec_obj2.active_records_tuples.add(rec_tuple_obj)
-                    self.sub_rids1.setdefault(rec_obj1,set()).add(rec_tuple_obj)
-                    self.sub_rids2.setdefault(rec_obj2, set()).add(rec_tuple_obj)
-                    self.sub_rids.add(rec_tuple_obj)
-
-
-
     # if we want to destroy the term tuple, we need to make sure it is not linked to any thing anymore
     def unlink_from_term_parents(self):
-        self.term_obj1.attached_tuples.remove(self)
-        self.term_obj2.attached_tuples.remove(self)
+        self.term_obj1.attached_term_tuples.remove(self)
+        self.term_obj2.attached_term_tuples.remove(self)
         print(f" delete {self.term_obj1.name},{self.term_obj2.name}")
 
     def unlink_from_all_rid_tuples(self):
@@ -263,35 +299,12 @@ class DataBag:
         self.db1_original_results = DB_Instance(self.paths.db1_results, "db1-original")
         self.db2_original_results = DB_Instance(self.paths.db2_results, "db2-original")
 
-        self.terms1 = dict()
-        self.terms2 = dict()
+
         self.mappings = []
 
     def add_mapping(self, mapping):
         self.mappings.append(mapping)
 
-    def read_terms_from_db(self,terms, db_instance):
-        multi_col_terms = set()
-        for file_name, df in db_instance.files.items():
-            for row_ind, row in df.iterrows():
-                temp_dict = {}
-                for col_ind, term in row.items():
-                    if term not in temp_dict:
-                        temp_dict[term] = (col_ind,)
-                    else:
-                        # in case a term appears several times in same atom i.e. A("a","a","b") -> make a tuple (1,2)
-                        temp_dict[term] = temp_dict[term] + (col_ind,)
-
-                        multi_col_terms.add(term)
-
-                # unpack values
-                for term, cols in temp_dict.items():
-                    if term in terms:
-                        terms[term].update(file_name, cols,row_ind)
-                    else:
-                        terms[term] = Term(term, file_name,cols,row_ind)
-        print("Count of terms with multi-occurrences in " + db_instance.name + " : " + str(len(multi_col_terms)))
-        return terms
 
     def log_terms(self):
         terms1_df = pd.Series(self.terms1.keys())

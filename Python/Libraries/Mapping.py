@@ -1,3 +1,5 @@
+from bidict import bidict
+
 from Python.Libraries import Classes
 from Python.Libraries import ShellLib
 import pandas as pd
@@ -22,19 +24,61 @@ class Mapping():
         self.expansion_strategy = expansion_strategy
         self.similarity_metric = similarity_metric
 
+        self.records1 = bidict()
+        self.records2 = bidict()
+        self.terms1 = dict() # could be bidict as well
+        self.terms2 = dict()
+
         self.c_uncertain_mappings = 0
         self.c_hub_recomp = 0
         self.c_comp_tuples = 0
 
+    def initialize_records_terms_db1(self, db1):
+        self.init_records_terms_db(db1,self.terms1,self.records1)
+
+    def init_records_terms_db2(self, db2):
+        self.init_records_terms_db(db2,self.terms2,self.records2)
+
+    # terms and records need to be initialised together because term.occurrences points to record_obj 
+    # and rec_obj.terms points to term_obj
+    def init_records_terms_db(self,db_instance,terms,records):
+
+        multi_col_terms = set()
+        for file_name, df in db_instance.files.items():
+            for row_ind, row in df.iterrows():
+                
+                curr_record = Classes.Record(row_ind, file_name)
+                records[row_ind, file_name] = curr_record
+                
+                temp_dict = dict()
+                for col_ind, term_name in row.items():
+                    # in case a term appears several times in same atom i.e. A("a","a","b") -> make a list [1,2]
+                    temp_dict.setdefault(term_name,list()).append(col_ind)
+
+                # unpack values
+                for term_name, cols in temp_dict.items():
+                    if len(cols) > 1:
+                        multi_col_terms.add(term_name)
+                    if term_name in terms:
+                        term_obj = terms[term_name]
+                        term_obj.update(file_name, cols,curr_record)
+                    else:
+                        term_obj = Classes.Term(term_name, file_name,cols,curr_record)
+                        terms[term_name] = term_obj
+                    curr_record.add_term(term_obj)
+        print("Count of terms with multi-occurrences in " + db_instance.name + " : " + str(len(multi_col_terms)))
+
     def set_mapping(self, mapping):
         self.mapping = mapping
 
-    def compute_mapping(self,db1,terms1,db2,terms2,pa_non_mapping_terms):
-        uncertain_mapping_tuples, count_hub_recomp, comp_tuples = self.expansion_strategy(self,db1,terms1,db2,terms2,pa_non_mapping_terms,self.similarity_metric)
+    def compute_mapping(self,db1,pa_non_mapping_terms):
+        uncertain_mapping_tuples, count_hub_recomp, comp_tuples = self.expansion_strategy(self,self.records1,self.terms1,self.records2,self.terms2,pa_non_mapping_terms,self.similarity_metric)
         self.c_uncertain_mappings = uncertain_mapping_tuples
         self.c_hub_recomp = count_hub_recomp
         self.c_comp_tuples = comp_tuples
 
+        # do the renaming & matching
+        # this could also be avoided through implementation of the record-objs, but is too much work rn
         for file_name,df in db1.files.items():
             mapped_df = self.map_df(df, self.mapping[0], self.mapping[1])
             self.db1_renamed_facts.insert_df(file_name,mapped_df)
