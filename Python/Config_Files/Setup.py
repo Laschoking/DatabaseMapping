@@ -25,7 +25,7 @@ debug = True
 if __name__ == "__main__":
 
     # specify Java-files & Programm Analysis
-    db_config = Unit_Test_Del_Record1
+    db_config = Unit_Test_Dyn_Max_Cardinality
     program_config = Doop_PointerAnalysis
 
     gen_new_facts = False  # if true, run doop again for new fact-gen, otherwise just copy from doop/out

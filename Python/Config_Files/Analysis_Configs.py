@@ -44,7 +44,7 @@ Unit_Test_Del_Rec1 = DB_Config("Strukturelle_Unit_Tests","Test_Del_Record_Tuple1
 Unit_Test_Del_Rec2 = DB_Config("Strukturelle_Unit_Tests","Test_Del_Record_Tuple2","v1","v2")
 Unit_Test_Del_Record1 = DB_Config("Strukturelle_Unit_Tests","Test_Del_Record1","v1","v2")
 Unit_Test_Del_Record2 = DB_Config("Strukturelle_Unit_Tests","Test_Del_Record2","v1","v2")
-
+Unit_Test_Dyn_Max_Cardinality = DB_Config("Strukturelle_Unit_Tests","Test_Dyn_Max_Cardinality","v1","v2")
 
 
 

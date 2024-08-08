@@ -72,9 +72,9 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
             mapped_tuple = tuples.pop(0)
             term_name1, term_name2 = mapped_tuple.term_obj1.name,mapped_tuple.term_obj2.name
             mapped_sim = mapped_tuple.get_similarity()
-            mapped_tuple.term_obj1.set_mapped()
-            mapped_tuple.term_obj2.set_mapped()
-            sub_rids1,sub_rids2,sub_rids = mapped_tuple.get_records()
+            remove_term_tuples = mapped_tuple.accept_this_mapping() # returns mappings that are now invalid
+
+            sub_rids = mapped_tuple.get_records()
 
             # last tuple in similarity bin -> delete empty bin
 
@@ -109,16 +109,14 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
 
             # find all term-tuplesthat are not possible after the current mapping (i.e accept: A -> A , can never match B-> A )
             # remove them from prio_dict & unattatch them
-            remove_term_tuples = set()
-            remove_term_tuples |= mapped_tuple.term_obj1.attached_term_tuples
-            remove_term_tuples |= mapped_tuple.term_obj2.attached_term_tuples
-            remove_term_tuples.remove(mapped_tuple)
 
-            delete_from_prio_dict(remove_term_tuples, prio_dict)
+
+            delete_from_prio_dict(remove_term_tuples - mapped_tuple, prio_dict)
             for del_term_tuple in remove_term_tuples.copy():
+                del_term_tuple.set_inactive()
                 #print(f"delete ({del_term_tuple.term_obj1.name},{del_term_tuple.term_obj2.name})")
-                del_term_tuple.unlink_from_term_parents()
-                del_term_tuple.unlink_from_all_rid_tuples()
+                #del_term_tuple.unlink_from_term_parents()
+                #del_term_tuple.unlink_from_all_rid_tuples()
 
             l = sum(len(val) for val in prio_dict.values())
             watch_prio_len.append(l)
@@ -130,7 +128,7 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
             outdated_rid_tuples = set()
             altered_term_tuples = set()
             # all tuples that are not active will be expanded & made active
-            for rec_obj,mapped_rec_tuples in itertools.chain(sub_rids1.items(),sub_rids2.items()):
+            for rec_obj,mapped_rec_tuples in sub_rids:
                 # rec_obj active means that the connected mapped_rec_tuples are also active
                 if rec_obj.is_active():
                     active_rid_tuples |= mapped_rec_tuples
@@ -140,10 +138,7 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
                 else:
                     rec_obj.set_active()
                     expansion_rid_tuples.update(mapped_rec_tuples)
-            # this is a little redundant as we do it twice for each record-tuple
-            for mapped_rec_tuple in sub_rids:
-                # the record-tuple has the mapped_tuple as a subscriber, and
-                mapped_rec_tuple.mark_filled_cols(mapped_tuple)
+
 
             # make rid-tuples that are now invalid inactive & find Term Tuples that need to be updated
             for outdated_rid_tuple in outdated_rid_tuples.copy():
@@ -153,7 +148,7 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
             for unfitting_record in mapped_tuple.destroy_record_objs:
                 if unfitting_record.is_active():
                     if setup.debug: print(f"deactivated record {unfitting_record.rid}")
-                    altered_term_tuples |= unfitting_record.deactivate_self(mapped_tuple)
+                    altered_term_tuples |= unfitting_record.deactivate_self(expanded_record_tuples)
 
             # update confidence value & possibly change position of mapping in the prio queue
             # this will delete the Term Tuple if it now has a similarity of 0 (hence we dont need to delete Term Tuples midway)
