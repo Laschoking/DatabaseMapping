@@ -31,16 +31,10 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
     expanded_record_tuples = dict()
 
     # those lists hold all terms, that are still mappable
-    for term in terms1.keys():
-        if type(term) is not str:
-            print(term)
     free_term_names1 = SortedList(terms1.keys())
     free_term_names2 = SortedList(terms2.keys())
 
     mapping_dict = []
-
-    tuples_loc_sim = SortedDict()
-    processed_mapping_tuples = set()
 
     # block certain terms, that cannot be changed without computing wrong results
     '''    
@@ -62,7 +56,6 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
     uncertain_mapping_tuples = 0
     local_approval = setup.hub_recompute
 
-    count_hub_recomp = 0
     new_hubs_flag = True
 
     while 1:
@@ -79,8 +72,8 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
             mapped_tuple = tuples.pop(0)
             term_name1, term_name2 = mapped_tuple.term_obj1.name,mapped_tuple.term_obj2.name
             mapped_sim = mapped_tuple.get_similarity()
-            mapped_tuple.term_obj1.set_vacant(False)
-            mapped_tuple.term_obj2.set_vacant(False)
+            mapped_tuple.term_obj1.set_mapped()
+            mapped_tuple.term_obj2.set_mapped()
             sub_rids1,sub_rids2,sub_rids = mapped_tuple.get_records()
 
             # last tuple in similarity bin -> delete empty bin
@@ -176,10 +169,9 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
                     term_obj2 = rec_tuple.rec_obj2.terms[col]
                     new_mapping_tuples.add((term_obj1,term_obj2))
                     #if setup.debug: print(f"term1: {term_name1} , term2:  {term_name2}")
-            #new_mapping_tuples -= processed_mapping_tuples
 
-            add_mappings_to_pq(new_mapping_tuples,prio_dict,processed_mapping_tuples,
-                               watch_exp_sim, similarity_metric,records1,records2,expanded_record_tuples)
+            add_mappings_to_pq(new_mapping_tuples,prio_dict,
+                               watch_exp_sim, similarity_metric,expanded_record_tuples)
 
             if not prio_dict:
                 new_hubs_flag = True
@@ -198,7 +190,7 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
         # add new hubs, if prio_dict is empty
         elif len(free_term_names1) > 0 and len(free_term_names2) > 0 and new_hubs_flag:
             new_hubs_flag = False  # idea is to only find new hubs if in last iteration at least 1 mapping was added
-            count_hub_recomp += 1
+            mapping_obj.c_hub_recomp += 1
 
             # detect new hubs (term-objects) based on all free-terms for each Database
             hub_objs1 = find_hubs_quantile(free_term_names1, terms1)
@@ -206,16 +198,17 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
 
             new_mapping_tuples = find_crossproduct_mappings(hub_objs1, hub_objs2)
             add_mappings_to_pq(new_mapping_tuples,
-                               prio_dict,processed_mapping_tuples, watch_exp_sim, similarity_metric,records1,records2,expanded_record_tuples)
+                               prio_dict, watch_exp_sim, similarity_metric,expanded_record_tuples)
 
             l = sum(len(val) for val in prio_dict.values())
             if setup.debug:
                 print("new length hubs: " + str(l))
             watch_prio_len.append(l)
 
+
+        # Exit Strategy
+        # map the remaining terms to dummies
         else:
-            # Exit Strategy
-            # map the remaining terms to dummies
             for term_name1 in free_term_names1:
                 new_term = "new_var_" + str(mapping_obj.new_term_counter)
                 # print("add new var: " + new_term + " for " + term)
@@ -233,10 +226,8 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
     mapping_obj.mapping = pd.DataFrame.from_records(mapping_dict, columns=None)
     #plot_statistics(similarity_metric.__name__,watch_prio_len,watch_exp_sim,accepted_sim)
 
-    return uncertain_mapping_tuples, count_hub_recomp, len(tuples_loc_sim.keys())
+    return #uncertain_mapping_tuples, 0
 
-
-# stop sim berechnung wenn maximum gefunden wurde?
 
 def update_tuples_prio_dict(sub_term_tuples,prio_dict):
     for sub_term_tuple in sub_term_tuples:
@@ -275,10 +266,10 @@ def find_crossproduct_mappings(hub_objs1, hub_objs2):
 
 # poss_mappings is a set of tuple
 def add_mappings_to_pq(new_mapping_tuples,
-                       prio_dict,processed_mapping_tuples, watch_exp_sim, similarity_metric,records1,records2,expanded_record_tuples):
+                       prio_dict, watch_exp_sim, similarity_metric,expanded_record_tuples):
 
     for term_obj1, term_obj2 in new_mapping_tuples:
-        new_tuple = classes.TermTuple(term_obj1, term_obj2,records1, records2, expanded_record_tuples ,similarity_metric)
+        new_tuple = classes.TermTuple(term_obj1, term_obj2, expanded_record_tuples ,similarity_metric)
         
         # active rid_combinations may reduce the overlap, because of our knowledge about the state of the mapping
         #new_tuple.calc_initial_record_tuples()
@@ -289,8 +280,6 @@ def add_mappings_to_pq(new_mapping_tuples,
         if sim > 0:
             if setup.debug: print(f"expanded tuple: {new_tuple.term_obj1.name},{new_tuple.term_obj2.name}, sim: {sim}")
             prio_dict.setdefault(sim, list()).append(new_tuple)
-
-            processed_mapping_tuples.add((term_obj1,term_obj2))
 
             watch_exp_sim.append(sim)
 

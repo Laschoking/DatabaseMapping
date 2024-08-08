@@ -47,7 +47,7 @@ class Mapping():
         for file_name, df in db_instance.files.items():
             for row_ind, row in df.iterrows():
                 
-                curr_record = Classes.Record(row_ind, file_name)
+                curr_record = Classes.Record(row_ind, file_name,db_instance.name)
                 records[row_ind, file_name] = curr_record
                 
                 temp_dict = dict()
@@ -72,12 +72,15 @@ class Mapping():
         self.mapping = mapping
 
     def compute_mapping(self,db1,pa_non_mapping_terms):
-        uncertain_mapping_tuples, count_hub_recomp, comp_tuples = self.expansion_strategy(self,self.records1,self.terms1,self.records2,self.terms2,pa_non_mapping_terms,self.similarity_metric)
+        self.expansion_strategy(self, self.records1, self.terms1, self.records2, self.terms2, pa_non_mapping_terms,
+                                self.similarity_metric)
+        '''
+        uncertain_mapping_tuples, count_hub_recomp, comp_tuples = 
         self.c_uncertain_mappings = uncertain_mapping_tuples
         self.c_hub_recomp = count_hub_recomp
         self.c_comp_tuples = comp_tuples
-
-        # do the renaming & matching
+        '''
+        # do the renaming of Terms1 & matching of records
         # this could also be avoided through implementation of the record-objs, but is too much work rn
         for file_name,df in db1.files.items():
             mapped_df = self.map_df(df, self.mapping[0], self.mapping[1])
@@ -99,7 +102,7 @@ class Mapping():
             raise FileNotFoundError(self.mapping_path)
 
 
-    # output stuff
+    # write mapping results to CSV file
     def log_mapping(self):
         ShellLib.clear_directory(self.mapping_path.parent)
         self.mapping.to_csv(self.mapping_path,sep='\t',index=False,header=False)

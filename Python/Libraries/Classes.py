@@ -12,10 +12,11 @@ import os
 
 
 class Record:
-    def __init__(self, rid, file_name):
+    def __init__(self, rid, file_name,db):
         self.rid = rid
         self.file_name = file_name
         self.col_len = 0
+        self.db = db # denotes, if record belongs to db1 or db2
         self.vacant_cols = list()
         self.record_tuples = set()
         self.active = False
@@ -39,6 +40,8 @@ class Record:
     def add_record_tuple(self, rid_tuple):
         self.record_tuples.add(rid_tuple)
 
+
+
     # if a record can not be matched anymore due to a recent mapping, we want to delete the occurrences of the terms within
     def deactivate_self(self,mapped_tuple):
         self.active = False
@@ -47,7 +50,7 @@ class Record:
         i = 0
         for term_obj in self.terms:
             # makes sure we only update term_objs that are free (not mapped already)
-            if term_obj.is_vacant():
+            if not term_obj.is_mapped():
                 term_cols.setdefault(term_obj, list()).append(i)
             i += 1
 
@@ -58,7 +61,10 @@ class Record:
         for term_obj,cols in term_cols.items():
             # remove this record_obj from the occurrences of the term, because it is now obsolete
             print(f"delete occurrence ({self.file_name},{self.rid}) from {term_obj.name} at col {cols}")
-            term_obj.occurrences[self.file_name,tuple(cols)].remove(self)
+            term_obj.remove_occurrence(self.file_name,tuple(cols),self)
+
+            for term_tuple in term_obj.attached_term_tuples:
+                term_tuple.unlink_record(self)
 
             # those terms will later receive a new similarity based on the deleted occurrences
             altered_term_tuples |= term_obj.attached_term_tuples
@@ -122,14 +128,14 @@ class Term:
         self.attached_term_tuples = set()
         self.type = "int" if type(term_name) is int else "string"
         self.degree = 0
-        self.vacant = True
+        self.mapped = False
 
         self.update(file_name,col_ind,rec_obj)
 
-    def is_vacant(self):
-        return self.vacant
-    def set_vacant(self,b):
-        self.vacant = b
+    def is_mapped(self):
+        return self.mapped
+    def set_mapped(self):
+        self.mapped = True
     # one occurence has the following structure: file_name,cols,row_nr
     # the collection is of following structure {(file_name,cols) : [row_nr1,row_nr2, ...]}
     # this way, all row_nr are stored together, but with file_name,cols as keys
@@ -142,13 +148,14 @@ class Term:
         self.occurrences.setdefault(key,set()).add(rec_obj)
         self.degree += 1
 
-    def set_inactive(self):
-        self.is_vacant = False
-
+    def remove_occurrence(self,file_name,cols,rec_tuple):
+        self.occurrences[file_name,cols].remove(rec_tuple)
+        if not self.occurrences[file_name,cols]:
+            del self.occurrences[file_name,cols]
 
 # this will be 1 potential mapping
 class TermTuple:
-    def __init__(self,term_obj1, term_obj2,records1, records2, expanded_record_tuples,similiarity_metric):
+    def __init__(self,term_obj1, term_obj2, expanded_record_tuples,similiarity_metric):
         self.term_obj1 = term_obj1
         term_obj1.attached_term_tuples.add(self)
         term_obj2.attached_term_tuples.add(self)
@@ -159,13 +166,13 @@ class TermTuple:
         self.destroy_record_objs = set() # keeps all record-objects that are destroyed (never matched) after applying this mapping
         self.similiarity_metric = similiarity_metric
         self.sim = 0
-        self.calc_initial_record_tuples(records1, records2, expanded_record_tuples)
+        self.calc_initial_record_tuples(expanded_record_tuples)
 
 
 
     # this function is comes up with all record tuples, that a term pair could fulfill
     # it is only called once, when initialising the term-tuple
-    def calc_initial_record_tuples(self, records1, records2, expanded_record_tuples):
+    def calc_initial_record_tuples(self, expanded_record_tuples):
         # intersection saves the key (file,cols):  which is the minimum of occurrences for this key
         intersection = set(self.term_obj1.occurrences.keys()) & set(self.term_obj2.occurrences.keys())
         destroy_records1 = set(self.term_obj1.occurrences.keys()) - intersection
@@ -213,6 +220,12 @@ class TermTuple:
         self.sim = self.similiarity_metric(self.term_obj1, self.term_obj2, self.sub_rids1,self.sub_rids2)
         return self.sim
 
+    def get_similarity(self):
+        return self.sim
+
+    def get_records(self):
+        return self.sub_rids1,self.sub_rids2,self.sub_rids
+
     # if we want to destroy the term tuple, we need to make sure it is not linked to any thing anymore
     def unlink_from_term_parents(self):
         self.term_obj1.attached_term_tuples.remove(self)
@@ -224,22 +237,34 @@ class TermTuple:
             self.unlink_from_rid_tuple(rid_obj)
 
     def unlink_from_rid_tuple(self,rid_obj):
-        print(f"unlink ({self.term_obj1.name},{self.term_obj2.name}) from  ({rid_obj.rec_obj1.rid},{rid_obj.rec_obj2.rid})")
-        rid_obj.remove_subscriber(self)
-        self.sub_rids.remove(rid_obj)
-        self.sub_rids1[rid_obj.rec_obj1].remove(rid_obj)
-        self.sub_rids2[rid_obj.rec_obj2].remove(rid_obj)
-        if not self.sub_rids1[rid_obj.rec_obj1]:
-            del self.sub_rids1[rid_obj.rec_obj1]
-        if not self.sub_rids2[rid_obj.rec_obj2]:
-            del self.sub_rids2[rid_obj.rec_obj2]
+        if rid_obj in self.sub_rids:
+            print(f"unlink ({self.term_obj1.name},{self.term_obj2.name}) from  ({rid_obj.rec_obj1.rid},{rid_obj.rec_obj2.rid})")
+            rid_obj.remove_subscriber(self)
+            self.sub_rids.remove(rid_obj)
+            self.sub_rids1[rid_obj.rec_obj1].remove(rid_obj)
+            self.sub_rids2[rid_obj.rec_obj2].remove(rid_obj)
+            if not self.sub_rids1[rid_obj.rec_obj1]:
+                del self.sub_rids1[rid_obj.rec_obj1]
+            if not self.sub_rids2[rid_obj.rec_obj2]:
+                del self.sub_rids2[rid_obj.rec_obj2]
+        else:
+            print(f"({self.term_obj1.name},{self.term_obj2.name}) is not linked to  ({rid_obj.rec_obj1.rid},{rid_obj.rec_obj2.rid})")
 
-    def get_similarity(self):
-        return self.sim
 
-    def get_records(self):
-        return self.sub_rids1,self.sub_rids2,self.sub_rids
+    # usually we unlink one or several record-tuples
+    # here we want to unlink all record-tuples that have record_obj as left or right
+    def unlink_record(self,record_obj):
+        if record_obj in self.sub_rids:
+            del self.sub_rids[record_obj]
+            print(f"removed all record_tuples from sub_rids connected to {record_obj.db,record_obj.file_name,record_obj.rid}")
 
+        if record_obj in self.sub_rids1:
+            del self.sub_rids1[record_obj]
+            print(f"removed all record_tuples from sub_rids1 connected to {record_obj.db,record_obj.file_name,record_obj.rid}")
+
+        if record_obj in self.sub_rids2:
+            del self.sub_rids2[record_obj]
+            print(f"removed all record_tuples from sub_rids2 connected to {record_obj.db,record_obj.file_name,record_obj.rid}")
 
 class DB_Instance:
     def __init__(self,db_base_path, sub_dir):
@@ -292,12 +317,12 @@ class DataBag:
         self.paths = BasePaths(base_output_path,db1_base_path, db2_base_path)
         # origin of the facts for both databases
 
-        self.db1_original_facts = DB_Instance(self.paths.db1_facts, "db1-original")
-        self.db2_original_facts = DB_Instance(self.paths.db2_facts, "db2-original")
+        self.db1_original_facts = DB_Instance(self.paths.db1_facts, "db1")
+        self.db2_original_facts = DB_Instance(self.paths.db2_facts, "db2")
 
         # origin for separate Program Analysis without Bijection
-        self.db1_original_results = DB_Instance(self.paths.db1_results, "db1-original")
-        self.db2_original_results = DB_Instance(self.paths.db2_results, "db2-original")
+        self.db1_original_results = DB_Instance(self.paths.db1_results, "db1")
+        self.db2_original_results = DB_Instance(self.paths.db2_results, "db2")
 
 
         self.mappings = []
