@@ -66,6 +66,7 @@ class Mapping():
                         term_obj = Classes.Term(term_name, file_name,cols,curr_record)
                         terms[term_name] = term_obj
                     curr_record.add_term(term_obj)
+
         print("Count of terms with multi-occurrences in " + db_instance.name + " : " + str(len(multi_col_terms)))
 
     def set_mapping(self, mapping):
