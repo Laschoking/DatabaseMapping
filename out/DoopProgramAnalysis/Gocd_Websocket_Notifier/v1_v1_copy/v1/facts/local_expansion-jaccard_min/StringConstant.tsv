@@ -1,0 +1,44 @@
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar
+groupId
+com.matt-richardson
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar
+artifactId
+gocd-websocket-notifier
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar
+version
+0.4.2+build.60.sha.7d0b8bc
+notify called with request name \'
+\' and requestBody \'
+\'
+new_var_7
+"<<\\"" connected\\"">>"
+gocd-websocket-notifier.conf
+gocd-websocket-notifier.conf
+websocket error
+sending \'
+"<<\\""\' to \\"">>"
+"\\""notification\\"""
+"\\""notifications-interested-in\\"""
+"\\""stage-status\\"""
+new_var_8
+new_var_9
+"<<\\""Starting WebSocket server started on port: \\"">>"
+"<<\\""WebSocket server started on port: \\"">>"
+"<<\\""Failed to launch WebSocket server on port: \\"">>"
+new_var_10
+"<<\\""Invalid request name: \\"">>"
+notifications-interested-in
+stage-status
+received pluginIdentifier request
+notification
+stage-status
+notifications
+requesting details of stage-status notifications
+handling stage notification
+status
+failed to notify pipeline listener
+messages
+status
+failure
+success
+1.0

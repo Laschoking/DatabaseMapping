@@ -1,0 +1,129 @@
+/go/api/pipelines/	/go/api/pipelines/	10
+/history	/history	10
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	/home/kotname/Documents/Diplom/Code/doop/DiffAnalysis/Java/Gocd_Websocket_Notifier/v0_4_2/Gocd_Websocket_Notifier.jar	0
+0.4.2+build.60.sha.7d0b8bc	0.4.2+build.60.sha.7d0b8bc	0
+1.0	1.0	0
+:	:	10
+"<<\\"" connected\\"">>"	"<<\\"" connected\\"">>"	0
+"<<\\"" has disconnected\\"">>"	"<<\\"" has disconnected\\"">>"	10
+"<<\\""Basic \\"">>"	"<<\\""Basic \\"">>"	10
+"<<\\""Failed to handle request with name: %s , and body: %s \\"">>"	"<<\\""Failed to handle request with name: %s , and body: %s \\"">>"	10
+"<<\\""Failed to launch WebSocket server on port: \\"">>"	"<<\\""Failed to launch WebSocket server on port: \\"">>"	0
+"<<\\""Invalid request name: \\"">>"	"<<\\""Invalid request name: \\"">>"	0
+"<<\\""Starting WebSocket server started on port: \\"">>"	"<<\\""Starting WebSocket server started on port: \\"">>"	0
+"<<\\""WebSocket server started on port: \\"">>"	"<<\\""WebSocket server started on port: \\"">>"	0
+"<<\\""\' to \\"">>"	"<<\\""\' to \\"">>"	0
+"<<\\""\\"">>"	"<<\\""\\"">>"	10
+"<<\\""received go plugin api request \\"">>"	"<<\\""received go plugin api request \\"">>"	10
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1: int responseCode()>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1: int responseCode()>	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1: java.lang.String responseBody()>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1: java.lang.String responseBody()>	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1: java.util.Map responseHeaders()>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1: java.util.Map responseHeaders()>	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1: void <init>(com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin,int,java.lang.String)>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1: void <init>(com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin,int,java.lang.String)>	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.GoPluginIdentifier pluginIdentifier()>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.GoPluginIdentifier pluginIdentifier()>	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handle(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handle(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handleNotificationsInterestedIn()>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handleNotificationsInterestedIn()>	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handleStageNotification(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handleStageNotification(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse renderJSON(int,java.lang.Object)>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse renderJSON(int,java.lang.Object)>	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void <clinit>()>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void <clinit>()>	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void <init>()>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void <init>()>	0
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void <init>(com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener)>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void <init>(com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener)>	10
+<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void initializeGoApplicationAccessor(com.thoughtworks.go.plugin.api.GoApplicationAccessor)>	<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void initializeGoApplicationAccessor(com.thoughtworks.go.plugin.api.GoApplicationAccessor)>	0
+<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: com.google.gson.JsonElement downloadPipelineInstanceDetails(java.lang.String)>	<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: com.google.gson.JsonElement downloadPipelineInstanceDetails(java.lang.String)>	10
+<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: java.lang.String extendMessageToIncludePipelineDetails(java.lang.String)>	<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: java.lang.String extendMessageToIncludePipelineDetails(java.lang.String)>	10
+<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: java.lang.String mergeInPipelineInstanceDetails(com.google.gson.JsonElement,com.google.gson.JsonElement)>	<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: java.lang.String mergeInPipelineInstanceDetails(com.google.gson.JsonElement,com.google.gson.JsonElement)>	10
+<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: void <clinit>()>	<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: void <clinit>()>	10
+<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: void <init>(com.matt_richardson.gocd.websocket_notifier.PluginConfig)>	<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: void <init>(com.matt_richardson.gocd.websocket_notifier.PluginConfig)>	10
+<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void <init>(int)>	<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void <init>(int)>	0
+<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void <init>(java.lang.String,int)>	<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void <init>(java.lang.String,int)>	10
+<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void onClose(org.java_websocket.WebSocket,int,java.lang.String,boolean)>	<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void onClose(org.java_websocket.WebSocket,int,java.lang.String,boolean)>	0
+<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void onError(org.java_websocket.WebSocket,java.lang.Exception)>	<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void onError(org.java_websocket.WebSocket,java.lang.Exception)>	0
+<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void onMessage(org.java_websocket.WebSocket,java.lang.String)>	<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void onMessage(org.java_websocket.WebSocket,java.lang.String)>	0
+<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void onOpen(org.java_websocket.WebSocket,org.java_websocket.handshake.ClientHandshake)>	<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void onOpen(org.java_websocket.WebSocket,org.java_websocket.handshake.ClientHandshake)>	0
+<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void sendToAll(java.lang.String)>	<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void sendToAll(java.lang.String)>	0
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: boolean hasBasicAuth()>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: boolean hasBasicAuth()>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: boolean isGoPasswordSet()>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: boolean isGoPasswordSet()>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: boolean isGoUserSet()>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: boolean isGoUserSet()>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: boolean isHostSet()>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: boolean isHostSet()>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: int getGoHttpPort()>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: int getGoHttpPort()>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: int getPort()>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: int getPort()>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: java.lang.String getGoPassword()>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: java.lang.String getGoPassword()>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: java.lang.String getGoUser()>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: java.lang.String getGoUser()>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: java.lang.String getHost()>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: java.lang.String getHost()>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void <clinit>()>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void <clinit>()>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void <init>()>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void <init>()>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void setGoHttpPort(int)>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void setGoHttpPort(int)>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void setGoPassword(java.lang.String)>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void setGoPassword(java.lang.String)>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void setGoUser(java.lang.String)>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void setGoUser(java.lang.String)>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void setHost(java.lang.String)>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void setHost(java.lang.String)>	10
+<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void setPort(int)>	<com.matt_richardson.gocd.websocket_notifier.PluginConfig: void setPort(int)>	10
+<com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener: void <init>(com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer,com.matt_richardson.gocd.websocket_notifier.PluginConfig)>	<com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener: void <init>(com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer,com.matt_richardson.gocd.websocket_notifier.PluginConfig)>	0
+<com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener: void notify(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>	<com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener: void notify(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>	0
+Authorization	Authorization	10
+Config file %s was not found in %s. Using default values.	Config file %s was not found in %s. Using default values.	10
+Failed to download pipeline instance details for requestBody \'	Failed to download pipeline instance details for requestBody \'	10
+\'	\'	0
+\'	\'	0
+\' and requestBody \'	\' and requestBody \'	0
+"\\""gocd-websocket-notifier.conf\\"""	"\\""gocd-websocket-notifier.conf\\"""	10
+"\\""notification\\"""	"\\""notification\\"""	0
+"\\""notifications-interested-in\\"""	"\\""notifications-interested-in\\"""	0
+"\\""stage-status\\"""	"\\""stage-status\\"""	0
+artifactId	artifactId	0
+com.matt-richardson	com.matt-richardson	0
+failed to notify pipeline listener	failed to notify pipeline listener	0
+failure	failure	0
+goHttpPort	goHttpPort	10
+goHttpPort	goHttpPort	10
+goPassword	goPassword	10
+goPassword	goPassword	10
+goUser	goUser	10
+goUser	goUser	10
+gocd-websocket-notifier	gocd-websocket-notifier	0
+gocd-websocket-notifier.conf	gocd-websocket-notifier.conf	0
+gocd-websocket-notifier.conf	gocd-websocket-notifier.conf	0
+gocd-websocket-notifier.conf	gocd-websocket-notifier.conf	0
+gocd-websocket-notifier.conf	gocd-websocket-notifier.conf	0
+groupId	groupId	0
+handling stage notification	handling stage notification	0
+host	host	10
+host	host	10
+http://localhost:	http://localhost:	10
+messages	messages	0
+name	name	10
+new_var_10	new_var_10	1
+new_var_7	new_var_7	1
+new_var_8	new_var_8	1
+new_var_9	new_var_9	1
+notification	notification	0
+notifications	notifications	0
+notifications-interested-in	notifications-interested-in	0
+notify called with request name \'	notify called with request name \'	0
+pipeline	pipeline	10
+pipeline-name	pipeline-name	10
+pipelines	pipelines	10
+port	port	10
+port	port	10
+received pluginIdentifier request	received pluginIdentifier request	0
+requesting details of stage-status notifications	requesting details of stage-status notifications	0
+sending \'	sending \'	0
+stage-status	stage-status	0
+stage-status	stage-status	0
+stage-status	stage-status	0
+stage-status	stage-status	0
+status	status	0
+status	status	0
+status	status	0
+status	status	0
+success	success	0
+user.home	user.home	10
+version	version	0
+websocket error	websocket error	0
+x-pipeline-instance-details	x-pipeline-instance-details	10
