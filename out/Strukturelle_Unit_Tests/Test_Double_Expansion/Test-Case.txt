@@ -1,0 +1,3 @@
+Nachdem A -> A  werd rec 1-4 expandiert paarweise.
+dh. E,E auch.
+nach F-> F wird auch Record Tupel (5,5) expandiert. Dadurch wird E,E nochmal berechnet, was unnötig ist

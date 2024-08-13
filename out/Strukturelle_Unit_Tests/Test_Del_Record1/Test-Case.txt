@@ -1,0 +1,2 @@
+Nachdem H -> H  sind alle Record- Kombination activ
+wenn A -> A dann fällt allerdings Record 3  in DB1 aus, da es kein Matching geben wird

@@ -16,9 +16,9 @@ import time
 
 update_terms = False
 hub_recompute = False
-debug = True
-debug_term_names1 = set(["gocd"])
-debug_term_names2 = set(["gocd"])
+debug = False
+debug_term_names1 = set() #set(["gocd"])
+debug_term_names2 = set() #set(["gocd"])
 debug_set = set()#set(["A","B","C","D","E","F","G","H"])
 #concat_occ_cols = True
 
@@ -26,7 +26,7 @@ debug_set = set()#set(["A","B","C","D","E","F","G","H"])
 if __name__ == "__main__":
 
     # specify Java-files & Programm Analysis
-    db_config = Unit_Test_Expanding_Bad_Record_Tuples
+    db_config = Doop_Gocd_Websocket_Notifier_v1_v4
     program_config = Doop_PointerAnalysis
 
     gen_new_facts = False  # if true, run doop again for new fact-gen, otherwise just copy from doop/out

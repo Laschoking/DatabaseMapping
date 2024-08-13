@@ -84,9 +84,9 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
             # confidence value was accepted:
 
             mapped_sim = mapped_tuple.get_similarity()
-            #if setup.debug or mapped_tuple in setup.debug_set:
-            print("-----------------------------")
-            print(f"{mapped_tuple.term_obj1.name}  -> {mapped_tuple.term_obj2.name} with sim: {mapped_sim}")
+            if setup.debug or mapped_tuple in setup.debug_set:
+                print("-----------------------------")
+                print(f"{mapped_tuple.term_obj1.name}  -> {mapped_tuple.term_obj2.name} with sim: {mapped_sim}")
 
             delete_term_tuples, altered_term_tuples = mapped_tuple.accept_this_mapping() # returns mappings that are now invalid & or need to be updated
             sub_rids = mapped_tuple.get_clean_record_tuples()
@@ -111,23 +111,21 @@ def iterative_anchor_expansion(mapping_obj, records1, terms1, records2, terms2, 
             expansion_rid_tuples = set()
             # denotes record-tuples that are now invalid, bc. the mapping does not support them
             outdated_rid_tuples = set()
-        # TODO an accepted mapping can also invalidate record-tuple that are active but not in process!
             # all tuples that are not active will be expanded & made active
             for rec_obj,mapped_rec_tuples in sub_rids.items():
                 # rec_obj active means that the connected mapped_rec_tuples are also active
                 if rec_obj.is_in_process():
-                    outdated_rid_tuples |= rec_obj.get_active_record_tuples() - mapped_rec_tuples
+                    outdated_rid_tuples |= rec_obj.get_all_record_tuples() - mapped_rec_tuples
                 # record-tuple was not active -> expand it in the discovery phase
 
                 # in case the tuple was a hub, it could remove not-in-process record-tuples, that other hubs-tuples were relying on
-                # TODO i think this can also happen for non hubs see above
-                elif mapped_tuple in hub_mapping_tuples.copy().values():
+                else:
                     rec_obj.in_process = True
                     outdated_rid_tuples |= rec_obj.get_all_record_tuples() - mapped_rec_tuples
                     expansion_rid_tuples.update(mapped_rec_tuples - outdated_rid_tuples)
-                else:
-                    rec_obj.in_process = True
-                    expansion_rid_tuples.update(mapped_rec_tuples)
+                #else:
+                #    rec_obj.in_process = True
+                #    expansion_rid_tuples.update(mapped_rec_tuples)
 
             if mapped_tuple in hub_mapping_tuples.copy():
                 del hub_mapping_tuples[mapped_tuple.term_obj1, mapped_tuple.term_obj2]

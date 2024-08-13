@@ -1,0 +1,2 @@
+Nachdem A -> A ist Record 3 von DB1 tot,
+sollte also nie Aktiv werden

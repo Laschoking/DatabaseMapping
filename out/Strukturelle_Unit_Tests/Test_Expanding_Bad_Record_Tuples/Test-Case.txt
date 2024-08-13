@@ -1,0 +1,4 @@
+Nachdem A -> A  wird als nächstes static -> static freigeschalten
+für Relation A bedeutet das Record-Tupel (0,0)
+nachdem später gocd -> gocd akzeptiert wird,
+ist auf einmal 0,1 wieder möglich

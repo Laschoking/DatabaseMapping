@@ -1,0 +1,21 @@
+
+
+Erwartetes Mapping /  Jaccard:
+A	B	K
+A	B	I
+A	K	G1
+A	G1	H1
+1/4 Zeilen
+
+Finsish-Atoms:
+A -> A
+B -> B
+{-1 : [(H,I,1,ÜL:1/3),(H,H1,1,ÜL:1/3),(I,I,1,ÜL:1/2),(I,H1,1,ÜL:1/2)]}
+z.B. I -> H1 | {-1 : [(H,I,1,ÜL:1/3)], -2 : [
+H -> I
+{-2 : [(G,G2,1, 1/3),(G,H2,1,1/3),(K,G1,1,1/2),(K,K,1,1/2)]}
+z.B. K -> G1
+{-1 : [(G,H2,1, 1/3)]}
+G -> H2
+
+3/4 Mappings
