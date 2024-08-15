@@ -153,10 +153,15 @@ class TermTuple:
         return self.sub_rids
 
     def accept_this_mapping(self):
+        if self.term_obj1.name == "t4":
+            print("t4")
 
         # update all record-tuples, that have now one (or more) less cells to fill
+        remaining_rec_objs = set()
         for mapped_rec_obj in self.sub_rids.keys():
             mapped_rec_obj.mark_filled_cols(self)
+            remaining_rec_objs.add(mapped_rec_obj)
+
 
         # find all mappings that are invalid now
         # in the expansion, they will be removed from prio-dict, otherwise we dont need to do anything to them, bc. either term_obj1, or term_obj2 is now mapped
@@ -167,20 +172,24 @@ class TermTuple:
 
         # calculate possible record_objs (not tuples!) that are now invalid (they can never be mapped anymore)
         # and make them inactive
-        destroy_occ1 = set(self.term_obj1.occurrences.keys()).difference(self.term_obj2.occurrences.keys())
-        destroy_occ2 = set(self.term_obj2.occurrences.keys()).difference(self.term_obj1.occurrences.keys())
-
-        destroy_record_objs = set()
-        for (file_name, col) in destroy_occ1:
-            destroy_record_objs.update(self.term_obj1.occurrences[file_name, col])
-
-        for (file_name, col) in destroy_occ2:
-            destroy_record_objs.update(self.term_obj2.occurrences[file_name, col])
+        # TODO: die Bestimmung der Overlaps ist outdated (z.B. wenn t1,t2 in der gleichen Spalte & Relation vorkommen, wird kein Record zerstört
+        # TODO: das gilt aber auch, wenn die Verbindung durch ein Record tupel gar nicht existiert
+        
+        # gather all records where the two terms are involved individually
+        all_rec_objs = set()
+        for rec_objs in itertools.chain(self.term_obj1.occurrences.values(),self.term_obj2.occurrences.values()):
+            all_rec_objs |= rec_objs
+        #all_rec_objs.update(rec_objs for rec_objs in self.term_obj1.occurrences.values())
+        #all_rec_objs.update(rec_objs for rec_objs in self.term_obj2.occurrences.values())
+        destroy_record_objs = all_rec_objs - remaining_rec_objs
 
         # this will deactivate all record-objects and return those term-tuples that need to be updated (since a record-tuple was deleted from them)
         altered_term_tuples = set()
         for rec_obj in destroy_record_objs:
+
             if rec_obj.is_active():
+                if setup.debug or self in setup.debug_set:
+                    print(f"deactivate  record: {rec_obj.db}({rec_obj.file_name, rec_obj.rid})")
                 altered_term_tuples |= rec_obj.deactivate_self_and_all_rt()
         return delete_term_tuples,altered_term_tuples
 
