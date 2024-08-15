@@ -1,22 +1,18 @@
-from src.ExpansionStrategies.Dynamic_Expansion import *
-
 import difflib
-from collections import Counter
 
 
-
-def isub_sequence_matcher(term_obj1, term_obj2, common_occ):
-    term_name1 = term_obj1.name
-    term_name2 = term_obj2.name
+def isub_sequence_matcher(term1, term2, common_occ):
+    term_name1 = term1.name
+    term_name2 = term2.name
     # if both terms are integers String-Matching will have problems -> return closeness of both ints then
-    if term_obj1.type == "int" and term_obj2.type == "int":
+    if term1.type == "int" and term2.type == "int":
         max_int = max(int(term_name1), int(term_name2))
         if max_int > 0:
             return 1 - abs(int(term_name1) - int(term_name2)) / max_int
         else:
             return 1
     # if both were int we return already. now we know, that 1 is string
-    elif (term_obj1.type == "int" and term_obj2.type != "int") or (term_obj1.type != "int" and term_obj2.type == "int"):
+    elif (term1.type == "int" and term2.type != "int") or (term1.type != "int" and term2.type == "int"):
         return -1
 
     elif term_name1 is None or term_name2 is None or term_name1 == '' or term_name2 == '':
@@ -24,7 +20,7 @@ def isub_sequence_matcher(term_obj1, term_obj2, common_occ):
 
     # count common substrings
     count_lcs = 0
-    sm = difflib.SequenceMatcher(None,term_name1, term_name2)
+    sm = difflib.SequenceMatcher(None, term_name1, term_name2)
     matching_blocks = sm.get_matching_blocks()
     # convert to list to reduce string sice
     l_st1 = len(term_name1)
@@ -39,7 +35,6 @@ def isub_sequence_matcher(term_obj1, term_obj2, common_occ):
         count_lcs += size
         term_name1[st1_ind:st1_ind + size] = [None] * size
         term_name2[st2_ind:st2_ind + size] = [None] * size
-
 
     comm = 2 * count_lcs / (l_st1 + l_st2)
 
@@ -57,9 +52,9 @@ def isub_sequence_matcher(term_obj1, term_obj2, common_occ):
         diff = product / (p + (1 - p) * (l_st_sum - product))
 
     if winkler_st1_ind == 0 and winkler_st2_ind == 0 and winkler_size > 0:
-        impr_winkler = min(winkler_size,4) * 0.1 * (1 - comm)
+        impr_winkler = min(winkler_size, 4) * 0.1 * (1 - comm)
     else:
         impr_winkler = 0
 
-    score =  comm - diff + impr_winkler
+    score = comm - diff + impr_winkler
     return score

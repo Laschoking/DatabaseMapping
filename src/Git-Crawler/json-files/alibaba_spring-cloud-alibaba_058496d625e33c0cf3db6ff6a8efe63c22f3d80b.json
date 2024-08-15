@@ -1,0 +1,66 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/alibaba/spring-cloud-alibaba.git",
+	"sha1": "058496d625e33c0cf3db6ff6a8efe63c22f3d80b",
+	"url": "https://github.com/alibaba/spring-cloud-alibaba/commit/058496d625e33c0cf3db6ff6a8efe63c22f3d80b",
+	"refactorings": [{
+	"type": "Remove Class Annotation",
+	"description": "Remove Class Annotation @EnableDiscoveryClient in class com.alibaba.cloud.examples.OpenFeignApplication",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/sentinel-example/sentinel-openfeign-example/src/main/java/com/alibaba/cloud/examples/OpenFeignApplication.java",
+		"startLine": 30,
+		"endLine": 30,
+		"startColumn": 0,
+		"endColumn": 23,
+		"codeElementType": "ANNOTATION",
+		"description": "removed annotation",
+		"codeElement": "@EnableDiscoveryClient"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/sentinel-example/sentinel-openfeign-example/src/main/java/com/alibaba/cloud/examples/OpenFeignApplication.java",
+		"startLine": 24,
+		"endLine": 37,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.examples.OpenFeignApplication"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/sentinel-example/sentinel-openfeign-example/src/main/java/com/alibaba/cloud/examples/OpenFeignApplication.java",
+		"startLine": 23,
+		"endLine": 37,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with removed annotation",
+		"codeElement": "com.alibaba.cloud.examples.OpenFeignApplication"
+}]
+},
+{
+	"type": "Rename Class",
+	"description": "Rename Class com.alibaba.cloud.examples.ServiceApplication renamed to com.alibaba.cloud.examples.SentinelCoreApplication",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/sentinel-example/sentinel-core-example/src/main/java/com/alibaba/cloud/examples/ServiceApplication.java",
+		"startLine": 34,
+		"endLine": 73,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original type declaration",
+		"codeElement": "com.alibaba.cloud.examples.ServiceApplication"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/sentinel-example/sentinel-core-example/src/main/java/com/alibaba/cloud/examples/SentinelCoreApplication.java",
+		"startLine": 34,
+		"endLine": 73,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "renamed type declaration",
+		"codeElement": "com.alibaba.cloud.examples.SentinelCoreApplication"
+}]
+}
+]
+}]
+}

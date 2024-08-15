@@ -1,0 +1,141 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/alibaba/spring-cloud-alibaba.git",
+	"sha1": "43007721c0507f81b24586531bee95ac2a495365",
+	"url": "https://github.com/alibaba/spring-cloud-alibaba/commit/43007721c0507f81b24586531bee95ac2a495365",
+	"refactorings": [{
+	"type": "Add Method Annotation",
+	"description": "Add Method Annotation @Scope(\"prototype\") in method public generation() : Generation from class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 71,
+		"endLine": 76,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public generation() : Generation"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 73,
+		"endLine": 73,
+		"startColumn": 2,
+		"endColumn": 21,
+		"codeElementType": "ANNOTATION",
+		"description": "added annotation",
+		"codeElement": "@Scope(\"prototype\")"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 72,
+		"endLine": 78,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with added annotation",
+		"codeElement": "public generation() : Generation"
+}]
+},
+{
+	"type": "Add Method Annotation",
+	"description": "Add Method Annotation @Scope(\"prototype\") in method public imageSynthesis() : ImageSynthesis from class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 85,
+		"endLine": 90,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public imageSynthesis() : ImageSynthesis"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 89,
+		"endLine": 89,
+		"startColumn": 2,
+		"endColumn": 21,
+		"codeElementType": "ANNOTATION",
+		"description": "added annotation",
+		"codeElement": "@Scope(\"prototype\")"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 88,
+		"endLine": 94,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with added annotation",
+		"codeElement": "public imageSynthesis() : ImageSynthesis"
+}]
+},
+{
+	"type": "Add Method Annotation",
+	"description": "Add Method Annotation @Scope(\"prototype\") in method public msgManager() : MessageManager from class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 78,
+		"endLine": 83,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public msgManager() : MessageManager"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 81,
+		"endLine": 81,
+		"startColumn": 2,
+		"endColumn": 21,
+		"codeElementType": "ANNOTATION",
+		"description": "added annotation",
+		"codeElement": "@Scope(\"prototype\")"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 80,
+		"endLine": 86,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with added annotation",
+		"codeElement": "public msgManager() : MessageManager"
+}]
+},
+{
+	"type": "Add Method Annotation",
+	"description": "Add Method Annotation @Scope(\"prototype\") in method public speechSynthesizer() : SpeechSynthesizer from class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 92,
+		"endLine": 97,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public speechSynthesizer() : SpeechSynthesizer"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 97,
+		"endLine": 97,
+		"startColumn": 2,
+		"endColumn": 21,
+		"codeElementType": "ANNOTATION",
+		"description": "added annotation",
+		"codeElement": "@Scope(\"prototype\")"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 96,
+		"endLine": 102,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with added annotation",
+		"codeElement": "public speechSynthesizer() : SpeechSynthesizer"
+}]
+}
+]
+}]
+}

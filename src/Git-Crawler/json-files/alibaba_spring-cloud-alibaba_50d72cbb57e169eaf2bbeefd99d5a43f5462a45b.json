@@ -1,0 +1,51 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/alibaba/spring-cloud-alibaba.git",
+	"sha1": "50d72cbb57e169eaf2bbeefd99d5a43f5462a45b",
+	"url": "https://github.com/alibaba/spring-cloud-alibaba/commit/50d72cbb57e169eaf2bbeefd99d5a43f5462a45b",
+	"refactorings": [{
+	"type": "Modify Class Annotation",
+	"description": "Modify Class Annotation @ImportAutoConfiguration({NacosDiscoveryAutoConfiguration.class,NacosServiceAutoConfiguration.class,NacosDiscoveryClientConfiguration.class,NacosReactiveDiscoveryClientConfiguration.class}) to @ImportAutoConfiguration({NacosDiscoveryAutoConfiguration.class,NacosServiceAutoConfiguration.class,NacosDiscoveryClientConfiguration.class,NacosReactiveDiscoveryClientConfiguration.class,UtilIPv6AutoConfiguration.class}) in class com.alibaba.cloud.nacos.discovery.configclient.NacosDiscoveryClientConfigServiceBootstrapConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-nacos-discovery/src/main/java/com/alibaba/cloud/nacos/discovery/configclient/NacosDiscoveryClientConfigServiceBootstrapConfiguration.java",
+		"startLine": 39,
+		"endLine": 41,
+		"startColumn": 0,
+		"endColumn": 53,
+		"codeElementType": "ANNOTATION",
+		"description": "original annotation",
+		"codeElement": "@ImportAutoConfiguration({NacosDiscoveryAutoConfiguration.class,NacosServiceAutoConfiguration.class,NacosDiscoveryClientConfiguration.class,NacosReactiveDiscoveryClientConfiguration.class})"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-nacos-discovery/src/main/java/com/alibaba/cloud/nacos/discovery/configclient/NacosDiscoveryClientConfigServiceBootstrapConfiguration.java",
+		"startLine": 30,
+		"endLine": 44,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.nacos.discovery.configclient.NacosDiscoveryClientConfigServiceBootstrapConfiguration"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-nacos-discovery/src/main/java/com/alibaba/cloud/nacos/discovery/configclient/NacosDiscoveryClientConfigServiceBootstrapConfiguration.java",
+		"startLine": 40,
+		"endLine": 42,
+		"startColumn": 0,
+		"endColumn": 86,
+		"codeElementType": "ANNOTATION",
+		"description": "modified annotation",
+		"codeElement": "@ImportAutoConfiguration({NacosDiscoveryAutoConfiguration.class,NacosServiceAutoConfiguration.class,NacosDiscoveryClientConfiguration.class,NacosReactiveDiscoveryClientConfiguration.class,UtilIPv6AutoConfiguration.class})"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-nacos-discovery/src/main/java/com/alibaba/cloud/nacos/discovery/configclient/NacosDiscoveryClientConfigServiceBootstrapConfiguration.java",
+		"startLine": 31,
+		"endLine": 45,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with modified annotation",
+		"codeElement": "com.alibaba.cloud.nacos.discovery.configclient.NacosDiscoveryClientConfigServiceBootstrapConfiguration"
+}]
+}
+]
+}]
+}

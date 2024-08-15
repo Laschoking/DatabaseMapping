@@ -17,10 +17,10 @@ java_source_dir = base_diff_path.joinpath("Java")
 
 SOUFFLE_ANALYSIS_BASE = Path("/home/kotname/Documents/Diplom/Code/ex_souffle/Analysis")
 DOOP_PA_BASE = Path("/home/kotname/Documents/Diplom/Code/DiffAnalysis/Datalog-Programs/DoopProgramAnalysis")
-SYNTHETIC_EXAMPLES_BASE =  Path("/home/kotname/Documents/Diplom/Code/DiffAnalysis/Datalog-Programs/SouffleSynthetic")
+SYNTHETIC_EXAMPLES_BASE = Path("/home/kotname/Documents/Diplom/Code/DiffAnalysis/Datalog-Programs/SouffleSynthetic")
 base_dir = "/out/"
 
-Engine = Enum("Engine",["SOUFFLE", "NEMO"])
+Engine = Enum("Engine", ["SOUFFLE", "NEMO"])
 NR_LEFT = 1
 NR_RIGHT = 10
 NR_TARGET = 0

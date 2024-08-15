@@ -1,4 +1,3 @@
-
 import os
 import time
 import requests
@@ -17,6 +16,7 @@ HEADERS = {
     "Authorization": f"Bearer {GITHUB_TOKEN}"
 }
 
+
 def check_rate_limit():
     query = """
     {
@@ -31,6 +31,7 @@ def check_rate_limit():
     remaining = rate_limit["remaining"]
     reset_time = rate_limit["resetAt"]
     return remaining, reset_time
+
 
 def search_repositories(after_cursor=None):
     query = """
@@ -68,12 +69,14 @@ def search_repositories(after_cursor=None):
     response = client.execute(query=query, variables=variables, headers=HEADERS)
     return response["data"]["search"]
 
+
 def download_jar(asset_url, download_path):
     response = requests.get(asset_url, headers={"Authorization": f"token {GITHUB_TOKEN}"}, stream=True)
     response.raise_for_status()
     with open(download_path, 'wb') as file:
         for chunk in response.iter_content(chunk_size=8192):
             file.write(chunk)
+
 
 if __name__ == "__main__":
     collected_repos = 0
@@ -115,7 +118,7 @@ if __name__ == "__main__":
                 print(f"Found 2 JAR files for {repo_full_name}. Downloading...")
                 os.makedirs(repo_full_name.replace("/", "_"), exist_ok=True)
                 for i, jar_url in enumerate(jar_urls):
-                    download_path = f"{repo_full_name.replace('/', '_')}/release_{i+1}.jar"
+                    download_path = f"{repo_full_name.replace('/', '_')}/release_{i + 1}.jar"
                     download_jar(jar_url, download_path)
                     print(f"Downloaded {jar_url} to {download_path}")
                 collected_repos += 1

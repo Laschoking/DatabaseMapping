@@ -12,6 +12,7 @@ HEADERS = {
     "Authorization": f"token {GITHUB_TOKEN}"
 }
 
+
 def search_repositories():
     params = {
         "q": "language:java",
@@ -23,11 +24,13 @@ def search_repositories():
     response.raise_for_status()
     return response.json()["items"]
 
+
 def get_releases(repo_full_name):
     releases_url = f"{GITHUB_API_URL}/repos/{repo_full_name}/releases"
     response = requests.get(releases_url, headers=HEADERS)
     response.raise_for_status()
     return response.json()
+
 
 def download_jar(asset_url, download_path):
     response = requests.get(asset_url, headers=HEADERS, stream=True)
@@ -36,12 +39,13 @@ def download_jar(asset_url, download_path):
         for chunk in response.iter_content(chunk_size=8192):
             file.write(chunk)
 
+
 def main():
     repos = search_repositories()
     for i in range(400):
         for repo in repos:
             repo_full_name = repo["full_name"]
-            #repo_full_name = "pH-7/Simple-Java-Calculator"
+            # repo_full_name = "pH-7/Simple-Java-Calculator"
             releases = get_releases(repo_full_name)
             jar_urls = []
 
@@ -57,10 +61,11 @@ def main():
             if len(jar_urls) >= 2:
                 print(f"Found 2 JAR files for {repo_full_name}. Downloading...")
                 os.makedirs(repo_full_name.replace("/", "_"), exist_ok=True)
-                for i, jar_url in enumerate(jar_urls):
-                    download_path = f"{repo_full_name.replace('/', '_')}/release_{i+1}.jar"
+                for j, jar_url in enumerate(jar_urls):
+                    download_path = f"{repo_full_name.replace('/', '_')}/release_{j + 1}.jar"
                     download_jar(jar_url, download_path)
                     print(f"Downloaded {jar_url} to {download_path}")
+
 
 if __name__ == "__main__":
     main()

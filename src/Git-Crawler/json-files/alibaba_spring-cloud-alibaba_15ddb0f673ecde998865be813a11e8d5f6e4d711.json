@@ -1,0 +1,57 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/alibaba/spring-cloud-alibaba.git",
+	"sha1": "15ddb0f673ecde998865be813a11e8d5f6e4d711",
+	"url": "https://github.com/alibaba/spring-cloud-alibaba/commit/15ddb0f673ecde998865be813a11e8d5f6e4d711",
+	"refactorings": [{
+	"type": "Change Method Access Modifier",
+	"description": "Change Method Access Modifier private to protected in method protected enrichNacosConfigProperties(nacosConfigProperties Properties) : void from class com.alibaba.cloud.nacos.NacosConfigProperties",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-nacos-config/src/main/java/com/alibaba/cloud/nacos/NacosConfigProperties.java",
+		"startLine": 595,
+		"endLine": 603,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "private enrichNacosConfigProperties(nacosConfigProperties Properties) : void"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-nacos-config/src/main/java/com/alibaba/cloud/nacos/NacosConfigProperties.java",
+		"startLine": 595,
+		"endLine": 603,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with changed access modifier",
+		"codeElement": "protected enrichNacosConfigProperties(nacosConfigProperties Properties) : void"
+}]
+},
+{
+	"type": "Change Method Access Modifier",
+	"description": "Change Method Access Modifier private to protected in method protected resolveKey(key String) : String from class com.alibaba.cloud.nacos.NacosConfigProperties",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-nacos-config/src/main/java/com/alibaba/cloud/nacos/NacosConfigProperties.java",
+		"startLine": 605,
+		"endLine": 613,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "private resolveKey(key String) : String"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-nacos-config/src/main/java/com/alibaba/cloud/nacos/NacosConfigProperties.java",
+		"startLine": 605,
+		"endLine": 613,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with changed access modifier",
+		"codeElement": "protected resolveKey(key String) : String"
+}]
+}
+]
+}]
+}

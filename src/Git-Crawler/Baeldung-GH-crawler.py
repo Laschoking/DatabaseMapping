@@ -14,6 +14,7 @@ HEADERS = {
     "Accept": "application/vnd.github.v3+json"
 }
 
+
 def get_commit_shas():
     """
     Get all commit SHAs related to a specific path.
@@ -37,6 +38,7 @@ def get_commit_shas():
 
     return commit_shas
 
+
 def get_changed_files(commit_shas):
     """
     Retrieve all files that have been changed in the provided commits.
@@ -56,6 +58,7 @@ def get_changed_files(commit_shas):
 
     return files_changed
 
+
 def main():
     commit_shas = get_commit_shas()
     files_changed = get_changed_files(commit_shas)
@@ -67,6 +70,7 @@ def main():
     print("Files changed at least twice:")
     for filename in changed_at_least_twice:
         print(filename)
+
 
 if __name__ == "__main__":
     main()

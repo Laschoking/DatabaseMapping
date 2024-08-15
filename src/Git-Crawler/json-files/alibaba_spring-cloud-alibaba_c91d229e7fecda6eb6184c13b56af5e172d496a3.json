@@ -1,0 +1,1029 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/alibaba/spring-cloud-alibaba.git",
+	"sha1": "c91d229e7fecda6eb6184c13b56af5e172d496a3",
+	"url": "https://github.com/alibaba/spring-cloud-alibaba/commit/c91d229e7fecda6eb6184c13b56af5e172d496a3",
+	"refactorings": [{
+	"type": "Change Attribute Type",
+	"description": "Change Attribute Type audioTranscriptionClient : TongYiAudioTranscriptionClient to audioTranscriptionModel : TongYiAudioTranscriptionModel in class com.alibaba.cloud.ai.example.tongyi.service.impl.audio.transcription.TongYiAudioTranscriptionServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 54,
+		"endLine": 54,
+		"startColumn": 47,
+		"endColumn": 71,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "original attribute declaration",
+		"codeElement": "audioTranscriptionClient : TongYiAudioTranscriptionClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 56,
+		"endLine": 56,
+		"startColumn": 46,
+		"endColumn": 69,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "changed-type attribute declaration",
+		"codeElement": "audioTranscriptionModel : TongYiAudioTranscriptionModel"
+}]
+},
+{
+	"type": "Change Attribute Type",
+	"description": "Change Attribute Type client : TongYiAudioSpeechClient to client : TongYiAudioSpeechModel in class com.alibaba.cloud.ai.tongyi.audio.speech.TongYiAudioSpeechClientTest",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/test/java/com/alibaba/cloud/ai/tongyi/audio/speech/TongYiAudioSpeechClientTest.java",
+		"startLine": 47,
+		"endLine": 47,
+		"startColumn": 34,
+		"endColumn": 40,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "original attribute declaration",
+		"codeElement": "client : TongYiAudioSpeechClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/test/java/com/alibaba/cloud/ai/tongyi/audio/speech/TongYiAudioSpeechClientTest.java",
+		"startLine": 48,
+		"endLine": 48,
+		"startColumn": 33,
+		"endColumn": 39,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "changed-type attribute declaration",
+		"codeElement": "client : TongYiAudioSpeechModel"
+}]
+},
+{
+	"type": "Change Attribute Type",
+	"description": "Change Attribute Type speechClient : SpeechClient to speechClient : SpeechModel in class com.alibaba.cloud.ai.example.tongyi.service.impl.audio.speech.TongYiAudioSimpleServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/speech/TongYiAudioSimpleServiceImpl.java",
+		"startLine": 47,
+		"endLine": 47,
+		"startColumn": 29,
+		"endColumn": 41,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "original attribute declaration",
+		"codeElement": "speechClient : SpeechClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/speech/TongYiAudioSimpleServiceImpl.java",
+		"startLine": 46,
+		"endLine": 46,
+		"startColumn": 28,
+		"endColumn": 40,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "changed-type attribute declaration",
+		"codeElement": "speechClient : SpeechModel"
+}]
+},
+{
+	"type": "Change Parameter Type",
+	"description": "Change Parameter Type audioTranscriptionClient : TongYiAudioTranscriptionClient to transcriptionModel : TongYiAudioTranscriptionModel in method public TongYiAudioTranscriptionServiceImpl(transcriptionModel TongYiAudioTranscriptionModel) from class com.alibaba.cloud.ai.example.tongyi.service.impl.audio.transcription.TongYiAudioTranscriptionServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 57,
+		"endLine": 57,
+		"startColumn": 45,
+		"endColumn": 106,
+		"codeElementType": "SINGLE_VARIABLE_DECLARATION",
+		"description": "original variable declaration",
+		"codeElement": "audioTranscriptionClient : TongYiAudioTranscriptionClient"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 58,
+		"endLine": 58,
+		"startColumn": 3,
+		"endColumn": 60,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 59,
+		"endLine": 59,
+		"startColumn": 45,
+		"endColumn": 99,
+		"codeElementType": "SINGLE_VARIABLE_DECLARATION",
+		"description": "changed-type variable declaration",
+		"codeElement": "transcriptionModel : TongYiAudioTranscriptionModel"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 61,
+		"endLine": 61,
+		"startColumn": 3,
+		"endColumn": 53,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement referencing the variable with changed type",
+		"codeElement": null
+}]
+},
+{
+	"type": "Change Parameter Type",
+	"description": "Change Parameter Type client : SpeechClient to client : SpeechModel in method public TongYiAudioSimpleServiceImpl(client SpeechModel) from class com.alibaba.cloud.ai.example.tongyi.service.impl.audio.speech.TongYiAudioSimpleServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/speech/TongYiAudioSimpleServiceImpl.java",
+		"startLine": 50,
+		"endLine": 50,
+		"startColumn": 38,
+		"endColumn": 57,
+		"codeElementType": "SINGLE_VARIABLE_DECLARATION",
+		"description": "original variable declaration",
+		"codeElement": "client : SpeechClient"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/speech/TongYiAudioSimpleServiceImpl.java",
+		"startLine": 52,
+		"endLine": 52,
+		"startColumn": 3,
+		"endColumn": 30,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/speech/TongYiAudioSimpleServiceImpl.java",
+		"startLine": 49,
+		"endLine": 49,
+		"startColumn": 38,
+		"endColumn": 56,
+		"codeElementType": "SINGLE_VARIABLE_DECLARATION",
+		"description": "changed-type variable declaration",
+		"codeElement": "client : SpeechModel"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/speech/TongYiAudioSimpleServiceImpl.java",
+		"startLine": 51,
+		"endLine": 51,
+		"startColumn": 3,
+		"endColumn": 30,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement referencing the variable with changed type",
+		"codeElement": null
+}]
+},
+{
+	"type": "Change Return Type",
+	"description": "Change Return Type TongYiAudioSpeechClient to TongYiAudioSpeechModel in method public tongYiAudioSpeechClient(speechSynthesizer SpeechSynthesizer, speechProperties TongYiAudioSpeechProperties, connectionProperties TongYiConnectionProperties) : TongYiAudioSpeechModel from class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 175,
+		"endLine": 175,
+		"startColumn": 9,
+		"endColumn": 32,
+		"codeElementType": "TYPE",
+		"description": "original return type",
+		"codeElement": "TongYiAudioSpeechClient"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 168,
+		"endLine": 184,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public tongYiAudioSpeechClient(speechSynthesizer SpeechSynthesizer, speechProperties TongYiAudioSpeechProperties, connectionProperties TongYiConnectionProperties) : TongYiAudioSpeechClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 176,
+		"endLine": 176,
+		"startColumn": 9,
+		"endColumn": 31,
+		"codeElementType": "TYPE",
+		"description": "changed return type",
+		"codeElement": "TongYiAudioSpeechModel"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 169,
+		"endLine": 185,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with changed return type",
+		"codeElement": "public tongYiAudioSpeechClient(speechSynthesizer SpeechSynthesizer, speechProperties TongYiAudioSpeechProperties, connectionProperties TongYiConnectionProperties) : TongYiAudioSpeechModel"
+}]
+},
+{
+	"type": "Change Return Type",
+	"description": "Change Return Type TongYiAudioTranscriptionClient to TongYiAudioTranscriptionModel in method public tongYiAudioTranscriptionClient(transcription Transcription, transcriptionProperties TongYiAudioTranscriptionProperties, connectionProperties TongYiConnectionProperties) : TongYiAudioTranscriptionModel from class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 193,
+		"endLine": 193,
+		"startColumn": 9,
+		"endColumn": 39,
+		"codeElementType": "TYPE",
+		"description": "original return type",
+		"codeElement": "TongYiAudioTranscriptionClient"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 186,
+		"endLine": 204,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public tongYiAudioTranscriptionClient(transcription Transcription, transcriptionProperties TongYiAudioTranscriptionProperties, connectionProperties TongYiConnectionProperties) : TongYiAudioTranscriptionClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 194,
+		"endLine": 194,
+		"startColumn": 9,
+		"endColumn": 38,
+		"codeElementType": "TYPE",
+		"description": "changed return type",
+		"codeElement": "TongYiAudioTranscriptionModel"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 187,
+		"endLine": 205,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with changed return type",
+		"codeElement": "public tongYiAudioTranscriptionClient(transcription Transcription, transcriptionProperties TongYiAudioTranscriptionProperties, connectionProperties TongYiConnectionProperties) : TongYiAudioTranscriptionModel"
+}]
+},
+{
+	"type": "Change Return Type",
+	"description": "Change Return Type TongYiChatClient to TongYiChatModel in method public tongYiChatClient(generation Generation, chatOptions TongYiChatProperties, connectionProperties TongYiConnectionProperties) : TongYiChatModel from class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 140,
+		"endLine": 140,
+		"startColumn": 9,
+		"endColumn": 25,
+		"codeElementType": "TYPE",
+		"description": "original return type",
+		"codeElement": "TongYiChatClient"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 133,
+		"endLine": 148,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public tongYiChatClient(generation Generation, chatOptions TongYiChatProperties, connectionProperties TongYiConnectionProperties) : TongYiChatClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 141,
+		"endLine": 141,
+		"startColumn": 9,
+		"endColumn": 24,
+		"codeElementType": "TYPE",
+		"description": "changed return type",
+		"codeElement": "TongYiChatModel"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 134,
+		"endLine": 149,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with changed return type",
+		"codeElement": "public tongYiChatClient(generation Generation, chatOptions TongYiChatProperties, connectionProperties TongYiConnectionProperties) : TongYiChatModel"
+}]
+},
+{
+	"type": "Change Return Type",
+	"description": "Change Return Type TongYiImagesClient to TongYiImagesModel in method public tongYiImagesClient(imageSynthesis ImageSynthesis, imagesOptions TongYiImagesProperties, connectionProperties TongYiConnectionProperties) : TongYiImagesModel from class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 157,
+		"endLine": 157,
+		"startColumn": 9,
+		"endColumn": 27,
+		"codeElementType": "TYPE",
+		"description": "original return type",
+		"codeElement": "TongYiImagesClient"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 150,
+		"endLine": 166,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public tongYiImagesClient(imageSynthesis ImageSynthesis, imagesOptions TongYiImagesProperties, connectionProperties TongYiConnectionProperties) : TongYiImagesClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 158,
+		"endLine": 158,
+		"startColumn": 9,
+		"endColumn": 26,
+		"codeElementType": "TYPE",
+		"description": "changed return type",
+		"codeElement": "TongYiImagesModel"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 151,
+		"endLine": 167,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with changed return type",
+		"codeElement": "public tongYiImagesClient(imageSynthesis ImageSynthesis, imagesOptions TongYiImagesProperties, connectionProperties TongYiConnectionProperties) : TongYiImagesModel"
+}]
+},
+{
+	"type": "Change Return Type",
+	"description": "Change Return Type TongYiTextEmbeddingClient to TongYiTextEmbeddingModel in method public tongYiTextEmbeddingClient(textEmbedding TextEmbedding, connectionProperties TongYiConnectionProperties) : TongYiTextEmbeddingModel from class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 213,
+		"endLine": 213,
+		"startColumn": 9,
+		"endColumn": 34,
+		"codeElementType": "TYPE",
+		"description": "original return type",
+		"codeElement": "TongYiTextEmbeddingClient"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 206,
+		"endLine": 220,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public tongYiTextEmbeddingClient(textEmbedding TextEmbedding, connectionProperties TongYiConnectionProperties) : TongYiTextEmbeddingClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 214,
+		"endLine": 214,
+		"startColumn": 9,
+		"endColumn": 33,
+		"codeElementType": "TYPE",
+		"description": "changed return type",
+		"codeElement": "TongYiTextEmbeddingModel"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 207,
+		"endLine": 221,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with changed return type",
+		"codeElement": "public tongYiTextEmbeddingClient(textEmbedding TextEmbedding, connectionProperties TongYiConnectionProperties) : TongYiTextEmbeddingModel"
+}]
+},
+{
+	"type": "Modify Class Annotation",
+	"description": "Modify Class Annotation @ConditionalOnClass({MessageManager.class,TongYiChatClient.class,TongYiImagesClient.class,TongYiAudioSpeechClient.class,TongYiAudioTranscriptionClient.class}) to @ConditionalOnClass({MessageManager.class,TongYiChatModel.class,TongYiImagesModel.class,TongYiAudioSpeechModel.class,TongYiTextEmbeddingModel.class,TongYiAudioTranscriptionModel.class}) in class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 60,
+		"endLine": 66,
+		"startColumn": 0,
+		"endColumn": 3,
+		"codeElementType": "ANNOTATION",
+		"description": "original annotation",
+		"codeElement": "@ConditionalOnClass({MessageManager.class,TongYiChatClient.class,TongYiImagesClient.class,TongYiAudioSpeechClient.class,TongYiAudioTranscriptionClient.class})"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 53,
+		"endLine": 253,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 60,
+		"endLine": 67,
+		"startColumn": 0,
+		"endColumn": 3,
+		"codeElementType": "ANNOTATION",
+		"description": "modified annotation",
+		"codeElement": "@ConditionalOnClass({MessageManager.class,TongYiChatModel.class,TongYiImagesModel.class,TongYiAudioSpeechModel.class,TongYiTextEmbeddingModel.class,TongYiAudioTranscriptionModel.class})"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 53,
+		"endLine": 254,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with modified annotation",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration"
+}]
+},
+{
+	"type": "Modify Method Annotation",
+	"description": "Modify Method Annotation @GetMapping(\"/audio\") to @GetMapping(\"/audio/speech\") in method public genAudio(prompt String) : String from class com.alibaba.cloud.ai.example.tongyi.controller.TongYiController",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/controller/TongYiController.java",
+		"startLine": 136,
+		"endLine": 136,
+		"startColumn": 2,
+		"endColumn": 23,
+		"codeElementType": "ANNOTATION",
+		"description": "original annotation",
+		"codeElement": "@GetMapping(\"/audio\")"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/controller/TongYiController.java",
+		"startLine": 136,
+		"endLine": 141,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public genAudio(prompt String) : String"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/controller/TongYiController.java",
+		"startLine": 136,
+		"endLine": 136,
+		"startColumn": 2,
+		"endColumn": 30,
+		"codeElementType": "ANNOTATION",
+		"description": "modified annotation",
+		"codeElement": "@GetMapping(\"/audio/speech\")"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/controller/TongYiController.java",
+		"startLine": 136,
+		"endLine": 141,
+		"startColumn": 2,
+		"endColumn": 3,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with modified annotation",
+		"codeElement": "public genAudio(prompt String) : String"
+}]
+},
+{
+	"type": "Move Class",
+	"description": "Move Class com.alibaba.cloud.ai.tongyi.constants.TongYiConstants moved to com.alibaba.cloud.ai.tongyi.common.constants.TongYiConstants",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/constants/TongYiConstants.java",
+		"startLine": 19,
+		"endLine": 39,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.constants.TongYiConstants"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/common/constants/TongYiConstants.java",
+		"startLine": 19,
+		"endLine": 44,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "moved type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.common.constants.TongYiConstants"
+}]
+},
+{
+	"type": "Move Class",
+	"description": "Move Class com.alibaba.cloud.ai.tongyi.exception.TongYiException moved to com.alibaba.cloud.ai.tongyi.common.exception.TongYiException",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/exception/TongYiException.java",
+		"startLine": 19,
+		"endLine": 38,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.exception.TongYiException"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/common/exception/TongYiException.java",
+		"startLine": 19,
+		"endLine": 38,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "moved type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.common.exception.TongYiException"
+}]
+},
+{
+	"type": "Move Class",
+	"description": "Move Class com.alibaba.cloud.ai.tongyi.exception.TongYiImagesException moved to com.alibaba.cloud.ai.tongyi.common.exception.TongYiImagesException",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/exception/TongYiImagesException.java",
+		"startLine": 19,
+		"endLine": 39,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.exception.TongYiImagesException"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/common/exception/TongYiImagesException.java",
+		"startLine": 19,
+		"endLine": 39,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "moved type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.common.exception.TongYiImagesException"
+}]
+},
+{
+	"type": "Remove Class Annotation",
+	"description": "Remove Class Annotation @Slf4j in class com.alibaba.cloud.ai.example.tongyi.service.impl.audio.speech.TongYiAudioSimpleServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/speech/TongYiAudioSimpleServiceImpl.java",
+		"startLine": 41,
+		"endLine": 41,
+		"startColumn": 0,
+		"endColumn": 7,
+		"codeElementType": "ANNOTATION",
+		"description": "removed annotation",
+		"codeElement": "@Slf4j"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/speech/TongYiAudioSimpleServiceImpl.java",
+		"startLine": 36,
+		"endLine": 83,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.audio.speech.TongYiAudioSimpleServiceImpl"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/speech/TongYiAudioSimpleServiceImpl.java",
+		"startLine": 35,
+		"endLine": 82,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with removed annotation",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.audio.speech.TongYiAudioSimpleServiceImpl"
+}]
+},
+{
+	"type": "Remove Class Annotation",
+	"description": "Remove Class Annotation @Slf4j in class com.alibaba.cloud.ai.example.tongyi.service.impl.audio.transcription.TongYiAudioTranscriptionServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 50,
+		"endLine": 50,
+		"startColumn": 0,
+		"endColumn": 7,
+		"codeElementType": "ANNOTATION",
+		"description": "removed annotation",
+		"codeElement": "@Slf4j"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 46,
+		"endLine": 123,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.audio.transcription.TongYiAudioTranscriptionServiceImpl"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 45,
+		"endLine": 126,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with removed annotation",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.audio.transcription.TongYiAudioTranscriptionServiceImpl"
+}]
+},
+{
+	"type": "Remove Class Annotation",
+	"description": "Remove Class Annotation @Slf4j in class com.alibaba.cloud.ai.example.tongyi.service.impl.helloworld.TongYiSimpleServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/helloworld/TongYiSimpleServiceImpl.java",
+		"startLine": 44,
+		"endLine": 44,
+		"startColumn": 0,
+		"endColumn": 7,
+		"codeElementType": "ANNOTATION",
+		"description": "removed annotation",
+		"codeElement": "@Slf4j"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/helloworld/TongYiSimpleServiceImpl.java",
+		"startLine": 35,
+		"endLine": 87,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.helloworld.TongYiSimpleServiceImpl"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/helloworld/TongYiSimpleServiceImpl.java",
+		"startLine": 33,
+		"endLine": 85,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with removed annotation",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.helloworld.TongYiSimpleServiceImpl"
+}]
+},
+{
+	"type": "Remove Class Annotation",
+	"description": "Remove Class Annotation @Slf4j in class com.alibaba.cloud.ai.example.tongyi.service.impl.images.TongYiImagesServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/images/TongYiImagesServiceImpl.java",
+		"startLine": 39,
+		"endLine": 39,
+		"startColumn": 0,
+		"endColumn": 7,
+		"codeElementType": "ANNOTATION",
+		"description": "removed annotation",
+		"codeElement": "@Slf4j"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/images/TongYiImagesServiceImpl.java",
+		"startLine": 31,
+		"endLine": 61,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.images.TongYiImagesServiceImpl"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/images/TongYiImagesServiceImpl.java",
+		"startLine": 27,
+		"endLine": 53,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with removed annotation",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.images.TongYiImagesServiceImpl"
+}]
+},
+{
+	"type": "Remove Class Annotation",
+	"description": "Remove Class Annotation @Slf4j in class com.alibaba.cloud.ai.example.tongyi.service.impl.output.TongYiOutputParseServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/output/TongYiOutputParseServiceImpl.java",
+		"startLine": 44,
+		"endLine": 44,
+		"startColumn": 0,
+		"endColumn": 7,
+		"codeElementType": "ANNOTATION",
+		"description": "removed annotation",
+		"codeElement": "@Slf4j"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/output/TongYiOutputParseServiceImpl.java",
+		"startLine": 35,
+		"endLine": 79,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.output.TongYiOutputParseServiceImpl"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/output/TongYiOutputParseServiceImpl.java",
+		"startLine": 33,
+		"endLine": 76,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with removed annotation",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.output.TongYiOutputParseServiceImpl"
+}]
+},
+{
+	"type": "Remove Class Annotation",
+	"description": "Remove Class Annotation @Slf4j in class com.alibaba.cloud.ai.example.tongyi.service.impl.prompttemplate.TongYiPromptTemplateServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/prompttemplate/TongYiPromptTemplateServiceImpl.java",
+		"startLine": 44,
+		"endLine": 44,
+		"startColumn": 0,
+		"endColumn": 7,
+		"codeElementType": "ANNOTATION",
+		"description": "removed annotation",
+		"codeElement": "@Slf4j"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/prompttemplate/TongYiPromptTemplateServiceImpl.java",
+		"startLine": 35,
+		"endLine": 67,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.prompttemplate.TongYiPromptTemplateServiceImpl"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/prompttemplate/TongYiPromptTemplateServiceImpl.java",
+		"startLine": 31,
+		"endLine": 60,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with removed annotation",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.prompttemplate.TongYiPromptTemplateServiceImpl"
+}]
+},
+{
+	"type": "Remove Class Annotation",
+	"description": "Remove Class Annotation @Slf4j in class com.alibaba.cloud.ai.example.tongyi.service.impl.roles.TongYiRolesServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/roles/TongYiRolesServiceImpl.java",
+		"startLine": 43,
+		"endLine": 43,
+		"startColumn": 0,
+		"endColumn": 7,
+		"codeElementType": "ANNOTATION",
+		"description": "removed annotation",
+		"codeElement": "@Slf4j"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/roles/TongYiRolesServiceImpl.java",
+		"startLine": 37,
+		"endLine": 79,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.roles.TongYiRolesServiceImpl"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/roles/TongYiRolesServiceImpl.java",
+		"startLine": 33,
+		"endLine": 71,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with removed annotation",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.roles.TongYiRolesServiceImpl"
+}]
+},
+{
+	"type": "Remove Class Annotation",
+	"description": "Remove Class Annotation @Slf4j in class com.alibaba.cloud.ai.example.tongyi.service.impl.stuff.TongYiStuffServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/stuff/TongYiStuffServiceImpl.java",
+		"startLine": 45,
+		"endLine": 45,
+		"startColumn": 0,
+		"endColumn": 7,
+		"codeElementType": "ANNOTATION",
+		"description": "removed annotation",
+		"codeElement": "@Slf4j"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/stuff/TongYiStuffServiceImpl.java",
+		"startLine": 37,
+		"endLine": 82,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.stuff.TongYiStuffServiceImpl"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/stuff/TongYiStuffServiceImpl.java",
+		"startLine": 33,
+		"endLine": 75,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with removed annotation",
+		"codeElement": "com.alibaba.cloud.ai.example.tongyi.service.impl.stuff.TongYiStuffServiceImpl"
+}]
+},
+{
+	"type": "Rename Attribute",
+	"description": "Rename Attribute audioTranscriptionClient : TongYiAudioTranscriptionClient to audioTranscriptionModel : TongYiAudioTranscriptionModel in class com.alibaba.cloud.ai.example.tongyi.service.impl.audio.transcription.TongYiAudioTranscriptionServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 54,
+		"endLine": 54,
+		"startColumn": 47,
+		"endColumn": 71,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "original attribute declaration",
+		"codeElement": "audioTranscriptionClient : TongYiAudioTranscriptionClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 56,
+		"endLine": 56,
+		"startColumn": 46,
+		"endColumn": 69,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "renamed attribute declaration",
+		"codeElement": "audioTranscriptionModel : TongYiAudioTranscriptionModel"
+}]
+},
+{
+	"type": "Rename Class",
+	"description": "Rename Class com.alibaba.cloud.ai.tongyi.audio.speech.TongYiAudioSpeechClient renamed to com.alibaba.cloud.ai.tongyi.audio.speech.TongYiAudioSpeechModel",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/audio/speech/TongYiAudioSpeechClient.java",
+		"startLine": 40,
+		"endLine": 233,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.audio.speech.TongYiAudioSpeechClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/audio/speech/TongYiAudioSpeechModel.java",
+		"startLine": 40,
+		"endLine": 233,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "renamed type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.audio.speech.TongYiAudioSpeechModel"
+}]
+},
+{
+	"type": "Rename Class",
+	"description": "Rename Class com.alibaba.cloud.ai.tongyi.audio.speech.api.SpeechClient renamed to com.alibaba.cloud.ai.tongyi.audio.speech.api.SpeechModel",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/audio/speech/api/SpeechClient.java",
+		"startLine": 23,
+		"endLine": 51,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.audio.speech.api.SpeechClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/audio/speech/api/SpeechModel.java",
+		"startLine": 23,
+		"endLine": 51,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "renamed type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.audio.speech.api.SpeechModel"
+}]
+},
+{
+	"type": "Rename Class",
+	"description": "Rename Class com.alibaba.cloud.ai.tongyi.audio.speech.api.SpeechStreamClient renamed to com.alibaba.cloud.ai.tongyi.audio.speech.api.SpeechStreamModel",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/audio/speech/api/SpeechStreamClient.java",
+		"startLine": 25,
+		"endLine": 56,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.audio.speech.api.SpeechStreamClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/audio/speech/api/SpeechStreamModel.java",
+		"startLine": 25,
+		"endLine": 55,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "renamed type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.audio.speech.api.SpeechStreamModel"
+}]
+},
+{
+	"type": "Rename Class",
+	"description": "Rename Class com.alibaba.cloud.ai.tongyi.audio.transcription.TongYiAudioTranscriptionClient renamed to com.alibaba.cloud.ai.tongyi.audio.transcription.TongYiAudioTranscriptionModel",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/audio/transcription/TongYiAudioTranscriptionClient.java",
+		"startLine": 41,
+		"endLine": 191,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.audio.transcription.TongYiAudioTranscriptionClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/audio/transcription/TongYiAudioTranscriptionModel.java",
+		"startLine": 41,
+		"endLine": 191,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "renamed type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.audio.transcription.TongYiAudioTranscriptionModel"
+}]
+},
+{
+	"type": "Rename Class",
+	"description": "Rename Class com.alibaba.cloud.ai.tongyi.chat.TongYiChatClient renamed to com.alibaba.cloud.ai.tongyi.chat.TongYiChatModel",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/chat/TongYiChatClient.java",
+		"startLine": 58,
+		"endLine": 482,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.chat.TongYiChatClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/chat/TongYiChatModel.java",
+		"startLine": 58,
+		"endLine": 482,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "renamed type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.chat.TongYiChatModel"
+}]
+},
+{
+	"type": "Rename Class",
+	"description": "Rename Class com.alibaba.cloud.ai.tongyi.embedding.TongYiTextEmbeddingClient renamed to com.alibaba.cloud.ai.tongyi.embedding.TongYiTextEmbeddingModel",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/embedding/TongYiTextEmbeddingClient.java",
+		"startLine": 41,
+		"endLine": 176,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.embedding.TongYiTextEmbeddingClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/embedding/TongYiTextEmbeddingModel.java",
+		"startLine": 41,
+		"endLine": 176,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "renamed type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.embedding.TongYiTextEmbeddingModel"
+}]
+},
+{
+	"type": "Rename Class",
+	"description": "Rename Class com.alibaba.cloud.ai.tongyi.image.TongYiImagesClient renamed to com.alibaba.cloud.ai.tongyi.image.TongYiImagesModel",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/image/TongYiImagesClient.java",
+		"startLine": 42,
+		"endLine": 243,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.image.TongYiImagesClient"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/image/TongYiImagesModel.java",
+		"startLine": 42,
+		"endLine": 243,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "renamed type declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.image.TongYiImagesModel"
+}]
+},
+{
+	"type": "Rename Parameter",
+	"description": "Rename Parameter audioTranscriptionClient : TongYiAudioTranscriptionClient to transcriptionModel : TongYiAudioTranscriptionModel in method public TongYiAudioTranscriptionServiceImpl(transcriptionModel TongYiAudioTranscriptionModel) from class com.alibaba.cloud.ai.example.tongyi.service.impl.audio.transcription.TongYiAudioTranscriptionServiceImpl",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 57,
+		"endLine": 57,
+		"startColumn": 45,
+		"endColumn": 106,
+		"codeElementType": "SINGLE_VARIABLE_DECLARATION",
+		"description": "original variable declaration",
+		"codeElement": "audioTranscriptionClient : TongYiAudioTranscriptionClient"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 58,
+		"endLine": 58,
+		"startColumn": 3,
+		"endColumn": 60,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 59,
+		"endLine": 59,
+		"startColumn": 45,
+		"endColumn": 99,
+		"codeElementType": "SINGLE_VARIABLE_DECLARATION",
+		"description": "renamed variable declaration",
+		"codeElement": "transcriptionModel : TongYiAudioTranscriptionModel"
+}, {
+		"filePath": "spring-cloud-alibaba-examples/ai-example/spring-cloud-ai-example/src/main/java/com/alibaba/cloud/ai/example/tongyi/service/impl/audio/transcription/TongYiAudioTranscriptionServiceImpl.java",
+		"startLine": 61,
+		"endLine": 61,
+		"startColumn": 3,
+		"endColumn": 53,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}]
+}
+]
+}]
+}

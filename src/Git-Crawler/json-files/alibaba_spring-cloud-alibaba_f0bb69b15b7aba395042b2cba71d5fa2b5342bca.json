@@ -1,0 +1,57 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/alibaba/spring-cloud-alibaba.git",
+	"sha1": "f0bb69b15b7aba395042b2cba71d5fa2b5342bca",
+	"url": "https://github.com/alibaba/spring-cloud-alibaba/commit/f0bb69b15b7aba395042b2cba71d5fa2b5342bca",
+	"refactorings": [{
+	"type": "Modify Class Annotation",
+	"description": "Modify Class Annotation @EnableConfigurationProperties({TongYiChatProperties.class,TongYiImagesProperties.class,TongYiAudioSpeechProperties.class,TongYiConnectionProperties.class,TongYiConnectionProperties.class,TongYiTextEmbeddingProperties.class}) to @EnableConfigurationProperties({TongYiChatProperties.class,TongYiImagesProperties.class,TongYiAudioSpeechProperties.class,TongYiConnectionProperties.class,TongYiTextEmbeddingProperties.class}) in class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 62,
+		"endLine": 69,
+		"startColumn": 0,
+		"endColumn": 3,
+		"codeElementType": "ANNOTATION",
+		"description": "original annotation",
+		"codeElement": "@EnableConfigurationProperties({TongYiChatProperties.class,TongYiImagesProperties.class,TongYiAudioSpeechProperties.class,TongYiConnectionProperties.class,TongYiConnectionProperties.class,TongYiTextEmbeddingProperties.class})"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 49,
+		"endLine": 219,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 62,
+		"endLine": 68,
+		"startColumn": 0,
+		"endColumn": 3,
+		"codeElementType": "ANNOTATION",
+		"description": "modified annotation",
+		"codeElement": "@EnableConfigurationProperties({TongYiChatProperties.class,TongYiImagesProperties.class,TongYiAudioSpeechProperties.class,TongYiConnectionProperties.class,TongYiTextEmbeddingProperties.class})"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 49,
+		"endLine": 218,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with modified annotation",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration"
+}]
+},
+{
+	"type": "Move Source Folder",
+	"description": "Move Source Folder spring-cloud-alibaba-examples to spring-cloud-alibaba-examples/ai-example",
+	"leftSideLocations": [],
+	"rightSideLocations": []
+}
+]
+}]
+}

@@ -1,27 +1,25 @@
-from collections import deque
 import itertools
-import numpy as np
-import matplotlib.pyplot as plt
-from sortedcontainers import SortedList, SortedDict
-import itertools
-import pandas as pd
 
-def full_expansion_strategy(mapping_obj, db1, terms1, db2, terms2, blocked_terms, similarity_metric):
+import numpy as np
+import pandas as pd
+from sortedcontainers import SortedList, SortedDict
+
+
+def full_expansion_strategy(mapping, db1, terms_db1, db2, terms_db2, blocked_terms, similarity_metric):
     prio_dict = SortedDict()
 
     # those lists hold all terms, that are still mappable
-    free_term_names1 = SortedList(terms1.keys())
-    free_term_names2 = SortedList(terms2.keys())
+    free_term_names1 = SortedList(terms_db1.keys())
+    free_term_names2 = SortedList(terms_db2.keys())
 
     # those Dicts are a mirror version of prio_dict. for each term t, the tuple objects are saved, where t is involved
     # holds {term_name : [(tuple1,sim1),(tuple2,sim2) ...]}
-    terms1_pq_mirror = SortedDict()
-    terms2_pq_mirror = SortedDict()
+    terms_db1_pq_mirror = SortedDict()
+    terms_db2_pq_mirror = SortedDict()
     mapping_dict = []
 
     tuples_loc_sim = SortedDict()
     processed_mapping_tuples = set()
-
 
     # counts len, after mapping pop, del obsolete tuples & adding new tuples from neighbourhoods
     watch_prio_len = []
@@ -31,21 +29,22 @@ def full_expansion_strategy(mapping_obj, db1, terms1, db2, terms2, blocked_terms
 
     # block certain terms, that cannot be changed without computing wrong results
     for blocked_term in blocked_terms:
-        if blocked_term in terms1:
+        if blocked_term in terms_db1:
             # map term to itself
-            mapping_dict.append((blocked_term,blocked_term))
+            mapping_dict.append((blocked_term, blocked_term))
             free_term_names1.discard(blocked_term)
-            # if in terms2 then delete occurrence there
+            # if in terms_db2 then delete occurrence there
             if blocked_term in free_term_names2:
                 free_term_names2.discard(blocked_term)
             else:
                 # for counting, how many terms are mapped to synthetic values (that do not exist in DB2)
-                mapping_obj.new_term_counter += 1
-    term_objs1 = terms1.values()
-    term_objs2 = terms2.values()
-    all_poss_mapping = find_crossproduct_mappings(term_objs1, term_objs2)
-    # tuples_loc_sim, terms1_pq_mirror, terms2_pq_mirror, prio_dict, processed_mapping_tuples, watch_exp_sim, similarity_metric
-    add_mappings_to_pq(all_poss_mapping,tuples_loc_sim, terms1_pq_mirror, terms2_pq_mirror, prio_dict, processed_mapping_tuples, watch_exp_sim,similarity_metric)
+                mapping.new_term_counter += 1
+    terms_db1 = terms_db1.values()
+    terms_db2 = terms_db2.values()
+    all_poss_mapping = find_crossproduct_mappings(terms_db1, terms_db2)
+    # tuples_loc_sim, terms_db1_pq_mirror, terms_db2_pq_mirror, prio_dict, processed_mapping_tuples, watch_exp_sim, similarity_metric
+    add_mappings_to_pq(all_poss_mapping, tuples_loc_sim, terms_db1_pq_mirror, terms_db2_pq_mirror, prio_dict,
+                       processed_mapping_tuples, watch_exp_sim, similarity_metric)
 
     count_hub_recomp = 0
 
@@ -62,7 +61,7 @@ def full_expansion_strategy(mapping_obj, db1, terms1, db2, terms2, blocked_terms
             # removes first data-item
             term_name_tuple = tuples.pop()
             term_name1, term_name2 = term_name_tuple
-            term_obj1, term_obj2 = terms1[term_name1], terms2[term_name2]
+            term1, term2 = terms_db1[term_name1], terms_db2[term_name2]
 
             # last tuple in similarity bin -> delete empty bin
 
@@ -79,31 +78,30 @@ def full_expansion_strategy(mapping_obj, db1, terms1, db2, terms2, blocked_terms
                 free_term_names2.discard(term_name2)
 
                 # remove tuple from mirror so that we have no key error
-                terms1_pq_mirror[term_name1].remove((term_name_tuple, sim))
-                terms2_pq_mirror[term_name2].remove((term_name_tuple, sim))
+                terms_db1_pq_mirror[term_name1].remove((term_name_tuple, sim))
+                terms_db2_pq_mirror[term_name2].remove((term_name_tuple, sim))
 
-                # delete all tuples from priority queue, that contain term_obj1 or term_obj2
+                # delete all tuples from priority queue, that contain term1 or term2
 
-                uncertain_mapping_flag = delete_from_prio_dict(terms1_pq_mirror[term_name1], prio_dict,sim)
-                uncertain_mapping_flag += delete_from_prio_dict(terms2_pq_mirror[term_name2], prio_dict,sim)
+                uncertain_mapping_flag = delete_from_prio_dict(terms_db1_pq_mirror[term_name1], prio_dict, sim)
+                uncertain_mapping_flag += delete_from_prio_dict(terms_db2_pq_mirror[term_name2], prio_dict, sim)
                 if uncertain_mapping_flag:
                     uncertain_mapping_tuples += 1
                 # remove term entry from mirror
-                del terms1_pq_mirror[term_name1]
-                del terms2_pq_mirror[term_name2]
+                del terms_db1_pq_mirror[term_name1]
+                del terms_db2_pq_mirror[term_name2]
 
                 watch_mapped_sim.append(sim)
-
 
             watch_prio_len.append(sum(len(val) for val in prio_dict.values()))
         else:
             for term_name1 in free_term_names1:
-                new_term = "new_var_" + str(mapping_obj.new_term_counter)
+                new_term = "new_var_" + str(mapping.new_term_counter)
                 # print("add new var: " + new_term + " for " + term)
-                mapping_dict.append((term_name1,new_term))
-                mapping_obj.new_term_counter += 1
+                mapping_dict.append((term_name1, new_term))
+                mapping.new_term_counter += 1
             break
-    mapping_obj.mapping = pd.DataFrame.from_records(mapping_dict, columns=None)
+    mapping.final_mapping = pd.DataFrame.from_records(mapping_dict, columns=None)
 
     # TODO Plot node distribution
     '''fig, ax = plt.subplots(4,1)
@@ -147,16 +145,16 @@ def find_crossproduct_mappings(hubs1, hubs2):
 
 
 # poss_mappings is a set of tuple
-def add_mappings_to_pq(new_mapping_tuples, tuples_loc_sim, terms1_pq_mirror, terms2_pq_mirror, prio_dict,
+def add_mappings_to_pq(new_mapping_tuples, tuples_loc_sim, terms_db1_pq_mirror, terms_db2_pq_mirror, prio_dict,
                        processed_mapping_tuples, watch_exp_sim, similarity_metric):
-    for term_obj1, term_obj2 in new_mapping_tuples:
-        term_name_tuple = term_obj1.name, term_obj2.name
+    for term1, term2 in new_mapping_tuples:
+        term_name_tuple = term1.name, term2.name
 
         # this check is currently not necessary but later, when adding struc-sim we need it
         if term_name_tuple not in tuples_loc_sim:
-            join = occurrence_overlap(term_obj1, term_obj2)
+            join = occurrence_overlap(term1, term2)
             common_occ, term1_record_ids, term2_record_ids = join
-            sim = similarity_metric(term_obj1, term_obj2, common_occ)
+            sim = similarity_metric(term1, term2, common_occ)
 
             tuples_loc_sim[term_name_tuple] = (sim, common_occ)
 
@@ -171,30 +169,30 @@ def add_mappings_to_pq(new_mapping_tuples, tuples_loc_sim, terms1_pq_mirror, ter
                 processed_mapping_tuples.add(term_name_tuple)
 
                 # add term & tuple to prio_dict-mirror-1
-                if term_obj1.name in terms1_pq_mirror:
-                    terms1_pq_mirror[term_obj1.name].append((term_name_tuple, sim))
+                if term1.name in terms_db1_pq_mirror:
+                    terms_db1_pq_mirror[term1.name].append((term_name_tuple, sim))
                 else:
-                    terms1_pq_mirror[term_obj1.name] = [(term_name_tuple, sim)]
+                    terms_db1_pq_mirror[term1.name] = [(term_name_tuple, sim)]
 
                 # add term & tuple to prio_dict-mirror-2
-                if term_obj2.name in terms2_pq_mirror:
-                    terms2_pq_mirror[term_obj2.name].append((term_name_tuple, sim))
+                if term2.name in terms_db2_pq_mirror:
+                    terms_db2_pq_mirror[term2.name].append((term_name_tuple, sim))
                 else:
-                    terms2_pq_mirror[term_obj2.name] = [(term_name_tuple, sim)]
+                    terms_db2_pq_mirror[term2.name] = [(term_name_tuple, sim)]
                 watch_exp_sim.append(sim)
 
 
-def occurrence_overlap(term_obj1, term_obj2):
+def occurrence_overlap(term1, term2):
     # intersection saves the key (file,col_nr): #common which is the minimum of occurrences for this key
-    intersection = term_obj1.occurrence_c & term_obj2.occurrence_c
+    intersection = term1.occurrence_c & term2.occurrence_c
     term1_record_ids = []
     term2_record_ids = []
     # maybe it would be smarter to calculate this only after mapping has been accepted
     # on the other hand: when including the neighbour sim we need this info here
     # overlap consists of file, col_nr
     for overlap in intersection:
-        term1_record_ids.append(term_obj1.occurrences[overlap])
-        term2_record_ids.append(term_obj2.occurrences[overlap])
+        term1_record_ids.append(term1.occurrences[overlap])
+        term2_record_ids.append(term2.occurrences[overlap])
     return intersection, term1_record_ids, term2_record_ids
 
 
@@ -220,4 +218,4 @@ def find_hubs_quantile(free_term_names, terms):
     print("node degree mean: " + str(round(np.mean(nodes), 2)) + " standard deviation: " + str(round(np.std(nodes), 2)))
     quantile = np.quantile(nodes, q=0.98)
     # returns termobjects
-    return set(terms[free_term_names[iter]] for iter in range(len(free_term_names)) if nodes[iter] >= quantile)
+    return set(terms[free_term_names[i]] for i in range(len(free_term_names)) if nodes[i] >= quantile)
