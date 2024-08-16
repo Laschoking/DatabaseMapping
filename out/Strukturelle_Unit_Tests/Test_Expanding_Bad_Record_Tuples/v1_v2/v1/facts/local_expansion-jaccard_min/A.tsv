@@ -1,5 +1,4 @@
-static	gocd	A1
-private	gocd	A2
-static	S	A5
-static	R	A4
-static	T	A6
+test/$stack6	helper_a
+test/$stack6	main/$stack8
+test/$stack6	main/$stack8
+test/$stack6	helper_a

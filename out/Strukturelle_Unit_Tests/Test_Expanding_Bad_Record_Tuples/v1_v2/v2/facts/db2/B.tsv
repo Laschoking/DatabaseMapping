@@ -1,6 +1,3 @@
-A	static
-A	E
-A	F
-A	G
-A	H
-A	gocd
+main/$stack8	$stack8
+test/$stack6	$stack6
+helper/$stack8	$stack8

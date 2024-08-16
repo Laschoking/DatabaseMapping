@@ -1,6 +1,0 @@
-new_var_0	<Cat: void setParent(Cat)>	<Cat: void setParent(Cat)>/@parameter0
-new_var_0	<Animal: Animal playWith(Animal)>	<Animal: Animal playWith(Animal)>/@parameter0
-new_var_0	<Simple_Pointer: void main(java.lang.String[])>	<Simple_Pointer: void main(java.lang.String[])>/@parameter0
-new_var_0	<Simple_Pointer: void sanitize(java.lang.Object)>	<Simple_Pointer: void sanitize(java.lang.Object)>/@parameter0
-new_var_0	<Simple_Pointer: void test(int)>	<Simple_Pointer: void test(int)>/@parameter0
-new_var_0	<Simple_Pointer: void morePlay(Cat)>	<Simple_Pointer: void morePlay(Cat)>/@parameter0

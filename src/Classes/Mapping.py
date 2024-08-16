@@ -20,7 +20,7 @@ class Mapping:
         self.db2_unravelled_results = Databases.DbInstance(paths.db2_results, name)
 
         self.final_mapping = pd.DataFrame()
-        self.final_rec_tuples = list()
+        self.final_rec_tuples = dict() # filename : set((rid1,rid2),())
 
         self.mapping_path = paths.mapping_results.joinpath(self.name).with_suffix('.tsv')
         self.new_term_counter = 0
@@ -79,8 +79,8 @@ class Mapping:
     def set_mapping(self, mapping):
         self.final_mapping = mapping
 
-    def compute_mapping(self, db1, pa_non_mapping_terms):
-        self.expansion_strategy(self, self.records_db1, self.terms_db1, self.records_db2, self.terms_db2,
+    def compute_mapping(self, db1,db2,pa_non_mapping_terms):
+        self.expansion_strategy(self, self.terms_db1, self.terms_db2,
                                 pa_non_mapping_terms,
                                 self.similarity_metric)
         '''
@@ -91,14 +91,41 @@ class Mapping:
         '''
         # do the renaming of Terms1 & matching of records
         # this could also be avoided through implementation of the record-objs, but is too much work rn
-        for file_name, df in db1.files.items():
-            mapped_df = self.map_df(df, self.final_mapping[0], self.final_mapping[1])
+        for file_name, df1 in db1.files.items():
+            df2 = db2.files[file_name]
+
+            if file_name in self.final_rec_tuples:
+                matched_rec_tuples = self.final_rec_tuples[file_name]
+            else:
+                matched_rec_tuples = []
+            mapped_df = self.map_df(matched_rec_tuples,df1,df2, self.final_mapping[0], self.final_mapping[1])
             self.db1_renamed_facts.insert_df(file_name, mapped_df)
         return
 
-    def map_df(self, df, from_terms, to_terms):
+    def map_df(self,matched_rec_tuples, df1,df2, from_terms, to_terms):
         # assuming that keys & values are unpacked according to insertion order
-        return df.replace(from_terms.to_list(), to_terms.to_list())
+        matched_records = list()
+        if matched_rec_tuples:
+            rec1_indices = list()
+            rec2_indices = list()
+            for record1,record2 in matched_rec_tuples:
+                if record1 in rec1_indices or record2 in rec2_indices:
+                    print("record already in indices")
+                rec1_indices.append(record1)
+                rec2_indices.append(record2)
+
+            merged_df = df2.iloc[rec2_indices].reset_index(drop=True)
+            df1.drop(rec1_indices)
+
+        df1_replaced = df1.replace(from_terms.to_list(), to_terms.to_list())
+
+        # Concatenate the DataFrames
+        if matched_rec_tuples:
+            #print(f"remove {len(rec1_indices)} indices from DF1")
+            merged_df = pd.concat([merged_df, df1_replaced], ignore_index=True)
+            return merged_df
+        else:
+            return df1_replaced
 
     def read_mapping(self):
         if self.mapping_path.exists():

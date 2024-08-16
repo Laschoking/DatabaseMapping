@@ -1,4 +1,16 @@
-Nachdem A -> A  wird als nächstes static -> static freigeschalten
-für Relation A bedeutet das Record-Tupel (0,0)
-nachdem später gocd -> gocd akzeptiert wird,
-ist auf einmal 0,1 wieder möglich
+after
+test/$stack8 -> test/$stack6
+B1.1 and B2.1 are in_process
+(through test/$stack8 -> test/$stack6)
+
+then after
+main/$stack8  -> main/$stack8
+B1.0 is also in process (through main/$stack8  -> main/$stack8)
+
+now, when comparing ($stack8,$stack8) it will subscribe to:
+$stack8,$stack8  subscribes to B(1,0),(in_process1=True),(in_process2=True)
+$stack8,$stack8  subscribes to B(2,2),(in_process1=False),(in_process2=False)
+$stack8,$stack8  subscribes to B(0,0),(in_process1=True),(in_process2=True)
+
+however B(1,0) is wrong. even both, B1.1 and B2.0 are in_process they are cannot be matched
+(B1.1 holds [test/$stack6, ] and B2.0 holds [main/$stack8, ])

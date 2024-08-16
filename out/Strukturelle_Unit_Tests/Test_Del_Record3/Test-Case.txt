@@ -1,0 +1,5 @@
+Nachdem 0 -> 0 soll später C,C gewählt werden
+das Problem ist dass (C,C) in Relation B keine gleiche Zeile hat
+aber eine gleiche Occurrence
+d.h. wir erwarten dass
+nach C -> C Record1 von DB1/B gelöscht wird

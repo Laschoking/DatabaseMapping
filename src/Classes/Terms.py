@@ -117,7 +117,7 @@ class TermTuple:
                 rec_tuple.add_subscriber(self, mapped_cols)
                 if Setup.DEBUG or self.term1 in Setup.debug_set or self.term2 in Setup.debug_set:
                     print(
-                        f"{self.term1.name},{self.term2.name}  subscribes to {record1.file_name}(in_process={rec_tuple.record1.is_in_process()}) ({rec_tuple.record1.rid},{rec_tuple.record2.rid})")
+                        f"{self.term1.name},{self.term2.name}  subscribes to {record1.file_name}({rec_tuple.record1.rid},{rec_tuple.record2.rid}),(in_process1={rec_tuple.record1.is_in_process()}),(in_process2={rec_tuple.record2.is_in_process()})")
                     Setup.debug_set.add(rec_tuple)
 
                 if record1.is_active() == record2.is_active():
@@ -157,9 +157,28 @@ class TermTuple:
 
         # update all record-tuples, that have now one (or more) less cells to fill
         remaining_records = set()
+        finished_record_tuples = dict()
         for mapped_record in self.sub_rids.keys():
-            mapped_record.mark_filled_cols(self)
+            is_finished = mapped_record.mark_filled_cols(self)
             remaining_records.add(mapped_record)
+            if is_finished:
+                ind1 = list()
+                ind2 = list()
+                rec_tuples = self.sub_rids[mapped_record]
+                # TODO: it happens that with a finished record more than 1 record-tuple is considered finshed
+                for rec_tuple in rec_tuples:
+                    l1 = rec_tuple.record1.rid
+                    l2 = rec_tuple.record2.rid
+                    if l1 in ind1 or l2 in ind2:
+                        raise ValueError(f"this record is marked already for fulfillment {mapped_record.file_name,l1,l2}")
+                    else:
+                        ind1.append(l1)
+                        ind2.append(l2)
+                    if Setup.DEBUG or rec_tuple in Setup.debug_set:
+                        print(f"marked record for fill: {mapped_record.file_name}{l1,l2}")
+                    finished_record_tuples.setdefault(mapped_record.file_name,set()).add((rec_tuple.record1.rid,rec_tuple.record2.rid))
+
+
 
         # find all mappings that are invalid now
         # in the expansion, they will be removed from prio-dict, otherwise we dont need to do anything to them, bc. either term1, or term2 is now mapped
@@ -185,9 +204,9 @@ class TermTuple:
 
             if record.is_active():
                 if Setup.DEBUG or self in Setup.debug_set:
-                    print(f"deactivate  record: {record.db}({record.file_name, record.rid})")
+                    print(f"deactivate  record: {record.db}{record.file_name, record.rid}")
                 altered_term_tuples |= record.deactivate_self_and_all_rt()
-        return delete_term_tuples, altered_term_tuples
+        return delete_term_tuples, altered_term_tuples,finished_record_tuples
 
     def get_records(self):
         return self.sub_rids

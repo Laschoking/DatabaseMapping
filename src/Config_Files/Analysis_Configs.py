@@ -65,6 +65,7 @@ Unit_Test_Dyn_Max_Cardinality = DbConfig("Strukturelle_Unit_Tests", "Test_Dyn_Ma
 Unit_Test_Double_Expansion = DbConfig("Strukturelle_Unit_Tests", "Test_Double_Expansion", "v1", "v2")
 Unit_Test_Expanding_Bad_Record_Tuples = DbConfig("Strukturelle_Unit_Tests", "Test_Expanding_Bad_Record_Tuples", "v1",
                                                   "v2")
+Unit_Test_Expanding_Bad_Record_Tuples = DbConfig("Strukturelle_Unit_Tests", "Test_Expanding_Bad_Record_Tuples", "v1", "v2")
 
 DOOP_GH1_alibaba = DbConfig("DoopProgramAnalysis", "alibaba_arthas", "release_1", "release_2")
 DOOP_GH1_halo = DbConfig("DoopProgramAnalysis", "halo-dev_halo", "release_1", "release_2")

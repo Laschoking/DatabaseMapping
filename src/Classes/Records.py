@@ -49,6 +49,9 @@ class Record:
         if not self.vacant_cols:
             # if Setup.debug: print(f"deactivate Record: {self.db,self.rid}")
             self.gen_active = False
+            return True
+        else:
+            return False
 
     # if a record can not be matched anymore due to a recent mapping, we want to delete the occurrences of the terms within
     def deactivate_self_and_all_rt(self):

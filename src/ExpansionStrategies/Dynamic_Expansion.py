@@ -16,7 +16,7 @@ def recompute_hubs(accepted_sim):
     return low_outlier
 
 
-def iterative_anchor_expansion(mapping, records_db1, terms_db1, records_db2, terms_db2, blocked_terms,
+def iterative_anchor_expansion(mapping, terms_db1, terms_db2, blocked_terms,
                                similarity_metric):
     prio_dict = SortedDict()
 
@@ -31,7 +31,7 @@ def iterative_anchor_expansion(mapping, records_db1, terms_db1, records_db2, ter
     mapping_dict = []
 
     # If Datalog Rules are executed on the merged database, match the following terms to themselves
-    for blocked_term in blocked_terms:
+    '''for blocked_term in blocked_terms:
         if blocked_term in terms_db1.keys():
             term = terms_db1[blocked_term]
             term.deactivate_term_and_all_tt()
@@ -45,7 +45,7 @@ def iterative_anchor_expansion(mapping, records_db1, terms_db1, records_db2, ter
             else:
                 # for counting, how many terms are mapped to synthetic values (that do not exist in db2)
                 mapping.new_term_counter += 1
-
+    '''
     # counts len, after mapping pop, del obsolete tuples & adding new tuples from neighbourhoods
     watch_prio_len = []
     watch_exp_sim = []
@@ -87,8 +87,10 @@ def iterative_anchor_expansion(mapping, records_db1, terms_db1, records_db2, ter
                 print("-----------------------------")
                 print(f"{mapped_tuple.term1.name}  -> {mapped_tuple.term2.name} with sim: {mapped_sim}")
 
-            delete_term_tuples, altered_term_tuples = mapped_tuple.accept_this_mapping()  # returns mappings that are now invalid & or need to be updated
             sub_rids = mapped_tuple.get_clean_record_tuples()
+            delete_term_tuples, altered_term_tuples,finished_record_tuples = mapped_tuple.accept_this_mapping()  # returns mappings that are now invalid & or need to be updated
+            for file_name, rec_tuples in finished_record_tuples.items():
+                mapping.final_rec_tuples.setdefault(file_name,set()).update(rec_tuples)
 
             # reduce free term counter
             c_free_terms_db1 -= 1
@@ -115,6 +117,8 @@ def iterative_anchor_expansion(mapping, records_db1, terms_db1, records_db2, ter
                 # record was not in_process -> expand it in the discovery phase
                 else:
                     record.in_process = True
+                    if Setup.DEBUG:
+                        print(f"make record in process: {record.file_name,record.rid}")
                     outdated_rid_tuples |= record.get_all_record_tuples() - mapped_rec_tuples
                     expansion_rid_tuples.update(mapped_rec_tuples - outdated_rid_tuples)
                 # else:

@@ -8,20 +8,22 @@ from src.Config_Files.Analysis_Configs import *
 from src.ExpansionStrategies import Dynamic_Expansion
 from src.Libraries.EvaluateMappings import *
 from src.SimilarityMetric import Dynamic_Jaccard_Index
+from src.Libraries import ShellLib
 
 update_terms = False
 HUB_RECOMPUTE = False
-DEBUG = False
+DEBUG = True
 debug_term_names1 = set()  # set(["gocd"])
 debug_term_names2 = set()  # set(["gocd"])
 debug_set = set()  # set(["A","B","C","D","E","F","G","H"])
 # concat_occ_cols = True
 
+#TODO filter input for duplicated atoms
 
 if __name__ == "__main__":
-
+    # TODO Unit_Test_Dyn_Max_Cardinality
     # specify Java-files & Programm Analysis
-    db_config = Doop_Gocd_Websocket_Notifier_v1_v4
+    db_config = Unit_Test_Expanding_Bad_Record_Tuples
     program_config = Doop_PointerAnalysis
 
     GEN_FACTS = False  # if true, run doop again for new fact-gen, otherwise just copy from doop/out
@@ -105,7 +107,7 @@ if __name__ == "__main__":
         # calculate similarity_matrix & compute maximal mapping from db1_facts to db2_facts
         if COMP_MAPPING:
             t0 = time.time()
-            mapping.compute_mapping(db1_facts, program_config.blocked_terms)
+            mapping.compute_mapping(db1_facts,db2_facts, program_config.blocked_terms)
             t1 = time.time()
             mapping.db1_renamed_facts.log_db_relations()
             mapping_rt = round(t1 - t0, 4)

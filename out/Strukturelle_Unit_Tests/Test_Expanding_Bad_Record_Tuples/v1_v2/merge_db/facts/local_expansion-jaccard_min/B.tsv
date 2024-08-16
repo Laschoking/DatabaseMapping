@@ -1,6 +1,4 @@
-A	E	0
-A	F	0
-A	G	0
-A	H	0
-A	gocd	0
-A	static	0
+main/$stack8	$stack6	1
+main/$stack8	$stack8	10
+test/$stack6	$stack6	0
+test/$stack6	$stack6	0

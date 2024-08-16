@@ -55,6 +55,7 @@ def create_doop_facts(db_config, db_name, db_file_name, fact_path):
 
     for file in PathLib.DOOP_OUT.joinpath(doop_out_name).joinpath("database").glob("*.facts"):
         new_file_name = file.with_suffix('.tsv').name
+        # TODO verify that each atom is unique (DOOP sometimes produces identical facts!!!)
         target_file = fact_path.joinpath(new_file_name)
         shutil.copy(file, target_file)
 
