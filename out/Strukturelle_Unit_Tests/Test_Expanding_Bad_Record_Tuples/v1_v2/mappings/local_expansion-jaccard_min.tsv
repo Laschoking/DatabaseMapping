@@ -1,4 +1,5 @@
 test/$stack8	test/$stack6
 main/$stack8	main/$stack8
+$stack8	$stack8
 helper_a	helper_a
-$stack8	$stack6
+helper/$stack8	helper/$stack8

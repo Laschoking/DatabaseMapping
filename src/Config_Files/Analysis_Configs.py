@@ -61,11 +61,14 @@ Unit_Test_Del_Rec2 = DbConfig("Strukturelle_Unit_Tests", "Test_Del_Record_Tuple2
 Unit_Test_Del_Record1 = DbConfig("Strukturelle_Unit_Tests", "Test_Del_Record1", "v1", "v2")
 Unit_Test_Del_Record2 = DbConfig("Strukturelle_Unit_Tests", "Test_Del_Record2", "v1", "v2")
 Unit_Test_Del_Record3 = DbConfig("Strukturelle_Unit_Tests", "Test_Del_Record3", "v1", "v2")
-Unit_Test_Dyn_Max_Cardinality = DbConfig("Strukturelle_Unit_Tests", "Test_Dyn_Max_Cardinality", "v1", "v2")
+Unit_Test_Dyn_Max_Cardinality1 = DbConfig("Strukturelle_Unit_Tests", "Test_Dyn_Max_Cardinality1", "v1", "v2")
+Unit_Test_Dyn_Max_Cardinality2 = DbConfig("Strukturelle_Unit_Tests", "Test_Dyn_Max_Cardinality2", "v1", "v2")
 Unit_Test_Double_Expansion = DbConfig("Strukturelle_Unit_Tests", "Test_Double_Expansion", "v1", "v2")
-Unit_Test_Expanding_Bad_Record_Tuples = DbConfig("Strukturelle_Unit_Tests", "Test_Expanding_Bad_Record_Tuples", "v1",
+Unit_Test_Wrong_Subscription = DbConfig("Strukturelle_Unit_Tests", "Test_Wrong_Subscription", "v1",
                                                   "v2")
 Unit_Test_Expanding_Bad_Record_Tuples = DbConfig("Strukturelle_Unit_Tests", "Test_Expanding_Bad_Record_Tuples", "v1", "v2")
+
+
 
 DOOP_GH1_alibaba = DbConfig("DoopProgramAnalysis", "alibaba_arthas", "release_1", "release_2")
 DOOP_GH1_halo = DbConfig("DoopProgramAnalysis", "halo-dev_halo", "release_1", "release_2")

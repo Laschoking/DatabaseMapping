@@ -1,7 +1,0 @@
-<Cat: void setParent(Cat)>/write-field-parent/0	<Cat: Cat parent>	1
-<Cat: void setParent(Cat)>/write-field-parent/0	<Cat: Cat parent>	10
-<Cat: Cat getParent()>/read-field-parent/0	<Cat: Cat parent>	1
-<Cat: Cat getParent()>/read-field-parent/0	<Cat: Cat parent>	10
-<Simple_Pointer: void main(java.lang.String[])>/read-field-in/0	<java.lang.System: java.io.InputStream in>	1
-<Simple_Pointer: void main(java.lang.String[])>/read-field-in/0	<java.lang.System: java.io.InputStream in>	10
-<Simple_Pointer: void main(java.lang.String[])>/read-field-out/0	<java.lang.System: java.io.PrintStream out>	0

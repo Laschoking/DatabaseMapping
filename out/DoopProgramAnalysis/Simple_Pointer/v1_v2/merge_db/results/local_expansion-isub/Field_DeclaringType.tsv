@@ -1,5 +1,0 @@
-<Cat: Cat parent>	Cat	0
-<java.lang.System: java.io.InputStream in>	java.lang.System	1
-<java.lang.System: java.io.InputStream in>	java.lang.System	10
-<java.lang.System: java.io.PrintStream out>	java.lang.System	1
-<java.lang.System: java.io.PrintStream out>	java.lang.System	10

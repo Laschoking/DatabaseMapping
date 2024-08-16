@@ -91,9 +91,10 @@ class Mapping:
         '''
         # do the renaming of Terms1 & matching of records
         # this could also be avoided through implementation of the record-objs, but is too much work rn
-        for file_name, df1 in db1.files.items():
-            df2 = db2.files[file_name]
-
+        for file_name, df1_original in db1.files.items():
+            df2_original = db2.files[file_name]
+            df1 = df1_original.copy(deep=True)
+            df2 = df2_original.copy(deep=True)
             if file_name in self.final_rec_tuples:
                 matched_rec_tuples = self.final_rec_tuples[file_name]
             else:
@@ -110,12 +111,12 @@ class Mapping:
             rec2_indices = list()
             for record1,record2 in matched_rec_tuples:
                 if record1 in rec1_indices or record2 in rec2_indices:
-                    print("record already in indices")
+                    raise ValueError(f"record already in indices {record1,record2}")
                 rec1_indices.append(record1)
                 rec2_indices.append(record2)
 
             merged_df = df2.iloc[rec2_indices].reset_index(drop=True)
-            df1.drop(rec1_indices)
+            df1.drop(rec1_indices,inplace=True)
 
         df1_replaced = df1.replace(from_terms.to_list(), to_terms.to_list())
 

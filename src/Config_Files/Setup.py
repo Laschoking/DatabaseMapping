@@ -5,14 +5,15 @@ import git
 
 from src.Classes import Mapping, Databases
 from src.Config_Files.Analysis_Configs import *
-from src.ExpansionStrategies import Dynamic_Expansion
+from src.ExpansionStrategies.Dynamic_Expansion import iterative_anchor_expansion
 from src.Libraries.EvaluateMappings import *
-from src.SimilarityMetric import Dynamic_Jaccard_Index
+from src.SimilarityMetric.Dynamic_Min_Record_Tuple import dynamic_min_rec_tuples
+from src.SimilarityMetric.Dynamic_Jaccard_Index import dynamic_jaccard_index
 from src.Libraries import ShellLib
 
 update_terms = False
 HUB_RECOMPUTE = False
-DEBUG = True
+DEBUG = False
 debug_term_names1 = set()  # set(["gocd"])
 debug_term_names2 = set()  # set(["gocd"])
 debug_set = set()  # set(["A","B","C","D","E","F","G","H"])
@@ -23,7 +24,7 @@ debug_set = set()  # set(["A","B","C","D","E","F","G","H"])
 if __name__ == "__main__":
     # TODO Unit_Test_Dyn_Max_Cardinality
     # specify Java-files & Programm Analysis
-    db_config = Unit_Test_Expanding_Bad_Record_Tuples
+    db_config = Doop_Gocd_Websocket_Notifier_v1_v4
     program_config = Doop_PointerAnalysis
 
     GEN_FACTS = False  # if true, run doop again for new fact-gen, otherwise just copy from doop/out
@@ -80,8 +81,11 @@ if __name__ == "__main__":
     '''
     # data.add_mapping(Mapping(data.paths, "local_expansion", iterative_anchor_expansion, "term_equality", term_equality))
     data.add_mapping(
-        Mapping.Mapping(data.paths, "local_expansion", Dynamic_Expansion.iterative_anchor_expansion, "jaccard_min",
-                        Dynamic_Jaccard_Index.dynamic_jaccard_index))
+        Mapping.Mapping(data.paths, "dynamic", iterative_anchor_expansion, "jaccard_min",
+                        dynamic_jaccard_index))
+    data.add_mapping(
+        Mapping.Mapping(data.paths, "dynamic", iterative_anchor_expansion, "edge_count",
+                        dynamic_min_rec_tuples))
     # data.add_mapping(Mapping(data.paths, "local_expansion", iterative_anchor_expansion, "isub", isub_sequence_matcher))
     # data.add_mapping(Mapping(data.paths,"local_expansion",iterative_anchor_expansion,"jaccard+isub",jaccard_isub_mix))
 

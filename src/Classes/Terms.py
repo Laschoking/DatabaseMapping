@@ -94,23 +94,27 @@ class TermTuple:
                         print(f"discarded record obj bc. it is inactive {record1.file_name}{record1.rid, record2.rid}")
                     continue
 
-                if record1.is_in_process() != record2.is_in_process():
-                    # this means we would expand a record-tuple, where one side of the record-tuple is already activated by a mapping
-                    # but the other side not (i.e. is_active-mapping(1,2) and we want to introduce new mapping (3,2) will never work
+                if record1.is_in_process() and record2.is_in_process():
+                    # if both records are individually in_process, but no active record tuple exist, skip
+                    if (record1, record2) not in expanded_record_tuples.keys():
+                        continue
+                    else:
+                        rec_tuple = expanded_record_tuples[(record1, record2)]
+                        # check if the existing record_tuple is still active
+                        if not rec_tuple.is_active():
+                            continue
+
+                elif not record1.is_in_process() and not record2.is_in_process():
+                    if (record1, record2) not in expanded_record_tuples.keys():
+                        rec_tuple = RecordTuple(record1, record2)
+                        expanded_record_tuples[record1,record2] = rec_tuple
+                    else:
+                        rec_tuple = expanded_record_tuples[(record1, record2)]
+
+                # Avoid record-tuples, where one side is in_process, when the other side is not
+                else:
                     continue
 
-                # both record-id1 and record-id2 point to the same object Record-Tuple (consisting of record-id1 and record-id2, etc.)
-                if (record1, record2) not in expanded_record_tuples.keys():
-                    rec_tuple = RecordTuple(record1, record2)
-                    # expanded_record_tuples is a global dictionary linking record1,record2 to the record-tuple
-                    expanded_record_tuples[(record1, record2)] = rec_tuple
-                else:
-                    # get access to the existing record-tuple-object
-                    rec_tuple = expanded_record_tuples[(record1, record2)]
-
-                    # check if the existing record_tuple is still active
-                    if not rec_tuple.is_active():
-                        continue
 
                 record1.record_tuples.add(rec_tuple)
                 record2.record_tuples.add(rec_tuple)
