@@ -47,7 +47,7 @@ class BasePaths:
         self.global_log = PathLib.base_out_path.joinpath("Results")
 
 
-class DataBag:
+class DataContainer:
     def __init__(self, base_output_path, db1_base_path, db2_base_path):
         self.terms1 = None
         self.terms2 = None

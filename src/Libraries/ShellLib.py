@@ -106,14 +106,14 @@ class GlobalLogger:
             self.merge_db_df = pd.read_csv(self.path_merge_db_df, sep='\t', index_col=0, header=0)
         else:
             self.merge_db_df = pd.DataFrame(
-                columns=["Date", "SHA", "MergeDB", "Mapping ID", "Expansion", "Metric", "Unique Records DB1",
+                columns=["Date", "SHA", "MergeDB", "MappingContainer ID", "Expansion", "Metric", "Unique Records DB1",
                          "Unique Records DB2", "Mutual Records", "Overlap in %"])
 
         if self.path_mapping_df.exists():
             self.mapping_df = pd.read_csv(self.path_mapping_df, sep='\t', index_col=0, header=0)
         else:
             self.mapping_df = pd.DataFrame(
-                columns=["Date", "SHA", "MergeDB", "Mapping ID", "Expansion", "Metric", "Expanded Tuples",
+                columns=["Date", "SHA", "MergeDB", "MappingContainer ID", "Expansion", "Metric", "Expanded Tuples",
                          "% to crossproduct",
                          "1-1 Mappings", "Synthetic Mappings", "Hub Re-Computation", "Uncertain Mappings",
                          "Unique Records DB1", "Unique Records DB2", "Mutual Records", "Overlap in %", "Runtime"])
@@ -122,7 +122,7 @@ class GlobalLogger:
             self.reasoning_df = pd.read_csv(self.path_reasoning_df, sep='\t', index_col=0, header=0)
         else:
             self.reasoning_df = pd.DataFrame(
-                columns=["Date", "SHA", "From DB", "Mapping", "DL-Rules", "Total Time", "Loading Time",
+                columns=["Date", "SHA", "From DB", "MappingContainer", "DL-Rules", "Total Time", "Loading Time",
                          "Reasoning Time",
                          "Saving Time"])
 

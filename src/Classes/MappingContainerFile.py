@@ -1,23 +1,24 @@
 import pandas as pd
 from bidict import bidict
 
-from src.Classes import Databases, Terms, Records
+from src.Classes.DataContainerFile import DbInstance
+from src.Classes import Terms, Records
 from src.Libraries import ShellLib
 
 
-# each Mapping has a Strategy and a similarity metric
-class Mapping:
+# each MappingContainer has a Strategy and a similarity metric
+class MappingContainer:
     def __init__(self, paths, exp_name, expansion_strategy, sim_name, similarity_metric):
         name = exp_name + "-" + sim_name
         self.name = name
 
-        self.db1_renamed_facts = Databases.DbInstance(paths.db1_facts, name)
+        self.db1_renamed_facts = DbInstance(paths.db1_facts, name)
 
-        self.db_merged_facts = Databases.DbInstance(paths.merge_facts, name)
-        self.db_merged_results = Databases.DbInstance(paths.merge_results, name)
+        self.db_merged_facts = DbInstance(paths.merge_facts, name)
+        self.db_merged_results = DbInstance(paths.merge_results, name)
 
-        self.db1_unravelled_results = Databases.DbInstance(paths.db1_results, name)
-        self.db2_unravelled_results = Databases.DbInstance(paths.db2_results, name)
+        self.db1_unravelled_results = DbInstance(paths.db1_results, name)
+        self.db2_unravelled_results = DbInstance(paths.db2_results, name)
 
         self.final_mapping = pd.DataFrame()
         self.final_rec_tuples = dict() # filename : set((rid1,rid2),())
@@ -35,7 +36,7 @@ class Mapping:
 
         self.c_uncertain_mappings = 0
         self.c_hub_recomp = 0
-        self.c_comp_tuples = 0
+        self.c_mappings = 0
 
     def initialize_records_terms_db1(self, db1):
         self.init_records_terms_db(db1, self.terms_db1, self.records_db1)
@@ -79,16 +80,11 @@ class Mapping:
     def set_mapping(self, mapping):
         self.final_mapping = mapping
 
-    def compute_mapping(self, db1,db2,pa_non_mapping_terms):
-        self.expansion_strategy(self, self.terms_db1, self.terms_db2,
-                                pa_non_mapping_terms,
-                                self.similarity_metric)
-        '''
-        uncertain_mapping_tuples, count_hub_recomp, comp_tuples = 
-        self.c_uncertain_mappings = uncertain_mapping_tuples
-        self.c_hub_recomp = count_hub_recomp
-        self.c_comp_tuples = comp_tuples
-        '''
+    def compute_mapping(self, db1, db2, DL_blocked_terms):
+        c_mappings = self.expansion_strategy(self, self.terms_db1, self.terms_db2,
+                                                                      DL_blocked_terms,self.similarity_metric)
+        self.c_mappings = c_mappings
+
         # do the renaming of Terms1 & matching of records
         # this could also be avoided through implementation of the record-objs, but is too much work rn
         for file_name, df1_original in db1.files.items():
@@ -185,4 +181,3 @@ class Mapping:
             else:
                 self.db1_unravelled_results.insert_df(file_name, pd.DataFrame())
                 self.db2_unravelled_results.insert_df(file_name, pd.DataFrame())
-        return

@@ -3,7 +3,8 @@ import time
 
 import git
 
-from src.Classes import Mapping, Databases
+from src.Classes.DataContainerFile import DataContainer
+from src.Classes.MappingContainerFile import MappingContainer
 from src.Config_Files.Analysis_Configs import *
 from src.ExpansionStrategies.Dynamic_Expansion import iterative_anchor_expansion
 from src.Libraries.EvaluateMappings import *
@@ -11,20 +12,13 @@ from src.SimilarityMetric.Dynamic_Min_Record_Tuple import dynamic_min_rec_tuples
 from src.SimilarityMetric.Dynamic_Jaccard_Index import dynamic_jaccard_index
 from src.Libraries import ShellLib
 
-update_terms = False
-HUB_RECOMPUTE = False
-DEBUG = False
-debug_term_names1 = set()  # set(["gocd"])
-debug_term_names2 = set()  # set(["gocd"])
-debug_set = set()  # set(["A","B","C","D","E","F","G","H"])
-# concat_occ_cols = True
 
 #TODO filter input for duplicated atoms
 
 if __name__ == "__main__":
     # TODO Unit_Test_Dyn_Max_Cardinality
     # specify Java-files & Programm Analysis
-    db_config = Doop_Gocd_Websocket_Notifier_v1_v4
+    db_config = Unit_Test_Dyn_Max_Cardinality2
     program_config = Doop_PointerAnalysis
 
     GEN_FACTS = False  # if true, run doop again for new fact-gen, otherwise just copy from doop/out
@@ -32,7 +26,7 @@ if __name__ == "__main__":
     RUN_DL = False
 
     # Fact Creation of Java-Files (or .Jar)
-    data = Databases.DataBag(db_config.base_output_path, db_config.db1_path, db_config.db2_path)
+    data = DataContainer(db_config.base_output_path, db_config.db1_path, db_config.db2_path)
 
     # for collecting results
     global_log = ShellLib.GlobalLogger(data.paths.global_log)
@@ -74,20 +68,20 @@ if __name__ == "__main__":
     db2_facts = data.db2_original_facts
 
     # add mappings to data
-    '''data.add_mapping(Mapping(data.paths, "full_expansion", full_expansion_strategy, "term_equality", term_equality))
-    data.add_mapping(Mapping(data.paths, "full_expansion", full_expansion_strategy, "jaccard_min", jaccard_min))
-    data.add_mapping(Mapping(data.paths, "full_expansion", full_expansion_strategy, "isub", isub_sequence_matcher))
-    data.add_mapping(Mapping(data.paths, "full_expansion", full_expansion_strategy, "jaccard+isub",  jaccard_isub_mix))
+    '''data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "term_equality", term_equality))
+    data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "jaccard_min", jaccard_min))
+    data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "isub", isub_sequence_matcher))
+    data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "jaccard+isub",  jaccard_isub_mix))
     '''
-    # data.add_mapping(Mapping(data.paths, "local_expansion", iterative_anchor_expansion, "term_equality", term_equality))
-    data.add_mapping(
-        Mapping.Mapping(data.paths, "dynamic", iterative_anchor_expansion, "jaccard_min",
-                        dynamic_jaccard_index))
-    data.add_mapping(
-        Mapping.Mapping(data.paths, "dynamic", iterative_anchor_expansion, "edge_count",
-                        dynamic_min_rec_tuples))
-    # data.add_mapping(Mapping(data.paths, "local_expansion", iterative_anchor_expansion, "isub", isub_sequence_matcher))
-    # data.add_mapping(Mapping(data.paths,"local_expansion",iterative_anchor_expansion,"jaccard+isub",jaccard_isub_mix))
+    # data.add_mapping(MappingContainer(data.paths, "local_expansion", iterative_anchor_expansion, "term_equality", term_equality))
+    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,
+                                      "jaccard_min",dynamic_jaccard_index))
+
+    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,
+                                      "edge_count",dynamic_min_rec_tuples))
+
+    # data.add_mapping(MappingContainer(data.paths, "local_expansion", iterative_anchor_expansion, "isub", isub_sequence_matcher))
+    # data.add_mapping(MappingContainer(data.paths,"local_expansion",iterative_anchor_expansion,"jaccard+isub",jaccard_isub_mix))
 
     eval_tab = PrettyTable()
     eval_tab.field_names = ["Method", "data set", "unique rows DB1", "unique rows DB2", "Common Rows",
@@ -97,7 +91,7 @@ if __name__ == "__main__":
                                                                print_flag=False))
 
     time_tab = PrettyTable()
-    time_tab.field_names = ["Mapping", "#blocked Mappings", "# 1:1 Mappings", "#synthetic Terms", "# hub comp.",
+    time_tab.field_names = ["MappingContainer", "#blocked Mappings", "# 1:1 Mappings", "#synthetic Terms", "# hub comp.",
                             "uncertain mappings", "# comp. tuples", "comp. tuples in %", "run-time"]
 
     # iterate through all selected mapping functions
@@ -134,13 +128,13 @@ if __name__ == "__main__":
 
         time_tab.add_row(
             [mapping.name, l_blocked_terms, nr_1_1_mappings, mapping.new_term_counter, mapping.c_hub_recomp,
-             mapping.c_uncertain_mappings, mapping.c_comp_tuples,
-             str(round(mapping.c_comp_tuples * 100 / c_max_tuples, 2)) + "%", mapping_rt])
+             mapping.c_uncertain_mappings, mapping.c_mappings,
+             str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", mapping_rt])
         if COMP_MAPPING:
             global_log.mapping_df.loc[len(global_log.mapping_df)] = (
-                    [date, commit, db_config.dir_name, mapping.name, mapping.expansion_strategy.__name__,
-                     mapping.similarity_metric.__name__, mapping.c_comp_tuples,
-                     str(round(mapping.c_comp_tuples * 100 / c_max_tuples, 2)) + "%", nr_1_1_mappings,
+                    [date, commit, db_config.full_name, mapping.name, mapping.expansion_strategy.__name__,
+                     mapping.similarity_metric.__name__, mapping.c_mappings,
+                     str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", nr_1_1_mappings,
                      mapping.new_term_counter, mapping.c_hub_recomp, mapping.c_uncertain_mappings] + res + [mapping_rt])
 
         if RUN_DL:
@@ -166,7 +160,7 @@ if __name__ == "__main__":
             global_log.reasoning_df.loc[len(global_log.reasoning_df)] = [date, commit, db_config.full_name,
                                                                          mapping.name,
                                                                          program_config.merge_dl.stem] + nemo_runtime
-            # "Date","SHA","MergeDB","Mapping","Expansion","Metric", "Unique Records DB1","Unique Records DB2","Mutual Records","Overlap in %"
+            # "Date","SHA","MergeDB","MappingContainer","Expansion","Metric", "Unique Records DB1","Unique Records DB2","Mutual Records","Overlap in %"
             global_log.merge_db_df.loc[len(global_log.merge_db_df)] = [date, commit, db_config.full_name, mapping.name,
                                                                        mapping.expansion_strategy.__name__,
                                                                        mapping.similarity_metric.__name__] + overlap

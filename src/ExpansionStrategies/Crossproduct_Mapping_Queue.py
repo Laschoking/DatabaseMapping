@@ -112,7 +112,7 @@ def full_expansion_strategy(mapping, db1, terms_db1, db2, terms_db2, blocked_ter
     ax[1].set_title("Computed Similarities")
     ax[2].scatter(range(len(watch_mapped_sim)), np.array(watch_mapped_sim), s=0.5, label='Mapped Similarities')
     ax[2].set_title("Mapped Similarities")
-    ax[3].hist(watch_mapped_sim,100,label='Accepted Mapping Distribution')
+    ax[3].hist(watch_mapped_sim,100,label='Accepted MappingContainer Distribution')
     ax[3].set_title("Distribution of Similarities")
     fig.tight_layout()
     plt.show()

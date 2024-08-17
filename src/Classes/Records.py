@@ -1,4 +1,4 @@
-import src.Config_Files.Setup as Setup
+from src.Config_Files.Debug_Flags import DEBUG, debug_set, debug_term_names1,debug_term_names2
 
 
 class Record:
@@ -20,7 +20,6 @@ class Record:
         for col in cols:
             # overwrite shallow terms list
             self.terms[col] = term
-            # if Setup.debug: print(f"record {self.rid} insert term {term} with col_len {self.col_len}")
 
     def get_active_record_tuples(self):
         for rec_tuple in self.active_records_tuples.copy():
@@ -47,7 +46,7 @@ class Record:
 
         # check if the record is finised (matched with another one), then we can deactivate it
         if not self.vacant_cols:
-            # if Setup.debug: print(f"deactivate Record: {self.db,self.rid}")
+            # if debug: print(f"deactivate Record: {self.db,self.rid}")
             self.gen_active = False
             return True
         else:
@@ -57,11 +56,11 @@ class Record:
     def deactivate_self_and_all_rt(self):
         self.gen_active = False
         self.in_process = False
-        altered_term_tuples = set()
-        # if Setup.debug: print(f"delete Record ({self.db,self.rid})")
+        altered_mappings = set()
+        # if debug: print(f"delete Record ({self.db,self.rid})")
         # make all connected record-tuples inactive and save the term-tuples that were subscribed to them
         for rec_tuple in self.record_tuples:
-            altered_term_tuples |= rec_tuple.make_inactive()  # only sets bool (so term-tuple still may hold inactive record-tuples)
+            altered_mappings |= rec_tuple.make_inactive()  # only sets bool (so term-tuple still may hold inactive record-tuples)
         term_cols = dict()
 
         i = 0
@@ -77,11 +76,11 @@ class Record:
         for term, cols in term_cols.items():
             if term.is_active():
                 # remove this record_obj from the occurrences of the term, because it is now obsolete
-                if Setup.DEBUG or term in Setup.debug_term_names1 or term in Setup.debug_term_names2:
+                if DEBUG or term in debug_term_names1 or term in debug_term_names2:
                     print(f"delete occurrence ({self.file_name},{self.rid}) from {term.name} at col {cols}")
                 term.remove_occurrence(self.file_name, tuple(cols), self)
 
-        return altered_term_tuples
+        return altered_mappings
 
     def is_active(self):
         return self.gen_active
@@ -100,17 +99,17 @@ class RecordTuple:
     def is_active(self):
         return self.gen_active
 
-    def add_subscriber(self, term_tuple, mapped_col):
-        self.subscribers.add(term_tuple)
+    def add_subscriber(self, mapping, mapped_col):
+        self.subscribers.add(mapping)
 
     def get_subscribers(self):
-        for term_tuple in self.subscribers.copy():
-            if not term_tuple.gen_active:
-                self.subscribers.remove(term_tuple)
+        for mapping in self.subscribers.copy():
+            if not mapping.gen_active:
+                self.subscribers.remove(mapping)
         return self.subscribers
 
     def make_inactive(self):
         self.gen_active = False
-        if Setup.DEBUG or self in Setup.debug_set:
+        if DEBUG or self in debug_set:
             print(f"deactivate Record Tuple: {self.record1.file_name}({self.record1.rid},{self.record2.rid})")
         return self.get_subscribers()
