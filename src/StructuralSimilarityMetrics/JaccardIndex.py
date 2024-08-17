@@ -1,0 +1,35 @@
+from src.Classes.SimilarityMetric import SimilarityMetric
+
+
+class DynamicJaccardIndex(SimilarityMetric):
+    def __init__(self):
+        super().__init__("Dynamic Jaccard")
+
+    def compute_similarity(self, term1, term2, sub_rec_tuples):
+        # no mutual matchings possible
+        if not sub_rec_tuples:
+            return 0
+        poss_matches = 0
+        total_occurrences = 0
+        file_rec_id1 = dict()
+        file_rec_id2 = dict()
+        # this gives all combinations per file_name
+        for record in sub_rec_tuples.keys():
+            if record.db == "facts-db1":
+                file_rec_id1.setdefault(record.file_name, list()).append(record)
+            else:
+                file_rec_id2.setdefault(record.file_name, list()).append(record)
+        # TODO This is currenctly not optimal, see Unit_Test_Max_Cardinality_1
+        # to approximate the correct result
+        # example (1 <-> 1, 1 <-> 2, 1 <-> 3, 2 <-> 4, 3 <-> 4, 4 <-> 4) means we have even number of records at each side but only two matches
+        for file_name, rec_ids1 in file_rec_id1.items():
+            rec_ids2 = file_rec_id2[file_name]
+            poss_matches += min(len(rec_ids1), len(rec_ids2))
+
+        total_occurrences = term1.degree + term2.degree
+        # weight matches higher to prefer important nodes
+        return poss_matches ** 2 / total_occurrences
+
+    def recompute_similarity(self, old_sim, term1, term2, sub_rec_tuples):
+        return self.compute_similarity(term1, term2, sub_rec_tuples)
+

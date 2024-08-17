@@ -1,5 +1,5 @@
-from src.SimilarityMetric.Jaccard_Min import *
-from src.SimilarityMetric.ISUB_SequenceMatcher import *
+from src.SimilarityMetrics.Jaccard_Min import *
+from src.SimilarityMetrics.ISUB_SequenceMatcher import *
 
 
 def jaccard_isub_mix(term1, term2, occ_overlap):
