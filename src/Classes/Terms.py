@@ -1,5 +1,5 @@
 import itertools
-from src.Config_Files.Debug_Flags import DEBUG, debug_set, debug_term_names1,debug_term_names2
+from src.Config_Files.Debug_Flags import DEBUG, debug_set, debug_term_names1,debug_term_names2,DYNAMIC_EXPANSION
 from src.Classes.Records import RecordTuple
 
 
@@ -55,14 +55,14 @@ class Term:
 
 
 class Mapping:
-    def __init__(self, term1, term2, expanded_record_tuples, similiarity_metric):
+    def __init__(self, term1, term2, expanded_record_tuples, similarity_metric):
         self.term1 = term1
         self.term2 = term2
         self.term1.attached_mappings.add(self)
         self.term2.attached_mappings.add(self)
         self.gen_active = True
         self.sub_rec_tuples = dict()  # {record : set(rec_tuple1,rec_tuple2,...) }
-        self.similiarity_metric = similiarity_metric
+        self.similarity_metric = similarity_metric
         self.sim = 0
 
         if term1.name in debug_term_names1:
@@ -133,10 +133,11 @@ class Mapping:
 
     def recompute_similarity(self):
         self.get_clean_record_tuples()  # make sure, that all records & record_objects are still valid
-        return self.compute_similarity()
+        self.sim = self.similarity_metric.recompute_similarity(self.sim,self.term1, self.term2, self.sub_rec_tuples)
+        return self.sim
 
     def compute_similarity(self):
-        self.sim = self.similiarity_metric(self.term1, self.term2, self.sub_rec_tuples)
+        self.sim = self.similarity_metric.compute_similarity(self.term1, self.term2, self.sub_rec_tuples)
         return self.sim
 
     def get_similarity(self):
@@ -192,25 +193,25 @@ class Mapping:
         related_mappings |= self.term2.deactivate_term_and_all_tt()
         related_mappings.remove(self)  # We don't want to delete the current mapping from the prio-dict
 
-
-        # Gather all records where the two terms are involved individually
-        all_records = set()
-        for records in itertools.chain(self.term1.occurrences.values(), self.term2.occurrences.values()):
-            all_records |= records
-
-        # Find records that can never be matched after the current mapping
-        # For example, consider DB1: foo(a1,b1). DB2: foo(c2,d2). foo(e2,c2).
-        # When accepting  "a1 -> c2", the record "foo(e2,c2)" can never be matched throughout the whole mapping process
-        destroy_records = all_records - remaining_records
-
-        # Deactivate  records and return subscribed term-tuples that need to be updated (since they lost a record-tuple)
         altered_mappings = set()
-        for record in destroy_records:
+        if DYNAMIC_EXPANSION:
+            # Gather all records where the two terms are involved individually
+            all_records = set()
+            for records in itertools.chain(self.term1.occurrences.values(), self.term2.occurrences.values()):
+                all_records |= records
 
-            if record.is_active():
-                if DEBUG or self in debug_set:
-                    print(f"deactivate  record: {record.db}{record.file_name, record.rid}")
-                altered_mappings |= record.deactivate_self_and_all_rt()
+            # Find records that can never be matched after the current mapping
+            # For example, consider DB1: foo(a1,b1). DB2: foo(c2,d2). foo(e2,c2).
+            # When accepting  "a1 -> c2", the record "foo(e2,c2)" can never be matched throughout the whole mapping process
+            destroy_records = all_records - remaining_records
+
+            # Deactivate  records and return subscribed term-tuples that need to be updated (since they lost a record-tuple)
+            for record in destroy_records:
+
+                if record.is_active():
+                    if DEBUG or self in debug_set:
+                        print(f"deactivate  record: {record.db}{record.file_name, record.rid}")
+                    altered_mappings |= record.deactivate_self_and_all_rt()
         return related_mappings, altered_mappings,finished_record_tuples
 
     def get_records(self):

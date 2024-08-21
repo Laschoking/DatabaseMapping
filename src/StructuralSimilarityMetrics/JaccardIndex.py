@@ -1,7 +1,7 @@
 from src.Classes.SimilarityMetric import SimilarityMetric
 
 
-class DynamicJaccardIndex(SimilarityMetric):
+class JaccardIndex(SimilarityMetric):
     def __init__(self):
         super().__init__("Dynamic Jaccard")
 
@@ -10,7 +10,6 @@ class DynamicJaccardIndex(SimilarityMetric):
         if not sub_rec_tuples:
             return 0
         poss_matches = 0
-        total_occurrences = 0
         file_rec_id1 = dict()
         file_rec_id2 = dict()
         # this gives all combinations per file_name

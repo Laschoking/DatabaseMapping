@@ -2,11 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from sortedcontainers import SortedDict
-from src.Config_Files.Debug_Flags import DEBUG, debug_set,HUB_RECOMPUTE, debug_term_names1,debug_term_names2
+from src.Config_Files.Debug_Flags import DEBUG, debug_set,HUB_RECOMPUTE, PLOT_STATISTICS,DYNAMIC_EXPANSION
 
 import src.Classes.Terms
-
-
 
 
 def iterative_anchor_expansion(mapping, terms_db1, terms_db2, blocked_terms,
@@ -123,7 +121,8 @@ def iterative_anchor_expansion(mapping, terms_db1, terms_db2, blocked_terms,
             # Deactivate invalid record_tuples and save mappings were subscribed to the record_tuples
             for outdated_rid_tuple in outdated_rid_tuples.copy():
                 altered_tuples = outdated_rid_tuple.make_inactive()
-                altered_mappings |= altered_tuples
+                if DYNAMIC_EXPANSION:
+                    altered_mappings |= altered_tuples
 
             # Remove mappings that will be deleted anyway from the mappings that need an update
             altered_mappings -= related_mappings
@@ -206,41 +205,40 @@ def iterative_anchor_expansion(mapping, terms_db1, terms_db2, blocked_terms,
                 print(s2 ^ set(terms_db2.keys()))
                 raise ValueError(
                     "not same nr of mappings than terms: " + str(len(mapping_dict)) + " " + str(len(terms_db1)))
-
-
             break
 
     # Load all mappings into the dataframe at once
     mapping.final_mapping = pd.DataFrame.from_records(mapping_dict, columns=None)
-    # plot_statistics(similarity_metric.__name__,w_prio_len,w_exp_sim,mapped_sims)
+    if PLOT_STATISTICS:
+        plot_statistics(similarity_metric.name,w_prio_len,w_exp_sim,mapped_sims)
 
     return len(expanded_record_tuples)
 
 
 def update_tuples_prio_dict(sub_mappings, prio_dict):
-    for sub_term_tuple in sub_mappings:
-        old_sim = sub_term_tuple.get_similarity()
-        new_sim = sub_term_tuple.recompute_similarity()
+    for sub_mapping in sub_mappings:
+        old_sim = sub_mapping.get_similarity()
+        new_sim = sub_mapping.recompute_similarity()
         # similarity stayed the same
-        if DEBUG or sub_term_tuple.term1 in debug_set or sub_term_tuple.term2 in debug_set:
+        if DEBUG or sub_mapping.term1 in debug_set or sub_mapping.term2 in debug_set:
             print(
-                f"recompute sim : ({sub_term_tuple.term1.name},{sub_term_tuple.term2.name}) old sim: {old_sim}, new sim: {new_sim}")
+                f"recompute sim : ({sub_mapping.term1.name},{sub_mapping.term2.name}) old sim: {old_sim}, new sim: {new_sim}")
 
         # Leave mappings with not-changing similarity in prio_dict
         if old_sim == new_sim:
             continue
-        prio_dict[old_sim].remove(sub_term_tuple)
+        prio_dict[old_sim].remove(sub_mapping)
 
         # Remove mappings that are now obsolete
         if new_sim == 0:
-            sub_term_tuple.gen_active = False
-            if DEBUG or sub_term_tuple.term1 in debug_set or sub_term_tuple.term2 in debug_set:
+            sub_mapping.gen_active = False
+            if DEBUG or sub_mapping.term1 in debug_set or sub_mapping.term2 in debug_set:
                 print(
-                    f" deleted Term Tuple {sub_term_tuple.term1.name},{sub_term_tuple.term2.name} with Similarity = 0")
+                    f" deleted Term Tuple {sub_mapping.term1.name},{sub_mapping.term2.name} with Similarity = 0")
 
         # Insert mapping in prio_dict with updated similarity score
         else:
-            prio_dict.setdefault(new_sim, list()).append(sub_term_tuple)
+            prio_dict.setdefault(new_sim, list()).append(sub_mapping)
 
 
 def delete_from_prio_dict(remove_mappings,accepted_sim, prio_dict):
@@ -264,7 +262,7 @@ def add_mappings_to_pq(new_mapping_tuples,
                        prio_dict, w_exp_sim, similarity_metric, expanded_record_tuples, processed_mappings):
     for term1, term2 in new_mapping_tuples:
         if not term1.is_active():
-            print(f" term1 was mapped already: {term1.name} to {term2.name}")
+            print(f"term1 was mapped already: {term1.name} to {term2.name}")
             continue
 
         if not term2.is_active():

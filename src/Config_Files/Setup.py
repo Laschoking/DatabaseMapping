@@ -8,8 +8,14 @@ from src.Classes.MappingContainerFile import MappingContainer
 from src.Config_Files.Analysis_Configs import *
 from src.ExpansionStrategies.Dynamic_Expansion import iterative_anchor_expansion
 from src.Libraries.EvaluateMappings import *
-from src.SimilarityMetric.Dynamic_Min_Record_Tuple import dynamic_min_rec_tuples
-from src.SimilarityMetric.Dynamic_Jaccard_Index import dynamic_jaccard_index
+from src.StructuralSimilarityMetrics.DynamicRecordTupleCount import DynamicRecordTupleCount
+from src.StructuralSimilarityMetrics.JaccardIndex import JaccardIndex
+from src.StructuralSimilarityMetrics.NodeDegree import NodeDegree
+from src.LexicalSimilarityMetrics.ISUB import IsubStringMatcher
+from src.LexicalSimilarityMetrics.LevenshteinDistance import LevenshteinDistance
+from src.LexicalSimilarityMetrics.JaroWinkler import JaroWinkler
+
+
 from src.Libraries import ShellLib
 
 
@@ -18,7 +24,7 @@ from src.Libraries import ShellLib
 if __name__ == "__main__":
     # TODO Unit_Test_Dyn_Max_Cardinality
     # specify Java-files & Programm Analysis
-    db_config = Unit_Test_Dyn_Max_Cardinality2
+    db_config = Doop_Gocd_Websocket_Notifier_v1_v4
     program_config = Doop_PointerAnalysis
 
     GEN_FACTS = False  # if true, run doop again for new fact-gen, otherwise just copy from doop/out
@@ -73,12 +79,23 @@ if __name__ == "__main__":
     data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "isub", isub_sequence_matcher))
     data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "jaccard+isub",  jaccard_isub_mix))
     '''
-    # data.add_mapping(MappingContainer(data.paths, "local_expansion", iterative_anchor_expansion, "term_equality", term_equality))
-    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,
-                                      "jaccard_min",dynamic_jaccard_index))
+    jaccard_index = JaccardIndex()
+    dynamic_min_rec_tuples = DynamicRecordTupleCount()
+    node_degree = NodeDegree()
+    levenshtein_dist = LevenshteinDistance()
+    isub = IsubStringMatcher()
+    jaro_winkler = JaroWinkler()
 
-    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,
-                                      "edge_count",dynamic_min_rec_tuples))
+    #data.add_mapping(MappingContainer(data.paths, "local_expansion", iterative_anchor_expansion, "term_equality", term_equality))
+    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion, jaccard_index))
+
+    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,dynamic_min_rec_tuples))
+    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,node_degree))
+
+    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,isub))
+
+    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,levenshtein_dist))
+    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,jaro_winkler))
 
     # data.add_mapping(MappingContainer(data.paths, "local_expansion", iterative_anchor_expansion, "isub", isub_sequence_matcher))
     # data.add_mapping(MappingContainer(data.paths,"local_expansion",iterative_anchor_expansion,"jaccard+isub",jaccard_isub_mix))
@@ -133,7 +150,7 @@ if __name__ == "__main__":
         if COMP_MAPPING:
             global_log.mapping_df.loc[len(global_log.mapping_df)] = (
                     [date, commit, db_config.full_name, mapping.name, mapping.expansion_strategy.__name__,
-                     mapping.similarity_metric.__name__, mapping.c_mappings,
+                     mapping.similarity_metric.name, mapping.c_mappings,
                      str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", nr_1_1_mappings,
                      mapping.new_term_counter, mapping.c_hub_recomp, mapping.c_uncertain_mappings] + res + [mapping_rt])
 
@@ -163,7 +180,7 @@ if __name__ == "__main__":
             # "Date","SHA","MergeDB","MappingContainer","Expansion","Metric", "Unique Records DB1","Unique Records DB2","Mutual Records","Overlap in %"
             global_log.merge_db_df.loc[len(global_log.merge_db_df)] = [date, commit, db_config.full_name, mapping.name,
                                                                        mapping.expansion_strategy.__name__,
-                                                                       mapping.similarity_metric.__name__] + overlap
+                                                                       mapping.similarity_metric.name] + overlap
 
     # Evaluation function to analyse if the mapping reduces storage
     print(time_tab)

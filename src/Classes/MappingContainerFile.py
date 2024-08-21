@@ -4,12 +4,18 @@ from bidict import bidict
 from src.Classes.DataContainerFile import DbInstance
 from src.Classes import Terms, Records
 from src.Libraries import ShellLib
+from src.Config_Files.Debug_Flags import DYNAMIC_EXPANSION
 
 
 # each MappingContainer has a Strategy and a similarity metric
 class MappingContainer:
-    def __init__(self, paths, exp_name, expansion_strategy, sim_name, similarity_metric):
-        name = exp_name + "-" + sim_name
+    def __init__(self, paths, exp_name, expansion_strategy, similarity_metric):
+
+        if DYNAMIC_EXPANSION:
+            exp_type = "dynamic"
+        else:
+            exp_type = "static"
+        name = exp_type + "_"+ exp_name + "-" + similarity_metric.name.replace(" ","")
         self.name = name
 
         self.db1_renamed_facts = DbInstance(paths.db1_facts, name)
