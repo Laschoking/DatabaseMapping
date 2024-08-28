@@ -4,18 +4,18 @@ from bidict import bidict
 from src.Classes.DataContainerFile import DbInstance
 from src.Classes import Terms, Records
 from src.Libraries import ShellLib
-from src.Config_Files.Debug_Flags import DYNAMIC_EXPANSION
+
 
 
 # each MappingContainer has a Strategy and a similarity metric
 class MappingContainer:
-    def __init__(self, paths, exp_name, expansion_strategy, similarity_metric):
+    def __init__(self, paths, expansion_strategy, similarity_metric):
 
-        if DYNAMIC_EXPANSION:
+        if expansion_strategy.DYNAMIC:
             exp_type = "dynamic"
         else:
             exp_type = "static"
-        name = exp_type + "_"+ exp_name + "-" + similarity_metric.name.replace(" ","")
+        name = exp_type + "_" + expansion_strategy.name + "-" + similarity_metric.name.replace(" ","")
         self.name = name
 
         self.db1_renamed_facts = DbInstance(paths.db1_facts, name)
@@ -40,6 +40,8 @@ class MappingContainer:
         self.terms_db1 = dict()  # could be bidict as well
         self.terms_db2 = dict()
 
+        self.c_anchor_nodes = (0,0) # log how many anchor nodes were expanded for DB1 and DB2
+        self.c_accepted_anchor_mappings = 0
         self.c_uncertain_mappings = 0
         self.c_hub_recomp = 0
         self.c_mappings = 0
@@ -81,13 +83,12 @@ class MappingContainer:
 
                     curr_record.add_term(term, cols)
 
-        print("Count of terms with multi-occurrences in " + db_instance.name + " : " + str(len(multi_col_terms)))
 
     def set_mapping(self, mapping):
         self.final_mapping = mapping
 
     def compute_mapping(self, db1, db2, DL_blocked_terms):
-        c_mappings = self.expansion_strategy(self, self.terms_db1, self.terms_db2,
+        c_mappings = self.expansion_strategy.accept_expand_mappings(self, self.terms_db1, self.terms_db2,
                                                                       DL_blocked_terms,self.similarity_metric)
         self.c_mappings = c_mappings
 

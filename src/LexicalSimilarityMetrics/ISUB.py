@@ -1,19 +1,15 @@
 import difflib
-from src.Classes.SimilarityMetric import SimilarityMetric
+from src.Classes.SimilarityMetric import LexicalSimilarityMetric
 
 
-class IsubStringMatcher(SimilarityMetric):
+class IsubStringMatcher(LexicalSimilarityMetric):
     def __init__(self):
         super().__init__("ISUB StringMatcher")
 
-    def compute_similarity(self, term1, term2, sub_rec_tuples):
-        term_name1 = term1.name
-        term_name2 = term2.name
-        if not sub_rec_tuples:
-            return 0
+    def compute_lexical_similarity(self, term_name1, term_name2):
 
         # if both terms are integers String-Matching will have problems -> return closeness of both ints then
-        if term1.type == "int" and term2.type == "int":
+        '''if term1.type == "int" and term2.type == "int":
             max_int = max(int(term_name1), int(term_name2))
             if max_int > 0:
                 return 1 - abs(int(term_name1) - int(term_name2)) / max_int
@@ -25,7 +21,7 @@ class IsubStringMatcher(SimilarityMetric):
 
         elif term_name1 is None or term_name2 is None or term_name1 == '' or term_name2 == '':
             return -1
-
+        '''
 
         # count common substrings
         count_lcs = 0
@@ -67,9 +63,5 @@ class IsubStringMatcher(SimilarityMetric):
 
         score = comm - diff + impr_winkler
         return score
-    def recompute_similarity(self,old_sim,term1,term2,sub_rec_tuples):
-        if not sub_rec_tuples:
-            return 0
-        else:
-            return old_sim
+
 

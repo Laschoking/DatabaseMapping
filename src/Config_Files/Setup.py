@@ -5,14 +5,16 @@ import git
 
 from src.Classes.DataContainerFile import DataContainer
 from src.Classes.MappingContainerFile import MappingContainer
+from src.Classes.QuantileAnchorTerms import QuantileAnchorTerms
+from src.Classes.SimOutlier import SimOutlier,QuantileOutlier
 from src.Config_Files.Analysis_Configs import *
-from src.ExpansionStrategies.Dynamic_Expansion import iterative_anchor_expansion
+from src.ExpansionStrategies.IterativeAnchorExpansion import IterativeAnchorExpansion
 from src.Libraries.EvaluateMappings import *
 from src.StructuralSimilarityMetrics.DynamicRecordTupleCount import DynamicRecordTupleCount
 from src.StructuralSimilarityMetrics.JaccardIndex import JaccardIndex
 from src.StructuralSimilarityMetrics.NodeDegree import NodeDegree
 from src.LexicalSimilarityMetrics.ISUB import IsubStringMatcher
-from src.LexicalSimilarityMetrics.LevenshteinDistance import LevenshteinDistance
+from src.LexicalSimilarityMetrics.LevenshteinSimilarity import LevenshteinSimilarity
 from src.LexicalSimilarityMetrics.JaroWinkler import JaroWinkler
 
 
@@ -79,23 +81,48 @@ if __name__ == "__main__":
     data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "isub", isub_sequence_matcher))
     data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "jaccard+isub",  jaccard_isub_mix))
     '''
+    # Set Anchor Quantile
+    q_80 = QuantileAnchorTerms(0.80)
+    q_90 = QuantileAnchorTerms(0.90)
+    q_95 = QuantileAnchorTerms(0.95)
+    q_98 = QuantileAnchorTerms(0.98)
+
+    # Set SimOutlier
+    sim_outlier = QuantileOutlier()
+
+    # Set Expansion Strategy
+    dynamic_iterative_expansion = IterativeAnchorExpansion(q_95, sim_outlier, DYNAMIC=False)
+    static_iterative_expansion_80 = IterativeAnchorExpansion(q_80, sim_outlier, DYNAMIC=False)
+    static_iterative_expansion_90 = IterativeAnchorExpansion(q_90, sim_outlier, DYNAMIC=False)
+    static_iterative_expansion_95 = IterativeAnchorExpansion(q_95, sim_outlier, DYNAMIC=False)
+    static_iterative_expansion_98 = IterativeAnchorExpansion(q_98, sim_outlier, DYNAMIC=False)
+    dynamic_iterative_expansion_95 = IterativeAnchorExpansion(q_95, sim_outlier, DYNAMIC=True)
+    dynamic_iterative_expansion_98 = IterativeAnchorExpansion(q_98, sim_outlier, DYNAMIC=True)
+
+    # Set up Similarity Metrics
     jaccard_index = JaccardIndex()
     dynamic_min_rec_tuples = DynamicRecordTupleCount()
     node_degree = NodeDegree()
-    levenshtein_dist = LevenshteinDistance()
+    levenshtein_dist = LevenshteinSimilarity()
     isub = IsubStringMatcher()
     jaro_winkler = JaroWinkler()
 
-    #data.add_mapping(MappingContainer(data.paths, "local_expansion", iterative_anchor_expansion, "term_equality", term_equality))
-    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion, jaccard_index))
+    # Add combinations as new Mapping Container
 
-    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,dynamic_min_rec_tuples))
-    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,node_degree))
+    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion, jaccard_index))
+    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, jaccard_index))
+    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_90, jaccard_index))
+    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_95, jaccard_index))
+    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_98, jaccard_index))
+    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_95, jaccard_index))
+    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, jaccard_index))
+    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,dynamic_min_rec_tuples))
+    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,node_degree))
 
-    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,isub))
+    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,isub))
 
-    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,levenshtein_dist))
-    data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,jaro_winkler))
+    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,levenshtein_dist))
+    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,jaro_winkler))
 
     # data.add_mapping(MappingContainer(data.paths, "local_expansion", iterative_anchor_expansion, "isub", isub_sequence_matcher))
     # data.add_mapping(MappingContainer(data.paths,"local_expansion",iterative_anchor_expansion,"jaccard+isub",jaccard_isub_mix))
@@ -129,6 +156,7 @@ if __name__ == "__main__":
         else:
             mapping.read_mapping()
             mapping_rt = 0.0
+
         nr_1_1_mappings = len(mapping.final_mapping)
         # execute best mapping and create merged database: merge(map(db1_facts), db2_facts) -> merge_db2
         mapping.merge_dbs(mapping.db1_renamed_facts, db2_facts, mapping.db_merged_facts)
@@ -149,10 +177,12 @@ if __name__ == "__main__":
              str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", mapping_rt])
         if COMP_MAPPING:
             global_log.mapping_df.loc[len(global_log.mapping_df)] = (
-                    [date, commit, db_config.full_name, mapping.name, mapping.expansion_strategy.__name__,
+                    [date, commit, db_config.full_name, mapping.name, mapping.expansion_strategy.name,
                      mapping.similarity_metric.name, mapping.c_mappings,
                      str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", nr_1_1_mappings,
                      mapping.new_term_counter, mapping.c_hub_recomp, mapping.c_uncertain_mappings] + res + [mapping_rt])
+            print(f"expanded anchor nodes: {mapping.c_anchor_nodes}")
+            print(f"accepted mappings: {mapping.c_accepted_anchor_mappings}")
 
         if RUN_DL:
             # run Nemo-Rules on merged facts (merge_db2 )

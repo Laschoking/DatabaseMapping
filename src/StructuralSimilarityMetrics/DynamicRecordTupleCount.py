@@ -1,15 +1,12 @@
 from collections import Counter
-from src.Classes.SimilarityMetric import SimilarityMetric
+from src.Classes.SimilarityMetric import StructuralSimilarityMetric
 
 
-class DynamicRecordTupleCount(SimilarityMetric):
+class DynamicRecordTupleCount(StructuralSimilarityMetric):
     def __init__(self):
         super().__init__("Edge Count")
 
-    def compute_similarity(self, term1, term2, sub_rec_tuples):
-        # no mutual matchings possible
-        if not sub_rec_tuples:
-            return 0
+    def compute_structural_similarity(self, term1, term2, sub_rec_tuples):
         edge_count = 0
         rec_node_deg = Counter()
         temp_record_tuples = set()
@@ -26,9 +23,5 @@ class DynamicRecordTupleCount(SimilarityMetric):
         total_occurrences = term1.degree + term2.degree
         # weight matches higher to prefer important nodes
         return edge_count ** 2 / total_occurrences
-
-    def recompute_similarity(self,old_sim, term1, term2, sub_rec_tuples):
-        return self.compute_similarity(term1, term2, sub_rec_tuples)
-
 
 

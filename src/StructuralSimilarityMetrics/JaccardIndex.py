@@ -1,14 +1,12 @@
-from src.Classes.SimilarityMetric import SimilarityMetric
+from src.Classes.SimilarityMetric import StructuralSimilarityMetric
 
 
-class JaccardIndex(SimilarityMetric):
+class JaccardIndex(StructuralSimilarityMetric):
     def __init__(self):
         super().__init__("Dynamic Jaccard")
 
-    def compute_similarity(self, term1, term2, sub_rec_tuples):
+    def compute_structural_similarity(self, term1, term2, sub_rec_tuples):
         # no mutual matchings possible
-        if not sub_rec_tuples:
-            return 0
         poss_matches = 0
         file_rec_id1 = dict()
         file_rec_id2 = dict()
@@ -28,7 +26,4 @@ class JaccardIndex(SimilarityMetric):
         total_occurrences = term1.degree + term2.degree
         # weight matches higher to prefer important nodes
         return poss_matches ** 2 / total_occurrences
-
-    def recompute_similarity(self, old_sim, term1, term2, sub_rec_tuples):
-        return self.compute_similarity(term1, term2, sub_rec_tuples)
 
