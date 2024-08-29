@@ -30,13 +30,19 @@ class IsubStringMatcher(LexicalSimilarityMetric):
         # convert to list to reduce string sice
         l_st1 = len(term_name1)
         l_st2 = len(term_name2)
+        if not l_st1 and not l_st2:
+            return 1
+        elif l_st1 != l_st2:
+            return 0
+
         term_name1 = list(term_name1)
         term_name2 = list(term_name2)
 
         # no need to recompute index overlap when we have blocks already
         winkler_st1_ind, winkler_st2_ind, winkler_size = matching_blocks[0]
         for st1_ind, st2_ind, size in matching_blocks:
-            if size == 0: continue  # reached last statement or too small match
+            if size == 0:
+                continue  # reached last statement or too small match
             count_lcs += size
             term_name1[st1_ind:st1_ind + size] = [None] * size
             term_name2[st2_ind:st2_ind + size] = [None] * size

@@ -1,10 +1,26 @@
-from src.LexicalSimilarityMetrics.CodeBert import *
-import torch
-if __name__ == "__main__":
-    input1 = torch.randn(100, 1)
-    input2 = torch.randn(100, 1)
-    cos = torch.nn.CosineSimilarity(dim=0, eps=1e-6)
-    output = cos(input1, input2)
 
-    CB = CodeBertSimilarity()
-    print(CB.compute_similarity("hallo","test",[]))
+from sortedcontainers import SortedList
+
+class A:
+    def __init__(self,x):
+        self.x = x
+
+    def __lt__(self,other):
+        return self.x < other.x
+
+    def __eq__(self,other):
+        return self.x == other.x
+
+if __name__ == "__main__":
+    null = A(0)
+    a = A(1)
+    b = A(2)
+    c = A(3)
+    l = SortedList([null,a,b,c])
+    print([y.x for y in l])
+    b.x = 4
+    c.x = -1
+    l.update([c])
+
+    print([y.x for y in l])
+

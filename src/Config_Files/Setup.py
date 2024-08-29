@@ -1,6 +1,5 @@
 import datetime
 import time
-
 import git
 
 from src.Classes.DataContainerFile import DataContainer
@@ -16,8 +15,6 @@ from src.StructuralSimilarityMetrics.NodeDegree import NodeDegree
 from src.LexicalSimilarityMetrics.ISUB import IsubStringMatcher
 from src.LexicalSimilarityMetrics.LevenshteinSimilarity import LevenshteinSimilarity
 from src.LexicalSimilarityMetrics.JaroWinkler import JaroWinkler
-
-
 from src.Libraries import ShellLib
 
 
@@ -91,7 +88,6 @@ if __name__ == "__main__":
     sim_outlier = QuantileOutlier()
 
     # Set Expansion Strategy
-    dynamic_iterative_expansion = IterativeAnchorExpansion(q_95, sim_outlier, DYNAMIC=False)
     static_iterative_expansion_80 = IterativeAnchorExpansion(q_80, sim_outlier, DYNAMIC=False)
     static_iterative_expansion_90 = IterativeAnchorExpansion(q_90, sim_outlier, DYNAMIC=False)
     static_iterative_expansion_95 = IterativeAnchorExpansion(q_95, sim_outlier, DYNAMIC=False)
@@ -103,19 +99,18 @@ if __name__ == "__main__":
     jaccard_index = JaccardIndex()
     dynamic_min_rec_tuples = DynamicRecordTupleCount()
     node_degree = NodeDegree()
-    levenshtein_dist = LevenshteinSimilarity()
+    levenshtein = LevenshteinSimilarity()
     isub = IsubStringMatcher()
     jaro_winkler = JaroWinkler()
 
     # Add combinations as new Mapping Container
 
-    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion, jaccard_index))
-    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, jaccard_index))
-    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_90, jaccard_index))
-    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_95, jaccard_index))
-    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_98, jaccard_index))
-    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_95, jaccard_index))
-    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, jaccard_index))
+    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, jaro_winkler))
+    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_90, jaro_winkler))
+    data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, isub))
+    data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_90, isub))
+    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_95, jaccard_index))
+    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, jaccard_index))
     #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,dynamic_min_rec_tuples))
     #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,node_degree))
 
@@ -181,7 +176,7 @@ if __name__ == "__main__":
                      mapping.similarity_metric.name, mapping.c_mappings,
                      str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", nr_1_1_mappings,
                      mapping.new_term_counter, mapping.c_hub_recomp, mapping.c_uncertain_mappings] + res + [mapping_rt])
-            print(f"expanded anchor nodes: {mapping.c_anchor_nodes}")
+            print(f"expanded anchor nodes: {mapping.anchor_nodes}")
             print(f"accepted mappings: {mapping.c_accepted_anchor_mappings}")
 
         if RUN_DL:

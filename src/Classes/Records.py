@@ -96,6 +96,19 @@ class RecordTuple:
         self.subscribers = set()
         self.gen_active = True  # means it is not dead
 
+    def __lt__(self, other):
+        if self.record1.file_name < other.record1.file_name:
+            return True
+        elif self.record1.file_name > other.record1.file_name:
+            return False
+        elif self.record1.rid < other.record1.rid:
+            return True
+        elif self.record1.rid > other.record1.rid:
+            return False
+        elif self.record2.rid < other.record2.rid:
+            return True
+        elif self.record2.rid > other.record2.rid:
+            return False
     def is_active(self):
         return self.gen_active
 

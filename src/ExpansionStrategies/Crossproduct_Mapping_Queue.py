@@ -1,12 +1,19 @@
-import itertools
 
-import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
-from sortedcontainers import SortedList, SortedDict
+from sortedcontainers import SortedDict,SortedList,SortedSet
+from src.Config_Files.Debug_Flags import DEBUG, debug_set,HUB_RECOMPUTE, PLOT_STATISTICS
+from src.Classes.ExpansionStrategy import  ExpansionStrategy
+import src.Classes.Terms
+
+class Crossproduct(ExpansionStrategy):
+    def __init__(self,anchor_quantile,sim_outlier,DYNAMIC):
+        super().__init__("Iterative",anchor_quantile,sim_outlier,DYNAMIC)
 
 
-def full_expansion_strategy(mapping, db1, terms_db1, db2, terms_db2, blocked_terms, similarity_metric):
-    prio_dict = SortedDict()
+    def accept_expand_mappings(self,mapping, terms_db1, terms_db2, blocked_terms,
+                                   similarity_metric):
+        prio_dict = SortedList()
 
     # those lists hold all terms, that are still mappable
     free_term_names1 = SortedList(terms_db1.keys())

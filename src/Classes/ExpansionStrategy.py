@@ -17,7 +17,13 @@ class ExpansionStrategy:
         pass
 
     def update_tuples_prio_dict(self,sub_mappings, prio_dict):
+        update_mappings = []
         for sub_mapping in sub_mappings:
+            # remove the tuple before the value is recomputed otherwise the SortedList is getting inconsistent
+            if sub_mapping not in prio_dict:
+                print(prio_dict)
+            prio_dict.remove(sub_mapping)
+
             old_sim = sub_mapping.get_similarity()
             new_sim = sub_mapping.recompute_similarity()
             # similarity stayed the same
@@ -25,35 +31,42 @@ class ExpansionStrategy:
                 print(
                     f"recompute sim : ({sub_mapping.term1.name},{sub_mapping.term2.name}) old sim: {old_sim}, new sim: {new_sim}")
 
+
+
             # Leave mappings with not-changing similarity in prio_dict
             if old_sim == new_sim:
+                update_mappings.append(sub_mapping)
                 continue
-            prio_dict[old_sim].remove(sub_mapping)
 
             # Remove mappings that are now obsolete
             if new_sim == 0:
                 sub_mapping.gen_active = False
+
                 if DEBUG or sub_mapping.term1 in debug_set or sub_mapping.term2 in debug_set:
                     print(
                         f" deleted Term Tuple {sub_mapping.term1.name},{sub_mapping.term2.name} with Similarity = 0")
 
             # Insert mapping in prio_dict with updated similarity score
             else:
-                prio_dict.setdefault(new_sim, list()).append(sub_mapping)
+                update_mappings.append(sub_mapping)
 
-    def delete_from_prio_dict(self,remove_mappings, accepted_sim, prio_dict):
+        if update_mappings:
+            prio_dict.update(update_mappings)
+
+    def delete_from_prio_dict(self,remove_mappings, accepted_mapping, prio_dict):
         # This logs, if the accepted mapping was insecure because a related mapping had the same similarity score
         uncertain_mapping = 0
         for mapped_tuple in remove_mappings:
+            if mapped_tuple not in prio_dict:
+                print(prio_dict)
+            prio_dict.remove(mapped_tuple)
             sim = mapped_tuple.get_similarity()
-            if sim == accepted_sim:
+            if (accepted_mapping.eq_values
+                (mapped_tuple)):
                 uncertain_mapping = 1
             if DEBUG or mapped_tuple.term1 in debug_set or mapped_tuple.term2 in debug_set:
                 print(f"remove ({mapped_tuple.term1.name},{mapped_tuple.term2.name}) with sim {sim} from prio-dict")
-            if sim not in prio_dict:
-                raise ValueError("sim- key not in priority dict:" + str(sim))
-            else:
-                prio_dict[sim].remove(mapped_tuple)
+
         return uncertain_mapping
 
     def add_mappings_to_pq(self,new_mapping_tuples,
@@ -72,11 +85,10 @@ class ExpansionStrategy:
             sim = new_mapping.compute_similarity()
 
             if sim > 0:
-
                 # Insert mapping into priority_queue
                 if DEBUG or term1 in debug_set or term2 in debug_set:
                     print(f"expanded tuple: {new_mapping.term1.name},{new_mapping.term2.name}, sim: {sim}")
-                prio_dict.setdefault(sim, list()).append(new_mapping)
+                prio_dict.add(new_mapping)
                 w_exp_sim.append(sim)
 
                 processed_mappings.add((term1, term2))

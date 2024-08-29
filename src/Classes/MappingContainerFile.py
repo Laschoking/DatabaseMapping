@@ -6,7 +6,6 @@ from src.Classes import Terms, Records
 from src.Libraries import ShellLib
 
 
-
 # each MappingContainer has a Strategy and a similarity metric
 class MappingContainer:
     def __init__(self, paths, expansion_strategy, similarity_metric):
@@ -15,7 +14,7 @@ class MappingContainer:
             exp_type = "dynamic"
         else:
             exp_type = "static"
-        name = exp_type + "_" + expansion_strategy.name + "-" + similarity_metric.name.replace(" ","")
+        name = exp_type + "_" + expansion_strategy.name + "-" + similarity_metric.name.replace(" ", "")
         self.name = name
 
         self.db1_renamed_facts = DbInstance(paths.db1_facts, name)
@@ -27,7 +26,7 @@ class MappingContainer:
         self.db2_unravelled_results = DbInstance(paths.db2_results, name)
 
         self.final_mapping = pd.DataFrame()
-        self.final_rec_tuples = dict() # filename : set((rid1,rid2),())
+        self.final_rec_tuples = dict()  # filename : set((rid1,rid2),())
 
         self.mapping_path = paths.mapping_results.joinpath(self.name).with_suffix('.tsv')
         self.new_term_counter = 0
@@ -37,10 +36,10 @@ class MappingContainer:
         self.records_db1 = bidict()
         self.records_db2 = bidict()
 
-        self.terms_db1 = dict()  # could be bidict as well
+        self.terms_db1 = dict()  # could be bidict as well, or SortedDict
         self.terms_db2 = dict()
 
-        self.c_anchor_nodes = (0,0) # log how many anchor nodes were expanded for DB1 and DB2
+        self.anchor_nodes = [set(), set()]  # log how many anchor nodes were expanded for DB1 and DB2
         self.c_accepted_anchor_mappings = 0
         self.c_uncertain_mappings = 0
         self.c_hub_recomp = 0
@@ -83,13 +82,11 @@ class MappingContainer:
 
                     curr_record.add_term(term, cols)
 
-
     def set_mapping(self, mapping):
         self.final_mapping = mapping
 
     def compute_mapping(self, db1, db2, DL_blocked_terms):
-        c_mappings = self.expansion_strategy.accept_expand_mappings(self, self.terms_db1, self.terms_db2,
-                                                                      DL_blocked_terms,self.similarity_metric)
+        c_mappings = self.expansion_strategy.accept_expand_mappings(self, self.terms_db1, self.terms_db2,DL_blocked_terms, self.similarity_metric)
         self.c_mappings = c_mappings
 
         # do the renaming of Terms1 & matching of records
@@ -102,30 +99,30 @@ class MappingContainer:
                 matched_rec_tuples = self.final_rec_tuples[file_name]
             else:
                 matched_rec_tuples = []
-            mapped_df = self.map_df(matched_rec_tuples,df1,df2, self.final_mapping[0], self.final_mapping[1])
+            mapped_df = self.map_df(matched_rec_tuples, df1, df2, self.final_mapping[0], self.final_mapping[1])
             self.db1_renamed_facts.insert_df(file_name, mapped_df)
         return
 
-    def map_df(self,matched_rec_tuples, df1,df2, from_terms, to_terms):
+    def map_df(self, matched_rec_tuples, df1, df2, from_terms, to_terms):
         # assuming that keys & values are unpacked according to insertion order
         matched_records = list()
         if matched_rec_tuples:
             rec1_indices = list()
             rec2_indices = list()
-            for record1,record2 in matched_rec_tuples:
+            for record1, record2 in matched_rec_tuples:
                 if record1 in rec1_indices or record2 in rec2_indices:
-                    raise ValueError(f"record already in indices {record1,record2}")
+                    raise ValueError(f"record already in indices {record1, record2}")
                 rec1_indices.append(record1)
                 rec2_indices.append(record2)
 
             merged_df = df2.iloc[rec2_indices].reset_index(drop=True)
-            df1.drop(rec1_indices,inplace=True)
+            df1.drop(rec1_indices, inplace=True)
 
         df1_replaced = df1.replace(from_terms.to_list(), to_terms.to_list())
 
         # Concatenate the DataFrames
         if matched_rec_tuples:
-            #print(f"remove {len(rec1_indices)} indices from DF1")
+            # print(f"remove {len(rec1_indices)} indices from DF1")
             merged_df = pd.concat([merged_df, df1_replaced], ignore_index=True)
             return merged_df
         else:

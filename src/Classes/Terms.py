@@ -17,6 +17,9 @@ class Term:
 
         self.update(file_name, col_ind, record)
 
+    def __lt__(self, other):
+        return self.degree < other.degree
+
     def deactivate_term_and_all_tt(self):
         self.gen_active = False
         if DEBUG or self in debug_set:
@@ -73,6 +76,26 @@ class Mapping:
             debug_set.add(term2)
 
         self.calc_initial_record_tuples(expanded_record_tuples)
+
+    #def __hash__(self):
+    #    return id(self)
+
+    def __lt__(self, other):
+        #if id(self) == id(other): # if its identity but the similarity changed
+        #   return False
+        if self.sim < other.sim:
+            return True
+        elif self.sim > other.sim:
+            return False
+        elif min(self.term1.degree,self.term2.degree) < min(other.term1.degree,other.term2.degree):
+            return True
+        elif min(self.term1.degree,self.term2.degree) > min(other.term1.degree,other.term2.degree):
+            return False
+        return id(self) < id(other) # self.term1.name + "///" + self.term2.name < other.term1.name + "///" + other.term2.name
+
+    def eq_values(self,other):
+        return self.sim == other.sim and min(self.term1.degree,self.term2.degree) == min(other.term1.degree,other.term2.degree)
+
 
     def is_active(self):
         return self.gen_active
@@ -133,11 +156,13 @@ class Mapping:
 
     def recompute_similarity(self):
         self.get_clean_record_tuples()  # make sure, that all records & record_objects are still valid
-        self.sim = self.similarity_metric.recompute_similarity(self.sim,self.term1, self.term2, self.sub_rec_tuples)
+        sim = self.similarity_metric.recompute_similarity(self.sim,self.term1, self.term2, self.sub_rec_tuples)
+        self.sim = round(sim,5)
         return self.sim
 
     def compute_similarity(self):
-        self.sim = self.similarity_metric.compute_similarity(self.term1, self.term2, self.sub_rec_tuples)
+        sim = self.similarity_metric.compute_similarity(self.term1, self.term2, self.sub_rec_tuples)
+        self.sim = round(sim,5)
         return self.sim
 
     def get_similarity(self):
