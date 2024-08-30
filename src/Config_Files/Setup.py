@@ -83,6 +83,7 @@ if __name__ == "__main__":
     q_90 = QuantileAnchorTerms(0.90)
     q_95 = QuantileAnchorTerms(0.95)
     q_98 = QuantileAnchorTerms(0.98)
+    q_99 = QuantileAnchorTerms(0.99)
 
     # Set SimOutlier
     sim_outlier = QuantileOutlier()
@@ -94,6 +95,7 @@ if __name__ == "__main__":
     static_iterative_expansion_98 = IterativeAnchorExpansion(q_98, sim_outlier, DYNAMIC=False)
     dynamic_iterative_expansion_95 = IterativeAnchorExpansion(q_95, sim_outlier, DYNAMIC=True)
     dynamic_iterative_expansion_98 = IterativeAnchorExpansion(q_98, sim_outlier, DYNAMIC=True)
+    dynamic_iterative_expansion_99 = IterativeAnchorExpansion(q_99, sim_outlier, DYNAMIC=True)
 
     # Set up Similarity Metrics
     jaccard_index = JaccardIndex()
@@ -107,10 +109,15 @@ if __name__ == "__main__":
 
     #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, jaro_winkler))
     #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_90, jaro_winkler))
-    data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, isub))
-    data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_90, isub))
-    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_95, jaccard_index))
-    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, jaccard_index))
+    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, isub))
+    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_90, isub))
+    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, jaccard_index))
+    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, isub))
+    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, isub))
+    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_99, jaccard_index))
+    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, dynamic_min_rec_tuples))
+    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_99, dynamic_min_rec_tuples))
+
     #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,dynamic_min_rec_tuples))
     #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,node_degree))
 
@@ -176,7 +183,7 @@ if __name__ == "__main__":
                      mapping.similarity_metric.name, mapping.c_mappings,
                      str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", nr_1_1_mappings,
                      mapping.new_term_counter, mapping.c_hub_recomp, mapping.c_uncertain_mappings] + res + [mapping_rt])
-            print(f"expanded anchor nodes: {mapping.anchor_nodes}")
+            print(f"expanded anchor nodes: {len(mapping.anchor_nodes[0]),len(mapping.anchor_nodes[1])}")
             print(f"accepted mappings: {mapping.c_accepted_anchor_mappings}")
 
         if RUN_DL:

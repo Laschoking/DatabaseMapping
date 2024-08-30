@@ -1,8 +1,7 @@
-
 import matplotlib.pyplot as plt
 import pandas as pd
 from sortedcontainers import SortedDict,SortedList,SortedSet
-from src.Config_Files.Debug_Flags import DEBUG, debug_set,HUB_RECOMPUTE, PLOT_STATISTICS
+from src.Config_Files.Debug_Flags import DEBUG_TERMS, debug_set,HUB_RECOMPUTE, PLOT_STATISTICS
 from src.Classes.ExpansionStrategy import  ExpansionStrategy
 import src.Classes.Terms
 
@@ -13,9 +12,11 @@ class IterativeAnchorExpansion(ExpansionStrategy):
 
     def accept_expand_mappings(self,mapping, terms_db1, terms_db2, blocked_terms,
                                    similarity_metric):
+        self.anchor_quantile.reset_quantile() # Reset quantile since it is a shared object with other MappingContainers
         prio_dict = SortedList()
 
         expanded_record_tuples = dict()
+        exp_anchor_mappings = set()
         processed_mappings = set()
 
         # Count how many terms in DB1 and DB2 are still vacant
@@ -67,13 +68,13 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                         # Trigger new anchor term mappings and put mapping back to prio_dict
                         new_anchor_mappings = True
                         prio_dict[sim].append(accepted_mapping)
-                        if DEBUG: print(f"denied mapping with sim: {sim}")
+                        if DEBUG_TERMS: print(f"denied mapping with sim: {sim}")
                         bad_sim_selected = True
                         continue
 
                 # The similarity value was not rejected, so update & expand its neighbourhood
                 accepted_sim = accepted_mapping.get_similarity()
-                if DEBUG or accepted_mapping in debug_set:
+                if DEBUG_TERMS or accepted_mapping in debug_set:
                     print("-----------------------------")
                     print(f"{accepted_mapping.term1.name}  -> {accepted_mapping.term2.name} with sim: {accepted_sim}")
 
@@ -91,7 +92,7 @@ class IterativeAnchorExpansion(ExpansionStrategy):
 
                 # Save selected mapping
                 mapping_dict.append((accepted_mapping.term1.name, accepted_mapping.term2.name,accepted_sim))
-                if (accepted_mapping.term1,accepted_mapping.term2) in anchor_mappings:
+                if (accepted_mapping.term1,accepted_mapping.term2) in exp_anchor_mappings:
                     mapping.c_accepted_anchor_mappings += 1
 
                 # Remove the mappings that are now not possible anymore from prio_dict
@@ -101,7 +102,7 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                 w_prio_len.append(len(prio_dict))
                 mapped_sims.append(accepted_sim)
 
-                expansion_rid_tuples = SortedSet() # this is to make sure a coherent ordered of expansion
+                expansion_rid_tuples = set() # this is to make sure a coherent ordered of expansion
                 outdated_rid_tuples = set()
 
                 # Iterate through the subscribed record tuples by record (from DB1 or DB2), and connected record_tuples
@@ -114,7 +115,7 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                     # Therefor the connected record_tuples should be expanded
                     if not record.is_in_process():
                         record.in_process = True
-                        if DEBUG:
+                        if DEBUG_TERMS:
                             print(f"make record in process: {record.file_name, record.rid}")
 
                         expansion_rid_tuples.update(mapped_rec_tuples - outdated_rid_tuples)
@@ -135,9 +136,9 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                 # Reveal the two records of each expanded record_tuple and
                 # add term-tuples in the same column as potential new mappings
 
-                new_mappings = SortedSet()
+                new_mappings = set()
                 for rec_tuple in expansion_rid_tuples:
-                    if DEBUG or rec_tuple in debug_set:
+                    if DEBUG_TERMS or rec_tuple in debug_set:
                         print(
                             f"expand record tuple: {rec_tuple.record1.file_name}({rec_tuple.record1.rid},{rec_tuple.record2.rid})")
                     new_cols = rec_tuple.record1.vacant_cols  # has the same result as record2.vacant_cols, because both are updated at the same time
@@ -150,8 +151,8 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                 new_mappings -= processed_mappings
 
                 # Create new mappings from the mappings and insert them into prio_dict
-                self.add_mappings_to_pq(new_mappings, prio_dict,
-                                   w_exp_sim, similarity_metric, expanded_record_tuples,processed_mappings)
+                processed_mappings |= self.add_mappings_to_pq(new_mappings, prio_dict,
+                                   w_exp_sim, similarity_metric, expanded_record_tuples)
 
 
                 # Trigger new anchor mappings if the prio_dict is empty after expansion
@@ -171,20 +172,30 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                 new_anchor_mappings = False  # idea is to only find new hubs if in last iteration at least 1 mapping was added
                 mapping.c_hub_recomp += 1
 
+
                 # Find anchor terms for DB1 and DB2
                 anchor_terms1 = self.anchor_quantile.calc_anchor_terms(terms_db1)
                 anchor_terms2 = self.anchor_quantile.calc_anchor_terms(terms_db2)
 
                 mapping.anchor_nodes[0] |= anchor_terms1
                 mapping.anchor_nodes[1] |= anchor_terms2
+
                 # Combine anchor terms pairwise and insert them into the prio_dict
                 new_mappings = set((term1, term2) for term1 in anchor_terms1 for term2 in anchor_terms2)
-                self.add_mappings_to_pq(new_mappings,prio_dict, w_exp_sim, similarity_metric, expanded_record_tuples, processed_mappings)
-                anchor_mappings = processed_mappings.copy()
-                # if debug:
-                #    print("new length hubs: " + str(l))
+                exp_mappings = self.add_mappings_to_pq(new_mappings,prio_dict, w_exp_sim, similarity_metric, expanded_record_tuples)
+                exp_anchor_mappings |= exp_mappings
+                processed_mappings |= exp_mappings
+
+                # Increase the quantile and trigger new anchor mappings if no anchor mappings with sim > 0 were found
+                if not exp_mappings and self.anchor_quantile.q > 0:
+                    self.anchor_quantile.double_quantile()
+                    new_anchor_mappings = True
+
+
+
                 w_prio_len.append(len(prio_dict))
 
+                # TODO should processed mappings include sim=0 mappings?
 
             # Exit Strategy
             else:
@@ -194,7 +205,7 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                         new_term = "new_var_" + str(mapping.new_term_counter)
                         mapping_dict.append((term.name, new_term,0.01))
                         mapping.new_term_counter += 1
-                        if DEBUG or term in debug_set:
+                        if DEBUG_TERMS or term in debug_set:
                             print(f"added synthetic term ({term.name},{new_term})")
 
                 # Make quality check if each term1 received mapping

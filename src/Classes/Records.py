@@ -1,4 +1,4 @@
-from src.Config_Files.Debug_Flags import DEBUG, debug_set, debug_term_names1,debug_term_names2
+from src.Config_Files.Debug_Flags import DEBUG_TERMS, DEBUG_RECORDS,debug_set, debug_term_names1,debug_term_names2
 
 
 class Record:
@@ -76,7 +76,7 @@ class Record:
         for term, cols in term_cols.items():
             if term.is_active():
                 # remove this record_obj from the occurrences of the term, because it is now obsolete
-                if DEBUG or term in debug_term_names1 or term in debug_term_names2:
+                if DEBUG_RECORDS or term in debug_term_names1 or term in debug_term_names2:
                     print(f"delete occurrence ({self.file_name},{self.rid}) from {term.name} at col {cols}")
                 term.remove_occurrence(self.file_name, tuple(cols), self)
 
@@ -123,6 +123,6 @@ class RecordTuple:
 
     def make_inactive(self):
         self.gen_active = False
-        if DEBUG or self in debug_set:
+        if DEBUG_RECORDS or self in debug_set:
             print(f"deactivate Record Tuple: {self.record1.file_name}({self.record1.rid},{self.record2.rid})")
         return self.get_subscribers()

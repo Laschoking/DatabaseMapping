@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from sortedcontainers import SortedDict,SortedList,SortedSet
-from src.Config_Files.Debug_Flags import DEBUG, debug_set,HUB_RECOMPUTE, PLOT_STATISTICS
+from src.Config_Files.Debug_Flags import DEBUG_TERMS, debug_set,HUB_RECOMPUTE, PLOT_STATISTICS
 from src.Classes.ExpansionStrategy import  ExpansionStrategy
 import src.Classes.Terms
 

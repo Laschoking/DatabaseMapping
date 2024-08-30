@@ -1,5 +1,5 @@
 import itertools
-from src.Config_Files.Debug_Flags import DEBUG, debug_set, debug_term_names1,debug_term_names2,DYNAMIC_EXPANSION
+from src.Config_Files.Debug_Flags import DEBUG_TERMS,DEBUG_RECORDS, debug_set, debug_term_names1,debug_term_names2,DYNAMIC_EXPANSION
 from src.Classes.Records import RecordTuple
 
 
@@ -22,7 +22,7 @@ class Term:
 
     def deactivate_term_and_all_tt(self):
         self.gen_active = False
-        if DEBUG or self in debug_set:
+        if DEBUG_TERMS or self in debug_set:
             print(f"deactivate Term of {self.db}: ({self.name})")
 
         for mapping in self.attached_mappings.copy():
@@ -31,7 +31,7 @@ class Term:
                 self.attached_mappings.remove(mapping)
             else:  # otherwise deactivate now. we cannot destroy it yet bc. it needs to be removed from prio-dict first
                 mapping.gen_active = False
-                if DEBUG or mapping in debug_set:
+                if DEBUG_TERMS or mapping in debug_set:
                     print(f"deactivate Term Tuple: ({mapping.term1.name},{mapping.term2.name})")
 
         return self.attached_mappings
@@ -68,6 +68,7 @@ class Mapping:
         self.similarity_metric = similarity_metric
         self.sim = 0
 
+        #
         if term1.name in debug_term_names1:
             debug_set.add(term1)
             debug_set.add(self)
@@ -77,12 +78,8 @@ class Mapping:
 
         self.calc_initial_record_tuples(expanded_record_tuples)
 
-    #def __hash__(self):
-    #    return id(self)
 
     def __lt__(self, other):
-        #if id(self) == id(other): # if its identity but the similarity changed
-        #   return False
         if self.sim < other.sim:
             return True
         elif self.sim > other.sim:
@@ -114,7 +111,7 @@ class Mapping:
             for record1, record2 in itertools.product(records_db1, records_db2):
                 # in this case we would expand a side, where one record is inactive already
                 if not record1.is_active() or not record2.is_active():
-                    if DEBUG:
+                    if DEBUG_RECORDS:
                         print(f"discarded record obj bc. it is inactive {record1.file_name}{record1.rid, record2.rid}")
                     continue
 
@@ -143,7 +140,7 @@ class Mapping:
                 record1.record_tuples.add(rec_tuple)
                 record2.record_tuples.add(rec_tuple)
                 rec_tuple.add_subscriber(self, mapped_cols)
-                if DEBUG or self.term1 in debug_set or self.term2 in debug_set:
+                if DEBUG_RECORDS or self.term1 in debug_set or self.term2 in debug_set:
                     print(
                         f"{self.term1.name},{self.term2.name}  subscribes to {record1.file_name}({rec_tuple.record1.rid},{rec_tuple.record2.rid}),(in_process1={rec_tuple.record1.is_in_process()}),(in_process2={rec_tuple.record2.is_in_process()})")
                     debug_set.add(rec_tuple)
@@ -206,7 +203,7 @@ class Mapping:
                     else:
                         ind1.append(l1)
                         ind2.append(l2)
-                    if DEBUG or rec_tuple in debug_set:
+                    if DEBUG_RECORDS or rec_tuple in debug_set:
                         print(f"marked record for fill: {mapped_record.file_name}{l1,l2}")
                     finished_record_tuples.setdefault(mapped_record.file_name,set()).add((rec_tuple.record1.rid,rec_tuple.record2.rid))
 
@@ -234,7 +231,7 @@ class Mapping:
             for record in destroy_records:
 
                 if record.is_active():
-                    if DEBUG or self in debug_set:
+                    if DEBUG_RECORDS or self in debug_set:
                         print(f"deactivate  record: {record.db}{record.file_name, record.rid}")
                     altered_mappings |= record.deactivate_self_and_all_rt()
         return related_mappings, altered_mappings,finished_record_tuples
