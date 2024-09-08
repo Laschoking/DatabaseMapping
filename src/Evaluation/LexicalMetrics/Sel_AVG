@@ -1,0 +1,1 @@
+SELECT ALPHA ,AVG(ISUB_percentage),AVG(JaroWinkler_percentage),AVG(Levenshtein_percentage) ,AVG(LCS_percentage) ,AVG(QGram_percentage) ,AVG(Dice_percentage) FROM Log_Results WHERE use_nr_sim="True" GROUP BY ALPHA ;
