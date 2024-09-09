@@ -45,31 +45,52 @@ def create_doop_facts(db_config, db_name, db_file_name, fact_path):
                   + " 1.8 " + str(jar_path.parents[0]))  # + ">/dev/null 2>&1")
     else:
         print("No Java-file found, use .jar ")
-    if not os.path.isfile(jar_path):
-        raise FileNotFoundError("Java & Jar File do not exist: " + str(java_path) + str(jar_path))
-    # cannot name the java or jar files appart bc. javac would complain that Class name & file-name differ
-    doop_out_name = db_config.dir_name + "_" + db_name
+    #if not os.path.isfile(jar_path):
+    #    raise FileNotFoundError("Java & Jar File do not exist: " + str(java_path) + str(jar_path))
 
-    os.system("./doop -a context-insensitive -i " + str(jar_path) + " --id " + str(
-        doop_out_name) + " --facts-only --Xfacts-subset APP --cache --generate-jimple")
+    # cannot name the java or jar files appart bc. javac would complain that Class name & file-name differ
+    doop_out_name = db_config.dir_name
+
+    #os.system("./doop -a context-insensitive -i " + str(jar_path) + " --id " + str(
+    #    doop_out_name) + " --facts-only --Xfacts-subset APP --cache --generate-jimple")
 
     for file in PathLib.DOOP_OUT.joinpath(doop_out_name).joinpath("database").glob("*.facts"):
         new_file_name = file.with_suffix('.tsv').name
         # TODO verify that each atom is unique (DOOP sometimes produces identical facts!!!)
         target_file = fact_path.joinpath(new_file_name)
-        shutil.copy(file, target_file)
+
+        # Open the target file for writing
+        with target_file.open("w") as out_file:
+            command = ["uniq", str(file)]
+            print("Command:", command)
+            try:
+                # Run the command, capture the output and write to target_file
+                res = subprocess.run(command, stdout=out_file, check=True)
+            except subprocess.CalledProcessError as e:
+                raise ChildProcessError(f"Command failed with error: {e}")
+
+        '''
+        command = ["uniq",str(file),">",str(target_file)]
+        print(command)
+        
+    
+        try:
+            res = subprocess.run(command,check=True,shell=True)
+        except subprocess.CalledProcessError:
+            raise ChildProcessError(res.stderr.decode("utf-8"))
 
 
+        '''
 def chase_nemo(dl_rule_path, fact_path, result_path):
     if not dl_rule_path:
         return
     command = [str(PathLib.NEMO_ENGINE.joinpath("target/release/nmo")), str(dl_rule_path), "-I", str(fact_path), "-D",
                str(result_path), "--overwrite-results", "-e", "keep"]
-    p = subprocess.run(command, capture_output=True)
-    if p.returncode != 0:
-        raise ChildProcessError(p.stderr.decode("utf-8"))
+    res = subprocess.run(command, capture_output=True)
+    if res.returncode != 0:
+        raise ChildProcessError(res.stderr.decode("utf-8"))
 
-    nemo_runtime = split_nemo_stdout(p.stdout)
+    nemo_runtime = split_nemo_stdout(res.stdout)
     os.chdir(PathLib.DOOP_BASE)
     return nemo_runtime
 
