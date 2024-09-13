@@ -15,17 +15,17 @@ from src.StructuralSimilarityMetrics.NodeDegree import NodeDegree
 from src.LexicalSimilarityMetrics.ISUB import IsubStringMatcher
 from src.LexicalSimilarityMetrics.LevenshteinSimilarity import LevenshteinSimilarity
 from src.LexicalSimilarityMetrics.JaroWinkler import JaroWinkler
+from src.LexicalSimilarityMetrics.Dice import Dice
 from src.Libraries import ShellLib
-
-
-#TODO filter input for duplicated atoms
+import pandas as pd
 
 if __name__ == "__main__":
-    # TODO Unit_Test_Dyn_Max_Cardinality
     # specify Java-files & Programm Analysis
-    db_config = Doop_Gocd_Websocket_Notifier_v1_v4
+    conf = PathLib.db_config_df.loc['lattice-maven-build-model-_1.0.17_1.0.18.7']
+    db_config = DbConfig(*conf.array)
     program_config = Doop_PointerAnalysis
 
+    # GEN-FACTS requires a Java version depending on the  v.8
     GEN_FACTS = False  # if true, run doop again for new fact-gen, otherwise just copy from doop/out
     COMP_MAPPING = True
     RUN_DL = False
@@ -41,9 +41,9 @@ if __name__ == "__main__":
 
     if GEN_FACTS:
         ShellLib.create_input_facts(db_config, db_config.db1_dir_name, db_config.db1_file_name,
-                                    data.db1_original_facts.path)
+                                    data.db1_original_facts.path,force_gen=True)
         ShellLib.create_input_facts(db_config, db_config.db2_dir_name, db_config.db2_file_name,
-                                    data.db2_original_facts.path)
+                                    data.db2_original_facts.path,force_gen=True)
 
     # load facts into data-object
     data.db1_original_facts.read_db_relations()
@@ -99,7 +99,8 @@ if __name__ == "__main__":
 
     # Set up Similarity Metrics
     jaccard_index = JaccardIndex()
-    dynamic_min_rec_tuples = DynamicRecordTupleCount()
+    dynamic_edge_count = DynamicRecordTupleCount()
+    dice = Dice(n=2)
     node_degree = NodeDegree()
     levenshtein = LevenshteinSimilarity()
     isub = IsubStringMatcher()
@@ -111,14 +112,14 @@ if __name__ == "__main__":
     #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_90, jaro_winkler))
     #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, isub))
     #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_90, isub))
-    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, jaccard_index))
-    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, isub))
-    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, isub))
+    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, jaccard_index))
+    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, dynamic_edge_count))
+    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, dice))
     #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_99, jaccard_index))
-    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, dynamic_min_rec_tuples))
-    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_99, dynamic_min_rec_tuples))
+    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, dynamic_edge_count))
+    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_99, dynamic_edge_count))
 
-    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,dynamic_min_rec_tuples))
+    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,dynamic_edge_count))
     #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,node_degree))
 
     #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,isub))
@@ -144,7 +145,7 @@ if __name__ == "__main__":
     for mapping in data.mappings:
         print("--------------------------")
         print(mapping.name)
-        mapping.initialize_records_terms_db1(data.db1_original_facts)
+        mapping.init_records_terms_db1(data.db1_original_facts)
         mapping.init_records_terms_db2(data.db2_original_facts)
         c_max_tuples = len(mapping.terms_db1) * len(mapping.terms_db2)
 

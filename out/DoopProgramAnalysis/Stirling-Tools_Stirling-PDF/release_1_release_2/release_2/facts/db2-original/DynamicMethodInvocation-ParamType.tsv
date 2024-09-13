@@ -1,5 +1,0 @@
-<org.springframework.boot.loader.launch.JarFileArchive: java.util.Set getClassPathUrls(java.util.function.Predicate,java.util.function.Predicate)>/invokedynamic_metafactory::apply/1	0	org.springframework.boot.loader.launch.JarFileArchive
-<org.springframework.boot.loader.launch.JarFileArchive: java.nio.file.Path createUnpackDirectory(java.nio.file.Path)>/invokedynamic_makeConcatWithConstants::makeConcatWithConstants/0	0	java.lang.String
-<org.springframework.boot.loader.launch.JarFileArchive: java.nio.file.Path createUnpackDirectory(java.nio.file.Path)>/invokedynamic_makeConcatWithConstants::makeConcatWithConstants/0	1	java.util.UUID
-<org.springframework.boot.loader.launch.JarFileArchive: java.nio.file.Path createUnpackDirectory(java.nio.file.Path)>/invokedynamic_makeConcatWithConstants::makeConcatWithConstants/1	0	java.nio.file.Path
-<org.springframework.boot.loader.zip.ZipLocalFileHeaderRecord: org.springframework.boot.loader.zip.ZipLocalFileHeaderRecord load(org.springframework.boot.loader.zip.DataBlock,long)>/invokedynamic_makeConcatWithConstants::makeConcatWithConstants/0	0	long

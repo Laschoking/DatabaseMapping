@@ -49,8 +49,6 @@ class BasePaths:
 
 class DataContainer:
     def __init__(self, base_output_path, db1_base_path, db2_base_path):
-        self.terms1 = None
-        self.terms2 = None
         self.paths = BasePaths(base_output_path, db1_base_path, db2_base_path)
         # origin of the facts for both databases
 

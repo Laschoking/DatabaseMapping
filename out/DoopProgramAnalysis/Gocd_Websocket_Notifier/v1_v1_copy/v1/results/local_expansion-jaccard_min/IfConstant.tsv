@@ -1,3 +1,0 @@
-<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handle(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>/if/0	2	0
-<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handle(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>/if/1	2	0
-<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void sendToAll(java.lang.String)>/if/0	2	0

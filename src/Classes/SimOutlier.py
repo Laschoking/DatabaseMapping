@@ -1,4 +1,4 @@
-
+import numpy as np
 class SimOutlier:
     def __init__(self,name):
         self.name = name

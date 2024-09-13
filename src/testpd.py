@@ -1,26 +1,19 @@
+# data from https://allisonhorst.github.io/palmerpenguins/
 
-from sortedcontainers import SortedList
-
-class A:
-    def __init__(self,x):
-        self.x = x
-
-    def __lt__(self,other):
-        return self.x < other.x
-
-    def __eq__(self,other):
-        return self.x == other.x
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
 if __name__ == "__main__":
-    null = A(0)
-    a = A(1)
-    b = A(2)
-    c = A(3)
-    l = SortedList([null,a,b,c])
-    print([y.x for y in l])
-    b.x = 4
-    c.x = -1
-    l.update([c])
 
-    print([y.x for y in l])
+    data = {'col1': [1, 2, 3, 4, 5],
+            'col2': ['x', 'y', 8, 9, 10],
+            'col3': [11, 12, 13, 14, 15],
+            'col4': [16, 17, 18, 19, 20]}
 
+    df = pd.DataFrame(data)
+    x =  df.iloc[:,0:2]
+    r = (df[df.columns[:2]] == [2,'y']).all(1).any()
+    print(r)
+
+    print(df)

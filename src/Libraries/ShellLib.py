@@ -14,8 +14,12 @@ def clear_directory(directory):
         shutil.rmtree(str(directory))
     os.system("mkdir -p " + str(directory))
 
+def clear_file(file_path):
+    if file_path.exists():
+        os.remove(file_path)
 
-def init_synth_souffle_database(db_config, db_name, fact_path):
+
+def init_synth_souffle_database(db_config, db_name, fact_path,force_gen):
     gen_facts_path = PathLib.datalog_programs_path.joinpath(db_config.db_type).joinpath(db_config.dir_name)
     os.chdir(gen_facts_path)
     command = ["./gen_facts.sh", "small", str(fact_path)]
@@ -24,63 +28,70 @@ def init_synth_souffle_database(db_config, db_name, fact_path):
         raise ChildProcessError(p.stderr.decode("utf-8"))
 
 
-def create_input_facts(db_config, db_dir_name, db_file_name, fact_path):
+def create_input_facts(db_config, db_dir_name, db_file_name, fact_path,force_gen):
     if db_config.db_type == "DoopProgramAnalysis":
-        create_doop_facts(db_config, db_dir_name, db_file_name, fact_path)
+        create_doop_facts(db_config, db_dir_name, db_file_name, fact_path,force_gen)
     elif db_config.db_type == "SouffleSynthetic":
-        init_synth_souffle_database(db_config, db_dir_name, fact_path)
+        init_synth_souffle_database(db_config, db_dir_name, fact_path,force_gen)
     print("initialized database: " + db_dir_name)
 
 
-def create_doop_facts(db_config, db_name, db_file_name, fact_path):
+def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen):
     os.chdir(PathLib.DOOP_BASE)
     clear_directory(fact_path)
 
-    java_path = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_name).joinpath(
+    java_path = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_version).joinpath(
         db_file_name + ".java")
-    jar_path = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_name).joinpath(
+    jar_path1 = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_version).joinpath(
         db_file_name + ".jar")
+    jar_path2 = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_version).joinpath(
+        db_file_name + db_version + ".jar")
     if os.path.isfile(java_path):
         os.system("bin/mkjar " + str(java_path)
-                  + " 1.8 " + str(jar_path.parents[0]))  # + ">/dev/null 2>&1")
+                  + " 1.8 " + str(jar_path1.parents[0]))  # + ">/dev/null 2>&1")
     else:
         print("No Java-file found, use .jar ")
-    #if not os.path.isfile(jar_path):
-    #    raise FileNotFoundError("Java & Jar File do not exist: " + str(java_path) + str(jar_path))
+
+    if os.path.isfile(jar_path1):
+        jar_path = jar_path1
+    elif os.path.isfile(jar_path2):
+        jar_path = jar_path2
+    else:
+        raise FileNotFoundError("Java & Jar File do not exist: \n" + str(java_path) + "\n"+ str(jar_path1) + "\n"+ str(jar_path2))
 
     # cannot name the java or jar files appart bc. javac would complain that Class name & file-name differ
-    doop_out_name = db_config.dir_name
+    doop_out_name = db_config.dir_name + "_" + db_version
+    doop_out_path = PathLib.DOOP_OUT.joinpath(doop_out_name).joinpath("database")
 
-    #os.system("./doop -a context-insensitive -i " + str(jar_path) + " --id " + str(
-    #    doop_out_name) + " --facts-only --Xfacts-subset APP --cache --generate-jimple")
+    # Skip fact-generation, if the target directory contains facts already
+    if any(fact_path.iterdir()) and not force_gen:
+        return
 
-    for file in PathLib.DOOP_OUT.joinpath(doop_out_name).joinpath("database").glob("*.facts"):
+    # Only run DOOP, if no output with doop_out_name exists
+    if not any(doop_out_path.iterdir()) or force_gen:
+        # Run DOOP to generate new facts for given java or jar
+        os.system(f"./doop -a context-insensitive -i {jar_path} --id {doop_out_name} --facts-only --Xfacts-subset"
+              f" APP --cache --generate-jimple ")
+              #f"--platform java_11 --use-local-java-platform /home/kotname/.sdkman/candidates/java/current/bin/java")
+
+    if not doop_out_path.is_dir():
+        raise FileNotFoundError(f"the doop-facts do not exist: {PathLib.DOOP_OUT.joinpath(doop_out_name)}")
+
+    for file in doop_out_path.glob("*.facts"):
         new_file_name = file.with_suffix('.tsv').name
-        # TODO verify that each atom is unique (DOOP sometimes produces identical facts!!!)
         target_file = fact_path.joinpath(new_file_name)
 
         # Open the target file for writing
         with target_file.open("w") as out_file:
-            command = ["uniq", str(file)]
-            print("Command:", command)
+            #command = ["sort", str(file),"|","uniq"]
+            command = f"sort {file} | uniq"
+            #print("Command:", command)
             try:
                 # Run the command, capture the output and write to target_file
-                res = subprocess.run(command, stdout=out_file, check=True)
+                res = subprocess.run(command, shell=True, stdout=out_file, check=True)
             except subprocess.CalledProcessError as e:
                 raise ChildProcessError(f"Command failed with error: {e}")
 
-        '''
-        command = ["uniq",str(file),">",str(target_file)]
-        print(command)
-        
-    
-        try:
-            res = subprocess.run(command,check=True,shell=True)
-        except subprocess.CalledProcessError:
-            raise ChildProcessError(res.stderr.decode("utf-8"))
-
-
-        '''
 def chase_nemo(dl_rule_path, fact_path, result_path):
     if not dl_rule_path:
         return

@@ -4,7 +4,7 @@ from bidict import bidict
 from src.Classes.DataContainerFile import DbInstance
 from src.Classes import Terms, Records
 from src.Libraries import ShellLib
-
+from operator import attrgetter
 
 # each MappingContainer has a Strategy and a similarity metric
 class MappingContainer:
@@ -26,7 +26,7 @@ class MappingContainer:
         self.db2_unravelled_results = DbInstance(paths.db2_results, name)
 
         self.final_mapping = pd.DataFrame()
-        self.final_rec_tuples = dict()  # filename : set((rid1,rid2),())
+        self.final_rec_tuples = dict()
 
         self.mapping_path = paths.mapping_results.joinpath(self.name).with_suffix('.tsv')
         self.new_term_counter = 0
@@ -36,7 +36,7 @@ class MappingContainer:
         self.records_db1 = bidict()
         self.records_db2 = bidict()
 
-        self.terms_db1 = dict()  # could be bidict as well, or SortedDict
+        self.terms_db1 = dict()
         self.terms_db2 = dict()
 
         self.anchor_nodes = [set(), set()]  # log how many anchor nodes were expanded for DB1 and DB2
@@ -45,11 +45,12 @@ class MappingContainer:
         self.c_hub_recomp = 0
         self.c_mappings = 0
 
-    def initialize_records_terms_db1(self, db1):
-        self.init_records_terms_db(db1, self.terms_db1, self.records_db1)
-
+    def init_records_terms_db1(self, db1):
+        max_deg1 = self.init_records_terms_db(db1, self.terms_db1, self.records_db1)
+        self.similarity_metric.max_deg1 = max_deg1
     def init_records_terms_db2(self, db2):
-        self.init_records_terms_db(db2, self.terms_db2, self.records_db2)
+        max_deg2 = self.init_records_terms_db(db2, self.terms_db2, self.records_db2)
+        self.similarity_metric.max_deg2 = max_deg2
 
     # terms and records need to be initialised together because term.occurrences points to record_obj 
     # and record.terms points to term
@@ -66,7 +67,7 @@ class MappingContainer:
 
                 temp_dict = dict()
                 for col_ind, term_name in row.items():
-                    # in case a term appears several times in same atom i.e. A("a","a","b") -> make a list [1,2]
+                    # in case a term appears several times in same atom i.e. A("a","a","b") -> make a list of cols [1,2]
                     temp_dict.setdefault(term_name, list()).append(col_ind)
 
                 # unpack values
@@ -81,6 +82,8 @@ class MappingContainer:
                         terms[term_name] = term
 
                     curr_record.add_term(term, cols)
+        max_deg_node = max(terms.values(),key=attrgetter('degree'))
+        return max_deg_node.degree
 
     def set_mapping(self, mapping):
         self.final_mapping = mapping
@@ -139,10 +142,9 @@ class MappingContainer:
 
     # write mapping results to CSV file
     def log_mapping(self):
-        ShellLib.clear_directory(self.mapping_path.parent)
+        ShellLib.clear_file(self.mapping_path)
         self.final_mapping.to_csv(self.mapping_path, sep='\t', index=False, header=False)
 
-    # can be implemented faster, just replace db
     def merge_dbs(self, db1, db2, to_db):
         for file_name in db1.files.keys():
             df1 = db1.files[file_name]

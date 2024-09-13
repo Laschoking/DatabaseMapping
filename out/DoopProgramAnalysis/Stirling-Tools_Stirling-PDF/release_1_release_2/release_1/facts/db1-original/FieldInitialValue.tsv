@@ -1,5 +1,0 @@
-<org.springframework.boot.loader.zip.Zip64EndOfCentralDirectoryRecord: int SIGNATURE>	101075792
-<org.springframework.boot.loader.zip.Zip64EndOfCentralDirectoryRecord: int MINIMUM_SIZE>	56
-<org.springframework.boot.loader.jar.NestedJarFile: int DECIMAL>	10
-<org.springframework.boot.loader.jar.NestedJarFile: java.lang.String META_INF>	\\"META-INF/\\"
-<org.springframework.boot.loader.jar.NestedJarFile: java.lang.String META_INF_VERSIONS>	\\"META-INF/versions/\\"

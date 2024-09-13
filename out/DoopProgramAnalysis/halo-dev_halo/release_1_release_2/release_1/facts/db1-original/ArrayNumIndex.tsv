@@ -1,4 +1,0 @@
-<org.springframework.boot.loader.zip.ZipContent$Loader: org.springframework.boot.loader.zip.ZipContent load(org.springframework.boot.loader.zip.ZipContent$Source)>/write-array-idx/0	0
-<org.springframework.boot.loader.zip.ZipContent$Loader: org.springframework.boot.loader.zip.ZipContent load(org.springframework.boot.loader.zip.ZipContent$Source)>/write-array-idx/1	1
-<org.springframework.boot.loader.zip.ZipContent$Loader: org.springframework.boot.loader.zip.ZipContent loadNestedZip(org.springframework.boot.loader.zip.ZipContent$Source,org.springframework.boot.loader.zip.ZipContent$Entry)>/write-array-idx/0	0
-<org.springframework.boot.loader.zip.ZipContent$Loader: org.springframework.boot.loader.zip.ZipContent loadNestedZip(org.springframework.boot.loader.zip.ZipContent$Source,org.springframework.boot.loader.zip.ZipContent$Entry)>/write-array-idx/1	1

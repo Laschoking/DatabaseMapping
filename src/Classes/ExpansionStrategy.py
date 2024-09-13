@@ -85,7 +85,7 @@ class ExpansionStrategy:
 
             sim = new_mapping.compute_similarity()
             exp_mappings.add((term1, term2))
-            if sim > 0:
+            if sim > -0.5:
                 # Insert mapping into priority_queue
                 if DEBUG_TERMS or term1 in debug_set or term2 in debug_set:
                     print(f"expanded tuple: {new_mapping.term1.name},{new_mapping.term2.name}, sim: {sim}")

@@ -1,4 +1,0 @@
-org.springframework.boot.loader.nio.file.NestedByteChannel$Resources	java.lang.Runnable
-org.springframework.boot.loader.zip.VirtualZipDataBlock$DataPart	org.springframework.boot.loader.zip.DataBlock
-org.springframework.boot.loader.launch.JarFileArchive	org.springframework.boot.loader.launch.Archive
-org.springframework.boot.loader.zip.ByteArrayDataBlock	org.springframework.boot.loader.zip.CloseableDataBlock

@@ -1,6 +1,0 @@
-java.lang.Object	com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin	0
-java.lang.Object	com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator	10
-java.lang.Object	com.matt_richardson.gocd.websocket_notifier.PluginConfig	10
-java.lang.Object	com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener	0
-com.thoughtworks.go.plugin.api.response.GoPluginApiResponse	com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin$1	0
-org.java_websocket.server.WebSocketServer	com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer	0

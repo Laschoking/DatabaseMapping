@@ -159,7 +159,7 @@ class Mapping:
 
     def compute_similarity(self):
         sim = self.similarity_metric.compute_similarity(self.term1, self.term2, self.sub_rec_tuples)
-        self.sim = round(sim,5)
+        self.sim = sim
         return self.sim
 
     def get_similarity(self):

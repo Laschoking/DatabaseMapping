@@ -87,7 +87,7 @@ def verify_merge_results(data, mapping):
         print(t)
 
 
-def count_overlap_merge_db(merge_db):
+def count_overlap_merge_db(merge_db) -> [int,int,int,str]:
     c_left = 0
     c_right = 0
     c_both = 0
@@ -111,3 +111,4 @@ def count_overlap_merge_db(merge_db):
     else:
         overlap = 0.0
     return [c_left, c_right, c_both, str(overlap) + "%"]
+

@@ -1,5 +1,4 @@
-
-from nltk.util import ngrams
+import nltk.util
 from collections import Counter
 from src.Classes.SimilarityMetric import LexicalSimilarityMetric
 from strsimpy.qgram import QGram
@@ -7,8 +6,8 @@ from strsimpy.qgram import QGram
 from strsimpy.normalized_levenshtein import NormalizedLevenshtein
 
 class Dice(LexicalSimilarityMetric):
-    def __init__(self,n):
-        super().__init__(f"Dice")
+    def __init__(self,n,metric_weight):
+        super().__init__(f"Dice",metric_weight)
         self.n = n
 
     def compute_lexical_similarity(self, term_name1, term_name2):
@@ -24,11 +23,10 @@ class Dice(LexicalSimilarityMetric):
             similarity = 2 * len(common_ngrams) / (len(ngrams1) + len(ngrams2))
         else:
             similarity = 0
-
         return similarity
 
 
     def get_ngrams(self,text, n):
         # Generate n-grams
-        n_grams = ngrams(text, n)
+        n_grams = nltk.util.ngrams(text, n)
         return set(n_grams)

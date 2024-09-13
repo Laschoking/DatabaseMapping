@@ -1,5 +1,0 @@
-org.springframework.boot.loader.jar.NestedJarFile$RawZipDataInputStream	java.io.FilterInputStream
-org.springframework.boot.loader.net.protocol.jar.UrlJarEntry	java.util.jar.JarEntry
-org.springframework.boot.loader.zip.ZipContent$Loader	java.lang.Object
-org.springframework.boot.loader.launch.PropertiesLauncher$Instantiator$Using	java.lang.Record
-org.springframework.boot.loader.launch.JarFileArchive$JarArchiveEntry	java.lang.Record

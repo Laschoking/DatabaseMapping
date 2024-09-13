@@ -1,4 +1,0 @@
-final	org.springframework.boot.loader.net.protocol.jar.UrlJarEntry
-final	org.springframework.boot.loader.zip.ZipContent$Loader
-final	org.springframework.boot.loader.launch.PropertiesLauncher$Instantiator$Using
-final	org.springframework.boot.loader.launch.JarFileArchive$JarArchiveEntry

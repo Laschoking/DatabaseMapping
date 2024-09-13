@@ -1,6 +1,7 @@
 # This file defines all necessary paths for the comparison pipeline
 from pathlib import Path
 from enum import Enum
+import pandas as pd
 
 # create path to doop base and its output dir
 DOOP_BASE = Path("/home/kotname/Documents/Diplom/Code/doop/")
@@ -13,7 +14,10 @@ NEMO_ENGINE = Path("/home/kotname/Documents/Diplom/Code/nemo/nemo")
 base_diff_path = Path("/home/kotname/Documents/Diplom/Code/DatabaseMapping")
 datalog_programs_path = base_diff_path.joinpath("Datalog-Programs")
 base_out_path = base_diff_path.joinpath("out")
-java_source_dir = base_diff_path.joinpath("Java")
+java_source_dir = base_diff_path.joinpath("Java-Programs")
+mvn_dir = base_diff_path.joinpath("Evaluation").joinpath("mvn_libs")
+db_configs = base_diff_path.joinpath("src").joinpath("Config_Files").joinpath("DbConfig.csv")
+db_config_df = pd.read_csv(db_configs,index_col='DbConfig_Id')
 
 SOUFFLE_ANALYSIS_BASE = Path("/home/kotname/Documents/Diplom/Code/ex_souffle/Analysis")
 DOOP_PA_BASE = Path("/home/kotname/Documents/Diplom/Code/DiffAnalysis/Datalog-Programs/DoopProgramAnalysis")

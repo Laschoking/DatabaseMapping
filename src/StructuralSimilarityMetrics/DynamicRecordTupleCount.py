@@ -3,8 +3,8 @@ from src.Classes.SimilarityMetric import StructuralSimilarityMetric
 
 
 class DynamicRecordTupleCount(StructuralSimilarityMetric):
-    def __init__(self):
-        super().__init__("Edge Count")
+    def __init__(self,metric_weight):
+        super().__init__("Edge Count",metric_weight)
 
     def compute_structural_similarity(self, term1, term2, sub_rec_tuples):
         edge_count = 0
@@ -22,6 +22,6 @@ class DynamicRecordTupleCount(StructuralSimilarityMetric):
 
         total_occurrences = term1.degree + term2.degree
         # weight matches higher to prefer important nodes
-        return edge_count ** 2 / total_occurrences
+        return edge_count / total_occurrences
 
 

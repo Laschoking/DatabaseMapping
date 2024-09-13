@@ -226,6 +226,6 @@ class IterativeAnchorExpansion(ExpansionStrategy):
         if PLOT_STATISTICS:
             self.plot_statistics(similarity_metric.name,w_prio_len,w_exp_sim,mapped_sims)
 
-        return len(expanded_record_tuples)
+        return len(processed_mappings)
 
 
