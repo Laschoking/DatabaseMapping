@@ -3,9 +3,6 @@ true("true"^^xsd:boolean).
 
 @import MainClass :- tsv{resource="MainClass.tsv",format=(string)}. 
 
-% "<sun.misc.ProxyGenerator: byte[] generateClassFile()>"
-% "abstract"
-
 @import A_ArrayType :-tsv{resource="ArrayType.tsv",format=(string)} .
 @import A_ActualParam :-tsv{resource="ActualParam.tsv",format=(int,string,string)} .
 @import A_Var_Type :-tsv{resource="Var-Type.tsv",format=(string,string )} .
@@ -668,10 +665,7 @@ Method_Arity(?method, ?arity),
 Method_ReturnType(?method, ?returnType) :-
   A_Method(?method, ?simplename, ?params, ?declaringType, ?returnType, ?jvmDescriptor, ?arity).
 
-%Method_Descriptor(?method, ?descriptor) :-
-%  Method_ReturnType(?method, ?returnType),
-%  Method_ParamTypes(?method, ?params),
-%  ?descriptor = CONCAT(?returnType, "(", ?params, ")").
+
 
 
 isStoreInstanceField_Insn(?instruction),
@@ -788,27 +782,6 @@ Instruction_Method(?instruction, ?method) :-
   A_UnsupportedInstruction(?instruction, ?index, ?method).
 
 
-isModifier(?x), Modifier_abstract(?x) :- ?x = "abstract".
-isModifier(?x), Modifier_public(?x) :- ?x = "public".
-isModifier(?x), Modifier_private(?x) :- ?x = "private".
-isModifier(?x), Modifier_final(?x) :- ?x = "final".
-isModifier(?x), Modifier_static(?x) :- ?x = "static".
-
-
-isPrimitiveType(?t), Type_boolean(?t) :- ?t = "boolean".
-isPrimitiveType(?t), Type_byte(?t) :- ?t = "byte".
-isPrimitiveType(?t), Type_char(?t) :- ?t = "char".
-isPrimitiveType(?t), Type_short(?t) :- ?t = "short".
-isPrimitiveType(?t), Type_int(?t) :- ?t = "int".
-isPrimitiveType(?t), Type_long(?t) :- ?t = "long".
-isPrimitiveType(?t), Type_float(?t) :- ?t = "float".
-isPrimitiveType(?t), Type_double(?t) :- ?t = "double".
-isPrimitiveType(?t), Type_void(?t) :- ?t = "void".
-
-isNullType(?t), Type_null(?t) :- ?t = "null_type".
-
-isClassType(?t), Type_object(?t) :- ?t = "java.lang.Object".
-
 
 isAnnotation(?annotation) :- isReferenceType(?annotation), A_Type_Annotation(_, ?annotation).
 isAnnotation(?annotation) :- isReferenceType(?annotation), A_Method_Annotation(_, ?annotation).
@@ -819,10 +792,7 @@ isAnnotation(?annotation) :- isReferenceType(?annotation), A_Param_Annotation(_,
 isHeapAllocation(?heap), isMethodHandleConstant(?heap), MethodHandleConstant_Method(?heap, ?method), HeapAllocation_Type(?heap, "java.lang.invoke.MethodHandle")  :-
   MethodHandleConstant_Method(?heap, ?method).
 
-isHeapAllocation(?null), HeapAllocation_Type(?null, ?type) ,
-HeapAllocation_Null(?null) :-
-  ?null = "<<null pseudo heap>>",
-  Type_null(?type).
+
 
 isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type) ,
 MainMethodArgArray(?heap) :-
@@ -859,76 +829,7 @@ ApplicationAllocation(?heap) :-
 
 ConcreteClass(?class) :-
   isClassType(?class),
-  ~ClassModifier("abstract", ?class).
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<java.io.UnixFileSystem: java.lang.String[] list(java.io.File)>/new java.lang.String[]/0",
-  ?type = "java.lang.String[]".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<java.io.UnixFileSystem: java.lang.String[] list(java.io.File)>/new java.lang.String/0",
-  ?type = "java.lang.String".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<sun.misc.Perf: java.nio.ByteBuffer createLong(java.lang.String,int,int,long)>/new java.nio.DirectByteBuffer/0",
-  ?type = "java.nio.DirectByteBuffer".
-
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<string-constant>>",
-  ?type = "java.lang.String".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<reflection-string-constant>>",
-  ?type = "java.lang.String".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<string-buffer>>",
-  ?type = "java.lang.StringBuffer".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<string-builder>>",
-  ?type = "java.lang.StringBuilder".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<system-thread-group>>",
-  ?type = "java.lang.ThreadGroup".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<main-thread-group>>",
-  ?type = "java.lang.ThreadGroup".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<main-thread>>",
-  ?type = "java.lang.Thread".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<initial-context>>",
-  ?type = "java.lang.Object".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<jvm-startup-context>>",
-  ?type = "java.lang.Object".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<jvm-startup-hcontext>>",
-  ?type = "java.lang.Object".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<clinit-context>>",
-  ?type = "java.lang.Object".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<immutable-context>>",
-  ?type = "java.lang.Object".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<immutable-hcontext>>",
-  ?type = "java.lang.Object".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type)  :-
-  ?heap = "<<immutable>>",
-  ?type = "java.lang.Object".
+  ~ClassModifier(_, ?class).
 
 
 % CFG

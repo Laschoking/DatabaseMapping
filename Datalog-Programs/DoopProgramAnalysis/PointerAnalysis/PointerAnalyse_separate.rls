@@ -38,11 +38,6 @@ true("true"^^xsd:boolean).
 @import z_LoadArrayIndex :- tsv{resource="LoadArrayIndex.tsv",format=(string, int, string, string, string)}.
 @import z_Return :- tsv{resource="Return.tsv",format=(string, int, string, string)}.
 
-
-%Method_Descriptor(?method, ?descriptor) :-
-%  Method_ReturnType(?method, ?returnType),
-%  Method_ParamTypes(?method, ?params),
-%  ?descriptor = CONCAT(?returnType, "(", ?params, ")").
   
 
 MainClass(?b):-
@@ -257,7 +252,7 @@ MethodImplemented(?simplename, ?descriptor, ?type, ?method):-
   Method_SimpleName(?method, ?simplename),
   Method_Descriptor(?method, ?descriptor),
   Method_DeclaringType(?method, ?type),
-  ~Method_Modifier("abstract", ?method).
+  ~Method_Modifier(_, ?method).
 
 DirectSubclass(?a, ?c):-
   DirectSuperclass(?a, ?c). % ok
@@ -298,8 +293,7 @@ SubtypeOf(?s, ?t):-
 
 SubtypeOf(?s, ?t):-
   isInterfaceType(?s),
-  isType(?t),
-  ?t = "java.lang.Object".
+  isType(?t).
 
 SubtypeOf(?s, ?s):-
   isInterfaceType(?s).
@@ -310,8 +304,7 @@ SubtypeOf(?s, ?t):-
 
 SubtypeOf(?s, ?t):-
   isArrayType(?s),
-  isType(?t),
-  ?t = "java.lang.Object".
+  isType(?t).
 
 SubtypeOf(?s, ?t):-
   ComponentType(?s, ?sc),
@@ -324,13 +317,13 @@ SubtypeOf(?s, ?t):-
   isArrayType(?s),
   isInterfaceType(?t),
   isType(?t),
-  ?t = "java.lang.Cloneable".
+  ?t = _.
 
 SubtypeOf(?s, ?t):-
   isArrayType(?s),
   isInterfaceType(?t),
   isType(?t),
-  ?t = "java.io.Serializable".
+  ?t = _.
 
 SubtypeOf(?t, ?t):-
   isType(?t).
@@ -342,14 +335,14 @@ SameMethod("<sun.security.provider.PolicyParser: void main(java.lang.String[])>"
 MainMethodDeclaration(?method):-
   MainClass(?type),
   Method_DeclaringType(?method, ?type),
-  Method_SimpleName(?method, "main"),
+  Method_SimpleName(?method,_),
   ~ SameMethod(?method),
-  Method_Descriptor(?method, "void(java.lang.String[])"),
-  Method_Modifier("public", ?method),
-  Method_Modifier("static", ?method).
+  Method_Descriptor(?method, _),
+  Method_Modifier(_, ?method),
+  Method_Modifier(_, ?method).
 
 ClassInitializer(?type, ?method):-
-   MethodImplemented("<clinit>", "void()", ?type, ?method).
+   MethodImplemented(_, _, ?type, ?method).
 
 InitializedClass(?superclass):-
    InitializedClass(?class),
