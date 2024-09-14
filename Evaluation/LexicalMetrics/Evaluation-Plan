@@ -1,0 +1,13 @@
+Auswertung Lexikalische Metriken:
+1. Genereller positiver Einfluss von use_nr_sim:
+- Berechnung AVG Increase Quality vs Runtime: +22,26% Quality, +4,19% Runtime
+- Plotten der AVG-Verteilung pro Tabelle
+
+2. Analyse von  ALPHA:
+- Plotten aller 3 Werte (0.6, 0.8, 0.95) & Berechnen der Qualitätsänderung
+
+3. Analyse der paare ?
+
+3. für use_nr_sim=True, ALPHA = 0.95 untersuchen der Metriken in Kombination mit fake paaren
+
+SELECT resource,use_nr_sim ,ALPHA,(AVG(ISUB_percentage) + AVG(JaroWinkler_percentage) + AVG(Levenshtein_percentage) + AVG(LCS_percentage) + AVG(QGram_percentage) + AVG(Dice_percentage))/6 as total_avg FROM Log_Results GROUP BY resource,use_nr_sim;

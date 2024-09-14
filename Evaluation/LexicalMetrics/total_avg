@@ -1,0 +1,1 @@
+SELECT resource,use_nr_sim ,(AVG(ISUB_percentage) + AVG(JaroWinkler_percentage) + AVG(Levenshtein_percentage) + AVG(LCS_percentage) + AVG(QGram_percentage) + AVG(Dice_percentage))/6 as total_avg FROM Log_Results GROUP BY resource,use_nr_sim;
