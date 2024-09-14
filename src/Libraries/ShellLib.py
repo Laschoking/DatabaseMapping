@@ -6,7 +6,7 @@ import shutil
 import subprocess
 from prettytable import PrettyTable
 import pandas as pd
-
+from sqlalchemy import create_engine,text
 
 # Shell commands
 def clear_directory(directory):
@@ -121,45 +121,3 @@ def print_nemo_runtime(runtime):
     t.add_rows(runtime)
     print(t)
 
-
-class GlobalLogger:
-    def __init__(self, result_path):
-        self.path_single_db = result_path.joinpath("SingleDatabase.tsv")
-        self.path_merge_db_df = result_path.joinpath("MergeDatabase.tsv")
-        self.path_mapping_df = result_path.joinpath("Mappings.tsv")
-        self.path_reasoning_df = result_path.joinpath("Reasoning.tsv")
-
-        '''if self.path_single_db.exists():
-            self.single_db_df = pd.read_csv(self.path_single_db, sep='\t', index_col=0, header=0)
-        else:
-            self.single_db_df = pd.DataFrame(columns=["name","Term-count" "Atom-count", "last-modified"])
-        '''
-        if self.path_merge_db_df.exists():
-            self.merge_db_df = pd.read_csv(self.path_merge_db_df, sep='\t', index_col=0, header=0)
-        else:
-            self.merge_db_df = pd.DataFrame(
-                columns=["Date", "SHA", "MergeDB", "MappingContainer ID", "Expansion", "Metric", "Unique Records DB1",
-                         "Unique Records DB2", "Mutual Records", "Overlap in %"])
-
-        if self.path_mapping_df.exists():
-            self.mapping_df = pd.read_csv(self.path_mapping_df, sep='\t', index_col=0, header=0)
-        else:
-            self.mapping_df = pd.DataFrame(
-                columns=["Date", "SHA", "MergeDB", "MappingContainer ID", "Expansion", "Metric", "Expanded Tuples",
-                         "% to crossproduct",
-                         "1-1 Mappings", "Synthetic Mappings", "Hub Re-Computation", "Uncertain Mappings",
-                         "Unique Records DB1", "Unique Records DB2", "Mutual Records", "Overlap in %", "Runtime"])
-
-        if self.path_reasoning_df.exists():
-            self.reasoning_df = pd.read_csv(self.path_reasoning_df, sep='\t', index_col=0, header=0)
-        else:
-            self.reasoning_df = pd.DataFrame(
-                columns=["Date", "SHA", "From DB", "MappingContainer", "DL-Rules", "Total Time", "Loading Time",
-                         "Reasoning Time",
-                         "Saving Time"])
-
-    def save_results(self):
-        # self.single_db_df.to_csv(self.path_single_db,sep='\t')
-        self.merge_db_df.to_csv(self.path_merge_db_df, sep='\t')
-        self.mapping_df.to_csv(self.path_mapping_df, sep='\t')
-        self.reasoning_df.to_csv(self.path_reasoning_df, sep='\t')

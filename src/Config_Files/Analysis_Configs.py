@@ -3,7 +3,7 @@ from src.Libraries import PathLib
 
 
 class DbConfig:
-    def __init__(self, use,db_type, dir_name, db1_dir_name, db2_dir_name, db1_file_name=None, db2_file_name=None):
+    def __init__(self, use,db_type, dir_name, db1_dir_name, db2_dir_name):
         self.use = use
         self.db_type = db_type
         self.dir_name = dir_name
@@ -14,8 +14,6 @@ class DbConfig:
         self.db2_dir_name = db2_dir_name
         self.db1_path = self.base_output_path.joinpath(db1_dir_name)
         self.db2_path = self.base_output_path.joinpath(db2_dir_name)
-        self.db1_file_name = db1_file_name if db1_file_name else dir_name
-        self.db2_file_name = db2_file_name if db2_file_name else dir_name
 
 
 class DatalogProgram:

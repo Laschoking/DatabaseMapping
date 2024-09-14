@@ -5,12 +5,12 @@ from src.Classes.SimilarityMetric import LexicalSimilarityMetric
 
 
 class QGram(LexicalSimilarityMetric):
-    def __init__(self,n):
-        super().__init__(f"QGram")
+    def __init__(self, n=2, metric_weight=1):
+        super().__init__(f"QGram",metric_weight=1)
         self.n = n
 
     def compute_lexical_similarity(self, term_name1, term_name2):
-        # Get N-grams
+        # Get n-grams
         ngrams1 = self.get_ngrams(term_name1, self.n)
         ngrams2 = self.get_ngrams(term_name2, self.n)
 

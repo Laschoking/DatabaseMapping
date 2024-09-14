@@ -1,0 +1,18 @@
+file: lattice-maven-build-model-_1.0.17_1.0.17_copy
+file: lattice-maven-build-model-_1.0.18.7_1.0.18.7_copy
+file: bit-lib_4j-1.4_4j-1.4_copy
+file: bit-lib_4j-1.4.13_4j-1.4.13_copy
+file: bit-lib_4j-1.5.2_4j-1.5.2_copy
+file: jamm-_0.3.0_0.3.0_copy
+file: jamm-_0.3.3_0.3.3_copy
+file: jamm-_0.4.0_0.4.0_copy
+file: noark-game-_3.2.0.Final_3.2.0.Final_copy
+file: noark-game-_3.3.0.Final_3.3.0.Final_copy
+file: noark-game-_3.4.0-Final_3.4.0-Final_copy
+file: Simple_Pointer_v1_v1_copy
+--------------------------
+static_Iterative-NodeDegree
+Traceback (most recent call last):
+  File "/home/kotname/Documents/Diplom/Code/DatabaseMapping/Evaluation/StructuralMetrics/EvaluateStructuralMetrics.py", line 116, in <module>
+    new_mapping.set_index("mapping_id", inplace=True)
+KeyboardInterrupt

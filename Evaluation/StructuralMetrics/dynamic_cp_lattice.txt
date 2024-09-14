@@ -1,0 +1,28 @@
+file: lattice-maven-build-model-_1.0.17_1.0.17_copy
+--------------------------
+dynamic_Iterative-NodeDegree
+expanded anchor nodes: (1509, 1509)
+accepted mappings: 1509
+--------------------------
+dynamic_Iterative-DynamicJaccard
+expanded anchor nodes: (1509, 1509)
+accepted mappings: 1509
+--------------------------
+dynamic_Iterative-EdgeCount
+expanded anchor nodes: (1509, 1509)
+accepted mappings: 1509
++----------------------------------+-------------------+----------------+------------------+-------------+--------------------+----------------+-------------------+----------+
+|         MappingContainer         | #blocked Mappings | # 1:1 Mappings | #synthetic Terms | # hub comp. | uncertain mappings | # comp. tuples | comp. tuples in % | run-time |
++----------------------------------+-------------------+----------------+------------------+-------------+--------------------+----------------+-------------------+----------+
+|   dynamic_Iterative-NodeDegree   |         0         |      1509      |        0         |      2      |        1247        |    2277081     |       100.0%      | 292.3353 |
+| dynamic_Iterative-DynamicJaccard |         0         |      1509      |        0         |      2      |        112         |    2277081     |       100.0%      | 264.712  |
+|   dynamic_Iterative-EdgeCount    |         0         |      1509      |        0         |      2      |        120         |    2277081     |       100.0%      | 263.9968 |
++----------------------------------+-------------------+----------------+------------------+-------------+--------------------+----------------+-------------------+----------+
++----------------------------------+----------------+-----------------+-----------------+-------------+--------------+
+|              Method              |    data set    | unique rows DB1 | unique rows DB2 | Common Rows | overlap in % |
++----------------------------------+----------------+-----------------+-----------------+-------------+--------------+
+|            No mapping            | original facts |        0        |        0        |     2744    |    100.0%    |
+|   dynamic_Iterative-NodeDegree   |  merged facts  |       1610      |       1610      |     1134    |    41.33%    |
+| dynamic_Iterative-DynamicJaccard |  merged facts  |        90       |        90       |     2654    |    96.72%    |
+|   dynamic_Iterative-EdgeCount    |  merged facts  |       102       |       102       |     2642    |    96.28%    |
++----------------------------------+----------------+-----------------+-----------------+-------------+--------------+

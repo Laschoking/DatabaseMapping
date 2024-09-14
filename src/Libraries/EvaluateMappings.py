@@ -87,7 +87,7 @@ def verify_merge_results(data, mapping):
         print(t)
 
 
-def count_overlap_merge_db(merge_db) -> [int,int,int,str]:
+def count_overlap_merge_db(merge_db) -> [int,int,int,float]:
     c_left = 0
     c_right = 0
     c_both = 0
@@ -95,7 +95,7 @@ def count_overlap_merge_db(merge_db) -> [int,int,int,str]:
     for df in merge_db.files.values():
         if df.empty:
             continue
-        # access last column that holds identifier for each record
+        # access last column that holds db_identifier for each record
         val_count = df.iloc[:, -1].value_counts()
         ind = val_count.index
         if '1' in ind:
@@ -110,5 +110,5 @@ def count_overlap_merge_db(merge_db) -> [int,int,int,str]:
         overlap = round(100 * c_both / total_records, 2)
     else:
         overlap = 0.0
-    return [c_left, c_right, c_both, str(overlap) + "%"]
+    return {"unique_records_db1" : c_left, "unique_records_db2" : c_right, "common_records" : c_both, "overlap_perc" : overlap}
 

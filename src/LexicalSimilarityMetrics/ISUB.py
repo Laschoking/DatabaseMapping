@@ -3,8 +3,8 @@ from src.Classes.SimilarityMetric import LexicalSimilarityMetric
 # this follows the LogMap implementation at https://github.com/ernestojimenezruiz/logmap-matcher/blob/a35c18eec8d027a76974b90aa63bca2b982db876/src/main/java/uk/ac/ox/krr/logmap2/mappings/I_Sub.java#L157
 
 class IsubStringMatcher(LexicalSimilarityMetric):
-    def __init__(self):
-        super().__init__("ISUB")
+    def __init__(self,metric_weight=1):
+        super().__init__("ISUB",metric_weight)
 
     def compute_lexical_similarity(self, term_name1, term_name2):
         term_name1 = term_name1.lower()

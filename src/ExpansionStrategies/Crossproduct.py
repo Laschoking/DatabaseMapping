@@ -46,7 +46,7 @@ class Crossproduct(ExpansionStrategy):
                     free_term_names2.discard(blocked_term)
                 else:
                     # for counting, how many terms are mapped to synthetic values (that do not exist in DB2)
-                    mapping.new_term_counter += 1
+                    mapping.syn_counter += 1
         terms_db1 = terms_db1.values()
         terms_db2 = terms_db2.values()
         all_poss_mapping = find_crossproduct_mappings(terms_db1, terms_db2)
@@ -104,10 +104,10 @@ class Crossproduct(ExpansionStrategy):
                 watch_prio_len.append(sum(len(val) for val in prio_dict.values()))
             else:
                 for term_name1 in free_term_names1:
-                    new_term = "new_var_" + str(mapping.new_term_counter)
+                    new_term = "new_var_" + str(mapping.syn_counter)
                     # print("add new var: " + new_term + " for " + term)
                     mapping_dict.append((term_name1, new_term))
-                    mapping.new_term_counter += 1
+                    mapping.syn_counter += 1
                 break
         mapping.final_mapping = pd.DataFrame.from_records(mapping_dict, columns=None)
 

@@ -14,7 +14,7 @@ from src.Libraries.SqlConnector import SqlConnector
 # TODO in best case: meld data in Lexical Results (with 1 Result-record per Metric)
 
 def get_fake_tuples(corr_pair, corr_id, rename_df, NR_FAKE_PAIRS):
-    fake_pairs = []
+    fake_pairs = pd.DataFrame(columns=rename_df.columns)
     i = corr_id
     go_backwards = False
     while len(fake_pairs) < NR_FAKE_PAIRS:
@@ -31,10 +31,11 @@ def get_fake_tuples(corr_pair, corr_id, rename_df, NR_FAKE_PAIRS):
         fake_name1 = next_corr_pair['OldName']
         fake_name2 = next_corr_pair['NewName']
         if fake_name1 != corr_pair['OldName']:
-            fake_pairs.append((fake_name1,corr_pair['NewName']))
+            fake_pairs.loc[len(fake_pairs)] = [fake_name1,corr_pair['NewName']]
 
         if fake_name2 != corr_pair['NewName']:
-            fake_pairs.append((corr_pair["OldName"],fake_name2))
+            fake_pairs.loc[len(fake_pairs)] = [corr_pair["OldName"],fake_name2]
+
 
 
 
@@ -49,14 +50,14 @@ def evaluate_sim_metric(metric, corr_pair, fake_pairs, parsed_res, COMP_NR_SIM,A
     c = 1 # Count how many pairs are evaluated
     # If the numerical metric is used, calculate the lexical metric on the remaining String-Components
     if COMP_NR_SIM:
-        old_str, old_nr = parsed_res[corr_pair[old_name]]
-        new_str, new_nr = parsed_res[corr_pair[new_name]]
+        old_str, old_nr = parsed_res[old_name]
+        new_str, new_nr = parsed_res[new_name]
         corr_sim = ALPHA * metric.compute_lexical_similarity(old_str, new_str) + (1 - ALPHA) * metric.number_similarity(old_nr, new_nr)
     else:
         # If no numerical metric is used, calculate the lexical metric on the full name (incl. numbers)
         corr_sim = metric.compute_lexical_similarity(old_name, new_name)
 
-    for fake_pair in fake_pairs:
+    for index,fake_pair in fake_pairs.iterrows():
         old_name = fake_pair['OldName']
         new_name = fake_pair['NewName']
 
@@ -64,8 +65,8 @@ def evaluate_sim_metric(metric, corr_pair, fake_pairs, parsed_res, COMP_NR_SIM,A
 
         # Same system as for the correct string pair above
         if COMP_NR_SIM:
-            old_str, old_nr = parsed_res[corr_pair[old_name]]
-            new_str, new_nr = parsed_res[corr_pair[new_name]]
+            old_str, old_nr = parsed_res[old_name]
+            new_str, new_nr = parsed_res[new_name]
             incorr_sim = ALPHA * metric.compute_lexical_similarity(old_str, new_str) + (1 - ALPHA) * metric.number_similarity(old_nr, new_nr)
 
         else:
@@ -73,10 +74,10 @@ def evaluate_sim_metric(metric, corr_pair, fake_pairs, parsed_res, COMP_NR_SIM,A
 
         if incorr_sim >= corr_sim:
             t1 = time.time()
-            return corr_pair,corr_sim,fake_pair,incorr_sim, (t1 - t0) / c
+            return corr_pair,corr_sim,False, (t1 - t0) / c
 
     t1 = time.time()
-    return corr_pair,corr_sim,None,None, (t1 - t0) / c
+    return corr_pair,corr_sim,True, (t1 - t0) / c
 
 
 if __name__ == "__main__":
@@ -108,20 +109,17 @@ if __name__ == "__main__":
     for metric in metric_objs:
         cols.append(metric.name + "_corr_pairs")
         cols.append(metric.name + "_percentage")
-        cols.append(metric.name + "_runtime") # Runtime is for 10000 computed pairs
+        cols.append(metric.name + "_runtime")
 
-    existing_lex_res = sql_con.get_table("MappingSetup")
+    existing_lex_res = sql_con.get_table("LexicalResults")
     new_lex_res = pd.DataFrame(columns=cols)
 
 
     for SQL_TABLE in SQL_TABLES:
         print(SQL_TABLE)
         t_total0 = time.time()
-        data = []
-        old_names = set()
-        new_names = set()
-        # TODO remove limit once everything works
-        query = f"SELECT OldName, NewName FROM {SQL_TABLE}  GROUP BY OldName, NewName LIMIT 100;"
+
+        query = f"SELECT OldName, NewName FROM {SQL_TABLE}  GROUP BY OldName, NewName LIMIT 10;"
         rename_df = lex_data_con.query_table(query)
 
         # Adapt the actual size from qual_res, because it filters & groups
@@ -141,14 +139,18 @@ if __name__ == "__main__":
             parsed_res[term_name1] = (red_name1,nrs1)
             parsed_res[term_name2] = (red_name2,nrs2)
 
-        for (NR_FAKE_PAIRS,COMP_NR_SIM,ALPHA) in combinations:
+        for (NR_FAKE_PAIRS, USE_NR_SIM, ALPHA) in combinations:
+            new_res_df = pd.Series({'resource' : SQL_TABLE,'nr_pairs' : MAX_PAIRS, 'nr_fake_pairs' : NR_FAKE_PAIRS,
+                                 'use_nr_sim' : str(USE_NR_SIM),'ALPHA' : ALPHA})
+
             # Check if combination was already computed
-            if (existing_lex_res[existing_lex_res.columns[:5]] == [SQL_TABLE,MAX_PAIRS,NR_FAKE_PAIRS,COMP_NR_SIM,ALPHA]).all(axis=1).any():
+            reduced_df = existing_lex_res[['resource','nr_pairs','nr_fake_pairs','use_nr_sim','ALPHA']]
+            if reduced_df.eq(new_res_df).all(axis=1).any():
                 continue
-            print(f"calculate combination:{SQL_TABLE,MAX_PAIRS,NR_FAKE_PAIRS,COMP_NR_SIM,ALPHA}")
+            print(f"calculate combination:{SQL_TABLE,MAX_PAIRS,NR_FAKE_PAIRS,str(USE_NR_SIM),ALPHA}")
 
 
-            metrics = {obj: [0, 0] for obj in metric_objs}
+            metric_res = {obj: {'corr_pairs' : 0, 'rt' : 0} for obj in metric_objs}
 
             log_it = 0
             for index,corr_pair in rename_df.iterrows():
@@ -158,43 +160,31 @@ if __name__ == "__main__":
                 log_it += 1
                 if log_it % 10000 == 0:
                     print(f"evaluated {log_it} pairs")
-                row = [corr_pair,0]
+                #row = [corr_pair,0]
                 fake_tuples = get_fake_tuples(corr_pair,log_it, rename_df, NR_FAKE_PAIRS)
-                for metric in metrics.keys():
-                    corr_pair,corr_sim,fake_pair,incorr_sim,rt = evaluate_sim_metric(metric, corr_pair, fake_tuples, parsed_res, COMP_NR_SIM,ALPHA)
-                    row += [corr_sim,fake_pair,incorr_sim]
-                    metrics[metric][1] += rt
-                    if not fake_pair:
-                        row[1] += 1
-                        metrics[metric][0] += 1
-                data.append(row)
-
-
-            cols = ["corr_pair","corr_metrics"]
-            for metric in metrics:
-                cols.append(metric.name + "sim")
-                cols.append(metric.name + "fake_pair")
-                cols.append(metric.name + "fake_sim")
-
-            #df = pd.DataFrame.from_records(data,columns=cols)
-            #df.to_csv(out_path.joinpath('MetricResults').with_suffix('.csv'))
+                for metric in metric_res.keys():
+                    corr_pair,corr_sim,det_mapping,rt = evaluate_sim_metric(metric, corr_pair, fake_tuples, parsed_res, USE_NR_SIM, ALPHA)
+                    metric_res[metric]['rt'] += rt
+                    if det_mapping:
+                        metric_res[metric]['corr_pairs'] += 1
 
             t_total1 = time.time()
 
-            log_row = [SQL_TABLE,MAX_PAIRS,NR_FAKE_PAIRS, str(COMP_NR_SIM),ALPHA]
-
             # the logger takes it in exactly this order
-            for metric in metrics:
-                log_row.append(metrics[metric][0])
-                log_row.append(round(100 * metrics[metric][0] / MAX_PAIRS, 2))
-                log_row.append(round(10000 * metrics[metric][1] / MAX_PAIRS, 4))
+            for metric,res in metric_res.items():
+                new_res_df[f"{metric.name}_corr_pairs"] = res['corr_pairs']
+                new_res_df[f"{metric.name}_percentage"] = round(res['corr_pairs'] / MAX_PAIRS ,3)
 
-            df1 = pd.DataFrame([log_row],columns=new_lex_res.columns)
-            new_lex_res = pd.concat([new_lex_res,df1],ignore_index=True)
+                # The runtime of a lexical metric is calculated in seconds for 10000 pairs
+                new_res_df[f"{metric.name}_runtime"] = round(10000 * res['rt'] / MAX_PAIRS, 4)
+
+            if not new_lex_res.empty:
+                new_lex_res = pd.concat([new_lex_res,new_res_df.to_frame().T],ignore_index=True)
+            else:
+                # Copy first series as DataFrame
+                new_lex_res = pd.DataFrame(new_res_df).T
+
             break
 
-            #next_index = res_log.index.max() + 1 if not res_log.empty else 0
-            #res_log.loc[next_index] = log_row
-    #res_log.to_csv(logging_res_path)
     sql_con.insert_records("LexicalResults",new_lex_res,write_index=False)
 

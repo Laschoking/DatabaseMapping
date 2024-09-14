@@ -29,7 +29,7 @@ class MappingContainer:
         self.final_rec_tuples = dict()
 
         self.mapping_path = paths.mapping_results.joinpath(self.name).with_suffix('.tsv')
-        self.new_term_counter = 0
+        self.syn_counter = 0
         self.expansion_strategy = expansion_strategy
         self.similarity_metric = similarity_metric
 
@@ -135,7 +135,7 @@ class MappingContainer:
         if self.mapping_path.exists():
             df = pd.read_csv(self.mapping_path, sep='\t', header=None)
             # check how many terms have been mapped to synthetic term
-            self.new_term_counter = df[1].str.startswith("new_var").value_counts()
+            self.syn_counter = df[1].str.startswith("new_var").value_counts()
             self.final_mapping = df
         else:
             raise FileNotFoundError(self.mapping_path)
@@ -187,3 +187,13 @@ class MappingContainer:
             else:
                 self.db1_unravelled_results.insert_df(file_name, pd.DataFrame())
                 self.db2_unravelled_results.insert_df(file_name, pd.DataFrame())
+
+
+    def get_finger_print(self) -> dict:
+        return {"expansion" : self.expansion_strategy.name, "dynamic" : str(self.expansion_strategy.DYNAMIC),
+                "anchor_quantile": self.expansion_strategy.anchor_quantile.initial_q, "metric" : self.similarity_metric.name,
+                "importance_weight" : self.similarity_metric.metric_weight}
+
+    def get_result_finger_print(self):
+        return {"synthetic_terms" : self.syn_counter, "hub_computations" : self.c_hub_recomp,
+                 "uncertain_mappings" : self.c_uncertain_mappings, "computed_mappings" : self.c_mappings}

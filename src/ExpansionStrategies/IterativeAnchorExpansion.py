@@ -49,7 +49,7 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                     c_free_terms_db2 -= 1
                 else:
                     # for counting, how many terms are mapped to synthetic values (that do not exist in db2)
-                    mapping.new_term_counter += 1
+                    mapping.syn_counter += 1
         '''
 
         while 1:
@@ -202,9 +202,9 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                 # Map remaining terms to dummy strings
                 for term in terms_db1.values():
                     if term.is_active():
-                        new_term = "new_var_" + str(mapping.new_term_counter)
+                        new_term = "new_var_" + str(mapping.syn_counter)
                         mapping_dict.append((term.name, new_term,0.01))
-                        mapping.new_term_counter += 1
+                        mapping.syn_counter += 1
                         if DEBUG_TERMS or term in debug_set:
                             print(f"added synthetic term ({term.name},{new_term})")
 

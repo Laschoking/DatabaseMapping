@@ -34,7 +34,7 @@ if __name__ == "__main__":
     data = DataContainer(db_config.base_output_path, db_config.db1_path, db_config.db2_path)
 
     # for collecting results
-    global_log = ShellLib.GlobalLogger(data.paths.global_log)
+    global_log = ShellLib.SqlConnector(data.paths.global_log)
     repo = git.Repo(search_parent_directories=True)
     commit = repo.head.object.hexsha
     date = datetime.datetime.now()
@@ -175,7 +175,7 @@ if __name__ == "__main__":
         l_blocked_terms = len(program_config.blocked_terms)
 
         time_tab.add_row(
-            [mapping.name, l_blocked_terms, nr_1_1_mappings, mapping.new_term_counter, mapping.c_hub_recomp,
+            [mapping.name, l_blocked_terms, nr_1_1_mappings, mapping.syn_counter, mapping.c_hub_recomp,
              mapping.c_uncertain_mappings, mapping.c_mappings,
              str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", mapping_rt])
         if COMP_MAPPING:
@@ -183,7 +183,7 @@ if __name__ == "__main__":
                     [date, commit, db_config.full_name, mapping.name, mapping.expansion_strategy.name,
                      mapping.similarity_metric.name, mapping.c_mappings,
                      str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", nr_1_1_mappings,
-                     mapping.new_term_counter, mapping.c_hub_recomp, mapping.c_uncertain_mappings] + res + [mapping_rt])
+                     mapping.syn_counter, mapping.c_hub_recomp, mapping.c_uncertain_mappings] + res + [mapping_rt])
             print(f"expanded anchor nodes: {len(mapping.anchor_nodes[0]),len(mapping.anchor_nodes[1])}")
             print(f"accepted mappings: {mapping.c_accepted_anchor_mappings}")
 
@@ -226,4 +226,4 @@ if __name__ == "__main__":
     print(eval_tab)
 
     # data.log_terms()
-    global_log.save_results()
+    #global_log.save_results()
