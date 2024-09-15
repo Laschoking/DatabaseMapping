@@ -9,8 +9,6 @@ import plotly.graph_objects as go
 from src.Libraries.PathLib import sql_con
 
 pd.options.plotting.backend = "plotly"
-# TODO re-compute all use_nr_sim=False entries, because they were calculcated without numbers
-# TODO maybe insert in the bar diagram, the amount of identical strings for reference
 
 def barplot_nr_use():
     query = '''SELECT resource,use_nr_sim ,SUM(nr_pairs) as MP ,SUM(Equality_corr_pairs) as EQ, SUM(ISUB_corr_pairs) as ISUB, SUM(JaroWinkler_corr_pairs) as JW, 
@@ -23,14 +21,14 @@ def barplot_nr_use():
     df['eq_mp'] = round(100 * df['EQ'] / df['MP'], 3)
 
     res_df = df[['resource','use_nr_sim','avg']]
-    res_df = res_df.replace(to_replace='True',value='with numeric metric')
-    res_df = res_df.replace(to_replace='False',value='without numeric metric')
+    res_df = res_df.replace(to_replace='True',value='All lexical metrics with numeric metric')
+    res_df = res_df.replace(to_replace='False',value='All lexical metrics without numeric metric')
 
 
-    new_df = df.query('use_nr_sim==\"False\"')
+    new_df = df.query('use_nr_sim==\"True\"')
     new_df = new_df[['resource','use_nr_sim','eq_mp']]
     new_df.rename(columns={'eq_mp':'avg'}, inplace=True)
-    new_df['use_nr_sim'] = 'Identical Pairs'
+    new_df['use_nr_sim'] = 'Equal String-Pairs after removing numbers'
     res_df = pd.concat([new_df,res_df])
     res_df.rename(columns={'use_nr_sim': 'Type'},inplace=True)
 
@@ -135,10 +133,10 @@ def barplot_metrics_runtime():
 if __name__ == "__main__":
     barplot_nr_use()
     calc_avg_quality_use_nr_sim()
-    #calc_avg_quality_alpha()
-    #calc_avg_rt_use_nr_sim()
-    #lineplot_fake_pairs_metrics()
-    #lineplot_alpha_metrics()
-    #barplot_metrics_runtime()
+    calc_avg_quality_alpha()
+    calc_avg_rt_use_nr_sim()
+    lineplot_fake_pairs_metrics()
+    lineplot_alpha_metrics()
+    barplot_metrics_runtime()
 
 

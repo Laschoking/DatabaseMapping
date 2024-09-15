@@ -83,7 +83,7 @@ def evaluate_sim_metric(metric, corr_pair, fake_pairs, parsed_res, COMP_NR_SIM,A
 if __name__ == "__main__":
     #############################################################
     # Important constants:
-    SQL_TABLES = ['rename_attribute','rename_variable','rename_class','rename_method','rename_parameter']
+    SQL_TABLES = ['rename_attribute','rename_variable','rename_class','rename_method','rename_parameter'] #
     fake_pairs = [2,4,6,8,10,12]
     alphas = [0.6,0.8,0.95]
     no_nr_use_combinations = [(fp,False,1) for fp in fake_pairs]
@@ -119,7 +119,7 @@ if __name__ == "__main__":
         print(SQL_TABLE)
         t_total0 = time.time()
 
-        query = f"SELECT OldName, NewName FROM {SQL_TABLE}  GROUP BY OldName, NewName LIMIT 10;"
+        query = f"SELECT OldName, NewName FROM {SQL_TABLE}  GROUP BY OldName, NewName;"
         rename_df = lex_data_con.query_table(query)
 
         # Adapt the actual size from qual_res, because it filters & groups
@@ -173,7 +173,7 @@ if __name__ == "__main__":
             # the logger takes it in exactly this order
             for metric,res in metric_res.items():
                 new_res_df[f"{metric.name}_corr_pairs"] = res['corr_pairs']
-                new_res_df[f"{metric.name}_percentage"] = round(res['corr_pairs'] / MAX_PAIRS ,3)
+                new_res_df[f"{metric.name}_percentage"] = round(100 * res['corr_pairs'] / MAX_PAIRS ,3)
 
                 # The runtime of a lexical metric is calculated in seconds for 10000 pairs
                 new_res_df[f"{metric.name}_runtime"] = round(10000 * res['rt'] / MAX_PAIRS, 4)
@@ -184,7 +184,4 @@ if __name__ == "__main__":
                 # Copy first series as DataFrame
                 new_lex_res = pd.DataFrame(new_res_df).T
 
-            break
-
     sql_con.insert_records("LexicalResults",new_lex_res,write_index=False)
-
