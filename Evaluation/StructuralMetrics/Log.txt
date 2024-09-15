@@ -12,7 +12,18 @@ file: noark-game-_3.4.0-Final_3.4.0-Final_copy
 file: Simple_Pointer_v1_v1_copy
 --------------------------
 static_Iterative-NodeDegree
-Traceback (most recent call last):
-  File "/home/kotname/Documents/Diplom/Code/DatabaseMapping/Evaluation/StructuralMetrics/EvaluateStructuralMetrics.py", line 116, in <module>
-    new_mapping.set_index("mapping_id", inplace=True)
-KeyboardInterrupt
+expanded anchor nodes: (281, 281)
+accepted mappings: 281
+unique_records_db1    object
+unique_records_db2    object
+common_records        object
+overlap_perc          object
+synthetic_terms       object
+hub_computations      object
+uncertain_mappings    object
+computed_mappings     object
+mapping_id            object
+db_config_id          object
+max_tuples            object
+runtime               object
+dtype: object

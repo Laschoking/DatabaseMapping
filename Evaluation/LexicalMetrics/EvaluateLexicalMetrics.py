@@ -111,6 +111,7 @@ if __name__ == "__main__":
         cols.append(metric.name + "_percentage")
         cols.append(metric.name + "_runtime")
 
+
     existing_lex_res = sql_con.get_table("LexicalResults")
     new_lex_res = pd.DataFrame(columns=cols)
 
@@ -122,7 +123,7 @@ if __name__ == "__main__":
         query = f"SELECT OldName, NewName FROM {SQL_TABLE}  GROUP BY OldName, NewName;"
         rename_df = lex_data_con.query_table(query)
 
-        # Adapt the actual size from qual_res, because it filters & groups
+        # Adapt the actual size from str_res, because it filters & groups
         MAX_PAIRS = len(rename_df)
         parsed_res = dict()
 
@@ -140,12 +141,13 @@ if __name__ == "__main__":
             parsed_res[term_name2] = (red_name2,nrs2)
 
         for (NR_FAKE_PAIRS, USE_NR_SIM, ALPHA) in combinations:
-            new_res_df = pd.Series({'resource' : SQL_TABLE,'nr_pairs' : MAX_PAIRS, 'nr_fake_pairs' : NR_FAKE_PAIRS,
+            new_res = pd.Series({'resource' : SQL_TABLE, 'nr_pairs' : MAX_PAIRS, 'nr_fake_pairs' : NR_FAKE_PAIRS,
                                  'use_nr_sim' : str(USE_NR_SIM),'ALPHA' : ALPHA})
+            # Convert the bool USE_NR_SIM to string, because comparison with df is difficult due to data-type issues
 
-            # Check if combination was already computed
+            # Skip this combination, if it was already computed for the database
             reduced_df = existing_lex_res[['resource','nr_pairs','nr_fake_pairs','use_nr_sim','ALPHA']]
-            if reduced_df.eq(new_res_df).all(axis=1).any():
+            if reduced_df.eq(new_res).all(axis=1).any():
                 continue
             print(f"calculate combination:{SQL_TABLE,MAX_PAIRS,NR_FAKE_PAIRS,str(USE_NR_SIM),ALPHA}")
 
@@ -172,16 +174,16 @@ if __name__ == "__main__":
 
             # the logger takes it in exactly this order
             for metric,res in metric_res.items():
-                new_res_df[f"{metric.name}_corr_pairs"] = res['corr_pairs']
-                new_res_df[f"{metric.name}_percentage"] = round(100 * res['corr_pairs'] / MAX_PAIRS ,3)
+                new_res[f"{metric.name}_corr_pairs"] = res['corr_pairs']
+                new_res[f"{metric.name}_percentage"] = round(100 * res['corr_pairs'] / MAX_PAIRS, 3)
 
                 # The runtime of a lexical metric is calculated in seconds for 10000 pairs
-                new_res_df[f"{metric.name}_runtime"] = round(10000 * res['rt'] / MAX_PAIRS, 4)
+                new_res[f"{metric.name}_runtime"] = round(10000 * res['rt'] / MAX_PAIRS, 4)
 
             if not new_lex_res.empty:
-                new_lex_res = pd.concat([new_lex_res,new_res_df.to_frame().T],ignore_index=True)
+                new_lex_res = pd.concat([new_lex_res, new_res.to_frame().T], ignore_index=True)
             else:
                 # Copy first series as DataFrame
-                new_lex_res = pd.DataFrame(new_res_df).T
+                new_lex_res = pd.DataFrame(new_res).T
 
     sql_con.insert_records("LexicalResults",new_lex_res,write_index=False)

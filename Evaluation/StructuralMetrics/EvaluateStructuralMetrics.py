@@ -12,34 +12,21 @@ from src.Libraries.EvaluateMappings import *
 from src.StructuralSimilarityMetrics.DynamicRecordTupleCount import DynamicRecordTupleCount
 from src.StructuralSimilarityMetrics.JaccardIndex import JaccardIndex
 from src.StructuralSimilarityMetrics.NodeDegree import NodeDegree
-
-from src.Libraries import ShellLib
-
 import pandas as pd
-import sqlite3
 
-# TODO adjust mapping_id
 
 if __name__ == "__main__":
     # Retrieve relevant data from Database
     query = "SELECT * FROM  DbConfig WHERE Use=\"structural-evaluation\";"
     db_config_df = sql_con.query_table(query, ind_col='db_config_id')
+    new_mappings_df = pd.DataFrame()
+    existing_mappings_df = sql_con.get_table('MappingSetup')
+    #existing_mappings_df.set_index("mapping_id", inplace=True)
 
-    #mapping_df = pd.DataFrame(columns=["mapping_id", "expansion", "anchor_quantile", "metric", "importance_weight",
-    #"commit_SHA"])
-    #mapping_df.set_index("mapping_id", inplace=True)
+    result_df = pd.DataFrame(columns=["mapping_id", "db_config_id", "unique_records_db1", "unique_records_db2",
+                                      "common_records","overlap_perc", "synthetic_terms", "hub_computations",
+                                      "uncertain_mappings", "computed_mappings", "max_tuples", "runtime"])
 
-    mapping_df = sql_con.get_table('MappingSetup')
-    mapping_df.set_index("mapping_id", inplace=True)
-
-    res_df = pd.DataFrame(
-        columns=["mapping_id", "db_config_id", "unique_records_db1", "unique_records_db2", "common_records",
-                 "overlap_perc", "synthetic_terms", "hub_computations",
-                 "uncertain_mappings", "computed_mappings", "max_tuples", "runtime"])
-
-    # Detect current commit for logging
-    repo = git.Repo(search_parent_directories=True)
-    commit = repo.head.object.hexsha
 
     for db_identifier, db_pair in db_config_df.iterrows():
         print(f"file: {db_identifier}")
@@ -105,33 +92,35 @@ if __name__ == "__main__":
             mapping.log_mapping()
             mapping.db_merged_facts.log_db_relations()
 
-            mapping_setup = mapping.get_finger_print()
-            mapping_setup |= {"commit_SHA" : commit,'mapping_id' : 1}
-            #new_mapping = pd.DataFrame({k: [v] for k, v in mapping_setup.items()})
-            new_mapping = pd.Series(mapping_setup)
-            # If mapping_setup is not in the DB already, mark it for insertion (with next Id number)
-            if mapping_df.eq(new_mapping).all(axis=1).any():
-                print("xx")
+            new_mapping = pd.Series(mapping.get_finger_print())
 
-            new_mapping.set_index("mapping_id", inplace=True)
+            # If mapping_setup is in the DB already, use the existing Mapping_Identifier
+            matches = existing_mappings_df[['expansion','anchor_quantile','importance_weight','dynamic','metric']].eq(new_mapping).all(axis=1)
+            if matches.any():
+                # The index which has the match is exactly the mapping_id we are looking for
+                mapping_id = matches.idxmax()
+            else:
+                # Add new entry for mapping_df
+                mapping_id = len(existing_mappings_df)
+                new_mapping['mapping_id'] = mapping_id
+                if not existing_mappings_df.empty:
+                    new_mappings_df = pd.concat([existing_mappings_df, new_mapping.to_frame().T], ignore_index=True)
+                else:
+                    # Copy first series as DataFrame
+                    new_mappings_df = pd.DataFrame(new_mapping).T
 
-            mapping_df = pd.concat([mapping_df,new_mapping],ignore_index=False)
 
 
-            # Insert mapping_setup into df, if it does not exist yet
+            # Save quality results for the insertion into the StructuralEvaluation table
+            str_res = count_overlap_merge_db(mapping.db_merged_facts)
+            str_res |= mapping.get_result_finger_print()
+            str_res |= {"mapping_id" : mapping_id, "db_config_id" : db_identifier, "max_tuples" : c_max_tuples, "runtime": mapping_rt}
 
-            # Insert quality results into the evaluation table
-            qual_res = count_overlap_merge_db(mapping.db_merged_facts)
-            qual_res |= mapping.get_result_finger_print()
-            qual_res |= {"mapping_id" : 1, "db_config_id" : db_identifier, "max_tuples" : c_max_tuples, "runtime": mapping_rt}
-
-            new_rec = pd.DataFrame({k: [v] for k, v in qual_res.items()})
-            #new_rec.set_index("mapping_id", inplace=True)
-
-            res_df = pd.concat([res_df, new_rec], ignore_index=False)
-
-            l_blocked_terms = 0
-
+            new_result = pd.Series(str_res)
+            if not result_df.empty:
+                result_df = pd.concat([result_df, new_result.to_frame().T], ignore_index=False)
+            else:
+                result_df = pd.DataFrame(new_result).T
 
             print(f"expanded anchor nodes: {len(mapping.anchor_nodes[0]), len(mapping.anchor_nodes[1])}")
             print(f"accepted mappings: {mapping.c_accepted_anchor_mappings}")
@@ -142,8 +131,11 @@ if __name__ == "__main__":
                     wrong_mappings.append(list(rec[:-1]))
 
             # print(wrong_mappings)
+            break
 
         # Evaluation function to analyse if the mapping reduces storage
-        sql_con.insert_records("MappingSetup", mapping_df,write_index=True)
-        sql_con.insert_records("StructuralResults", res_df,write_index=False)
+        print(result_df.dtypes)
+        if not new_mappings_df.empty:
+            sql_con.insert_records("MappingSetup", new_mappings_df, write_index=False)
+        sql_con.insert_records("StructuralResults", result_df.astype(str), write_index=False)
 
