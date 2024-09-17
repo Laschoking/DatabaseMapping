@@ -95,7 +95,7 @@ def count_overlap_merge_db(merge_db) -> [int,int,int,float]:
     for df in merge_db.files.values():
         if df.empty:
             continue
-        # access last column that holds db_identifier for each record
+        # access last column that holds db_config_id for each record
         val_count = df.iloc[:, -1].value_counts()
         ind = val_count.index
         if '1' in ind:

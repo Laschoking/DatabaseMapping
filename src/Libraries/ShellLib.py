@@ -5,18 +5,24 @@ from src.Libraries import PathLib
 import shutil
 import subprocess
 from prettytable import PrettyTable
+
 import pandas as pd
 from sqlalchemy import create_engine,text
 
 # Shell commands
 def clear_directory(directory):
-    if directory.exists():
+    if directory.is_dir():
         shutil.rmtree(str(directory))
+        # check if this removes anchor
     os.system("mkdir -p " + str(directory))
 
 def clear_file(file_path):
-    if file_path.exists():
+    if file_path.is_file():
         os.remove(file_path)
+    dir = file_path.parent
+    if not dir.is_dir():
+        os.system("mkdir -p " + str(dir))
+
 
 
 def init_synth_souffle_database(db_config, db_name, fact_path,force_gen):
@@ -28,12 +34,12 @@ def init_synth_souffle_database(db_config, db_name, fact_path,force_gen):
         raise ChildProcessError(p.stderr.decode("utf-8"))
 
 
-def create_input_facts(db_config, db_dir_name, db_file_name, fact_path,force_gen):
+def create_input_facts(db_config, db_version, db_dir_name, fact_path, force_gen):
     if db_config.db_type == "DoopProgramAnalysis":
-        create_doop_facts(db_config, db_dir_name, db_file_name, fact_path,force_gen)
+        create_doop_facts(db_config, db_version, db_dir_name, fact_path, force_gen)
     elif db_config.db_type == "SouffleSynthetic":
-        init_synth_souffle_database(db_config, db_dir_name, fact_path,force_gen)
-    print("initialized database: " + db_dir_name)
+        init_synth_souffle_database(db_config, db_version, fact_path, force_gen)
+    print("initialized database: " + db_version)
 
 
 def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen):
@@ -46,16 +52,15 @@ def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen)
         db_file_name + ".jar")
     jar_path2 = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_version).joinpath(
         db_file_name + db_version + ".jar")
-    if os.path.isfile(java_path):
-        os.system("bin/mkjar " + str(java_path)
-                  + " 1.8 " + str(jar_path1.parents[0]))  # + ">/dev/null 2>&1")
-    else:
-        print("No Java-file found, use .jar ")
 
-    if os.path.isfile(jar_path1):
-        jar_path = jar_path1
-    elif os.path.isfile(jar_path2):
-        jar_path = jar_path2
+    # Check if .java file exists
+    if not os.path.isfile(java_path):
+        java_path = None
+    # Otherwise check if .jar exists
+    if not java_path and os.path.isfile(jar_path1):
+        java_path = jar_path1
+    elif not java_path and os.path.isfile(jar_path2):
+        java_path = jar_path2
     else:
         raise FileNotFoundError("Java & Jar File do not exist: \n" + str(java_path) + "\n"+ str(jar_path1) + "\n"+ str(jar_path2))
 
@@ -70,9 +75,8 @@ def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen)
     # Only run DOOP, if no output with doop_out_name exists
     if not any(doop_out_path.iterdir()) or force_gen:
         # Run DOOP to generate new facts for given java or jar
-        os.system(f"./doop -a context-insensitive -i {jar_path} --id {doop_out_name} --facts-only --Xfacts-subset"
+        os.system(f"./doop -a context-insensitive -i {java_path} --id {doop_out_name} --facts-only --Xfacts-subset"
               f" APP --cache --generate-jimple ")
-              #f"--platform java_11 --use-local-java-platform /home/kotname/.sdkman/candidates/java/current/bin/java")
 
     if not doop_out_path.is_dir():
         raise FileNotFoundError(f"the doop-facts do not exist: {PathLib.DOOP_OUT.joinpath(doop_out_name)}")

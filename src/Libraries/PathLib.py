@@ -20,9 +20,6 @@ lex_eval_db = eval_dir.joinpath("SCAM2019.sqlite")
 eval_db_path = eval_dir.joinpath('Evaluation.db')
 sql_con = SqlConnector.SqlConnector(eval_db_path)
 
-#db_configs = base_diff_path.joinpath("src").joinpath("Config_Files").joinpath("DbConfig.csv")
-#db_config_df = pd.read_csv(db_configs,index_col='DbConfig_Id')
-
 
 SOUFFLE_ANALYSIS_BASE = Path("/home/kotname/Documents/Diplom/Code/ex_souffle/Analysis")
 DOOP_PA_BASE = Path("/home/kotname/Documents/Diplom/Code/DiffAnalysis/Datalog-Programs/DoopProgramAnalysis")

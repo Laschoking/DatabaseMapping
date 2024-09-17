@@ -5,10 +5,9 @@ from src.Classes.Terms import Mapping
 
 
 class ExpansionStrategy:
-    def __init__(self,name,anchor_quantile,sim_outlier,DYNAMIC):
+    def __init__(self,name,anchor_quantile,DYNAMIC):
         self.name = name
         self.anchor_quantile = anchor_quantile
-        self.sim_outlier = sim_outlier
         self.DYNAMIC = DYNAMIC
 
 
@@ -85,7 +84,7 @@ class ExpansionStrategy:
 
             sim = new_mapping.compute_similarity()
             exp_mappings.add((term1, term2))
-            if sim > -0.5:
+            if sim > 0:
                 # Insert mapping into priority_queue
                 if DEBUG_TERMS or term1 in debug_set or term2 in debug_set:
                     print(f"expanded tuple: {new_mapping.term1.name},{new_mapping.term2.name}, sim: {sim}")

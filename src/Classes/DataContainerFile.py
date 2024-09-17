@@ -23,6 +23,7 @@ class DbInstance:
                 df = pd.read_csv(rel_path, sep='\t', keep_default_na=False, dtype='string', header=None,
                                  on_bad_lines='warn')
             self.insert_df(file_name, df)
+        return self
 
     def insert_df(self, file_name, df):
         self.files[file_name] = df
@@ -63,6 +64,9 @@ class DataContainer:
 
     def add_mapping(self, mapping):
         self.mappings.append(mapping)
+
+    def add_mappings(self, mappings):
+        self.mappings += mappings
 
     def log_terms(self):
         terms_db1_df = pd.Series(self.terms_db1.keys())

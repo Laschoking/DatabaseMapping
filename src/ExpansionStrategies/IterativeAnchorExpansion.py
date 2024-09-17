@@ -1,17 +1,16 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from sortedcontainers import SortedDict,SortedList,SortedSet
-from src.Config_Files.Debug_Flags import DEBUG_TERMS, debug_set,HUB_RECOMPUTE, PLOT_STATISTICS
+from src.Config_Files.Debug_Flags import DEBUG_TERMS, DEBUG_RECORDS, debug_set,HUB_RECOMPUTE, PLOT_STATISTICS
 from src.Classes.ExpansionStrategy import  ExpansionStrategy
 import src.Classes.Terms
 
 class IterativeAnchorExpansion(ExpansionStrategy):
-    def __init__(self,anchor_quantile,sim_outlier,DYNAMIC):
-        super().__init__("Iterative",anchor_quantile,sim_outlier,DYNAMIC)
+    def __init__(self,anchor_quantile,DYNAMIC):
+        super().__init__("Iterative",anchor_quantile,DYNAMIC)
 
 
-    def accept_expand_mappings(self,mapping, terms_db1, terms_db2, blocked_terms,
-                                   similarity_metric):
+    def accept_expand_mappings(self,mapping, terms_db1, terms_db2, blocked_terms,similarity_metric):
         self.anchor_quantile.reset_quantile() # Reset quantile since it is a shared object with other MappingContainers
         prio_dict = SortedList()
 
@@ -28,10 +27,6 @@ class IterativeAnchorExpansion(ExpansionStrategy):
         # Logging variables
         w_prio_len, w_exp_sim, mapped_sims = [], [], []
 
-
-        # This flag makes sure, that if the hub computation does not find better mappings, the next mapping
-        # will be accepted, nonetheless its bad score
-        bad_sim_selected = HUB_RECOMPUTE
         # Flag to signalise the detection of new anchor mappings
         new_anchor_mappings = True
 
@@ -54,25 +49,10 @@ class IterativeAnchorExpansion(ExpansionStrategy):
 
         while 1:
             if prio_dict and not new_anchor_mappings:
-                # The last bag in prio_dict has the highest similarity
-                #print(prio_dict)
+                # The prio_dict is sorted in ascending order, so the last value has the highest similarity
                 accepted_mapping = prio_dict.pop(index=-1)
-                #print(prio_dict)
 
-                sim = accepted_mapping.get_similarity()
-
-                # Check if the similarity-value is no outlier of the existing distribution
-                if HUB_RECOMPUTE and mapped_sims and not bad_sim_selected:
-                    low_outlier_th = self.sim_outlier.calc_low_outlier_th(mapped_sims)
-                    if sim < low_outlier_th:
-                        # Trigger new anchor term mappings and put mapping back to prio_dict
-                        new_anchor_mappings = True
-                        prio_dict[sim].append(accepted_mapping)
-                        if DEBUG_TERMS: print(f"denied mapping with sim: {sim}")
-                        bad_sim_selected = True
-                        continue
-
-                # The similarity value was not rejected, so update & expand its neighbourhood
+                # Update & expand its neighbourhood
                 accepted_sim = accepted_mapping.get_similarity()
                 if DEBUG_TERMS or accepted_mapping in debug_set:
                     print("-----------------------------")
@@ -159,16 +139,13 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                 if not prio_dict:
                     new_anchor_mappings = True
 
-                # Allow new Anchor-Computation
-                if bad_sim_selected:
-                    bad_sim_selected = False
-                    # print("now accepted: " + str(mapped_sim))
-
                 w_prio_len.append(len(prio_dict))
 
 
             # Find anchor mappings if some terms are still vacant
             elif c_free_terms_db1 > 0 and c_free_terms_db2 > 0 and new_anchor_mappings:
+                if DEBUG_TERMS or DEBUG_RECORDS:
+                    print(f"Find new hubs: {c_free_terms_db1}")
                 new_anchor_mappings = False  # idea is to only find new hubs if in last iteration at least 1 mapping was added
                 mapping.c_hub_recomp += 1
 
@@ -191,11 +168,8 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                     self.anchor_quantile.double_quantile()
                     new_anchor_mappings = True
 
-
-
                 w_prio_len.append(len(prio_dict))
 
-                # TODO should processed mappings include sim=0 mappings?
 
             # Exit Strategy
             else:
@@ -208,7 +182,7 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                         if DEBUG_TERMS or term in debug_set:
                             print(f"added synthetic term ({term.name},{new_term})")
 
-                # Make quality check if each term1 received mapping
+                # Make quality check if each element in DB1 received mapping
                 if len(mapping_dict) != len(terms_db1):
                     print(len(mapping_dict))
                     print(len(terms_db1))
