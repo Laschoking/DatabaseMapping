@@ -1,0 +1,2 @@
+SELECT MappingSetup.mapping_id,MappingSetup.metric,MappingSetup.dynamic,StructuralResults.hub_computations from MappingSetup
+INNER JOIN StructuralResults ON MappingSetup.mapping_id=StructuralResults.mapping_id;
