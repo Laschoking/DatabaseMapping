@@ -86,7 +86,7 @@ def lineplot_alpha_metrics():
         new_avg_list.append(metric + "_avg")
 
     df = df.melt(id_vars=['ALPHA'],value_vars=new_avg_list,value_name='precision',var_name='metric')
-    #fig = px.box(df,x='nr_fake_pairs',y='metric_res')
+    #fig = px.box(res_df,x='nr_fake_pairs',y='metric_res')
     #fig.write_image("plots/fake_pair_box_plots.png")
 
     #fig.show()
@@ -107,7 +107,7 @@ def lineplot_fake_pairs_metrics():
         new_avg_list.append(metric + "_avg")
 
     df = df.melt(id_vars=['nr_fake_pairs'],value_vars=new_avg_list,value_name='precision',var_name='metric')
-    #fig = px.box(df,x='nr_fake_pairs',y='metric_res')
+    #fig = px.box(res_df,x='nr_fake_pairs',y='metric_res')
     #fig.write_image("plots/fake_pair_box_plots.png")
 
     #fig.show()
@@ -129,8 +129,20 @@ def barplot_metrics_runtime():
     fig.show()
     fig.write_image("plots/metric_runtime_avg.png")
     
+def barplot_dice_qgram_by_resource():
+    query = '''SELECT resource,nr_pairs, QGram_corr_pairs as QGRAM, Dice_corr_pairs as DICE, ISUB_corr_pairs as ISUB  
+        FROM LexicalResults WHERE ALPHA=0.95 AND use_nr_sim="True" AND nr_fake_pairs=12;'''
+    df = sql_con.query_table(query)
+    df1 = df.melt(id_vars=['resource','nr_pairs'],value_vars=['QGRAM','DICE','ISUB'], var_name='Metric',value_name='corr_pairs')
+    df1['avg'] = df1['corr_pairs'] * 100 / df1['nr_pairs']
 
+
+    # Bar plot
+    fig = px.bar(df1,x="resource",y="avg",barmode="group",color="Metric")
+    fig.show()
+    #fig.write_image("plots/grouped_bars_top_metric.png")
 if __name__ == "__main__":
+
     barplot_nr_use()
     calc_avg_quality_use_nr_sim()
     calc_avg_quality_alpha()
@@ -138,5 +150,7 @@ if __name__ == "__main__":
     lineplot_fake_pairs_metrics()
     lineplot_alpha_metrics()
     barplot_metrics_runtime()
+
+    barplot_dice_qgram_by_resource()
 
 

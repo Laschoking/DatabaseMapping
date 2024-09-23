@@ -28,10 +28,11 @@ class DbInstance:
     def insert_df(self, file_name, df):
         self.files[file_name] = df
 
-    def log_db_relations(self):
+    def log_db_relations(self,run_nr):
         ShellLib.clear_directory(self.path)
         for file_name, df in self.files.items():
-            df.to_csv(self.path.joinpath(file_name).with_suffix('.tsv'), sep="\t", index=False, header=False)
+            df.to_csv(self.path.joinpath(file_name + "_" + str(run_nr)).with_suffix('.tsv'), sep="\t",
+                      index=False, header=False)
 
 
 class BasePaths:

@@ -1,18 +1,74 @@
-file: lattice-maven-build-model-_1.0.17_1.0.17_copy
-file: lattice-maven-build-model-_1.0.18.7_1.0.18.7_copy
-file: bit-lib_4j-1.4_4j-1.4_copy
-file: bit-lib_4j-1.4.13_4j-1.4.13_copy
---------------------------
-static_Iterative-DynamicJaccard
-file: bit-lib_4j-1.5.2_4j-1.5.2_copy
---------------------------
-static_Iterative-DynamicJaccard
-file: jamm-_0.3.0_0.3.0_copy
---------------------------
-static_Iterative-DynamicJaccard
-file: jamm-_0.3.3_0.3.3_copy
---------------------------
-static_Iterative-DynamicJaccard
-file: jamm-_0.4.0_0.4.0_copy
+file: jcl-over-slf_4j-2.0.0_4j-2.0.0_copy
+/home/kotname/Documents/Diplom/Code/DatabaseMapping/src/Classes/DataContainerFile.py:23: ParserWarning: Skipping line 23: expected 6 fields, saw 7
+
+  df = pd.read_csv(rel_path, sep='\t', keep_default_na=False, dtype='string', header=None,
+file: akka-slf_4j_2.10-2.1.0_4j_2.10-2.1.0_copy
+/home/kotname/Documents/Diplom/Code/DatabaseMapping/src/Classes/DataContainerFile.py:23: ParserWarning: Skipping line 23: expected 6 fields, saw 7
+
+  df = pd.read_csv(rel_path, sep='\t', keep_default_na=False, dtype='string', header=None,
 --------------------------
 static_Iterative-NodeDegree
+Run number: 1
+Run number: 2
+Run number: 3
+Run number: 4
+Run number: 5
+--------------------------
+static_Iterative-DynamicJaccard
+Run number: 1
+Run number: 2
+Run number: 3
+Run number: 4
+Run number: 5
+--------------------------
+static_Iterative-EdgeCount
+Run number: 1
+Run number: 2
+Run number: 3
+Run number: 4
+Run number: 5
+--------------------------
+dynamic_Iterative-NodeDegree
+Run number: 1
+Run number: 2
+Run number: 3
+Run number: 4
+Run number: 5
+--------------------------
+dynamic_Iterative-DynamicJaccard
+Run number: 1
+Run number: 2
+Run number: 3
+Run number: 4
+Run number: 5
+--------------------------
+dynamic_Iterative-EdgeCount
+Run number: 1
+Run number: 2
+Run number: 3
+Run number: 4
+Run number: 5
+file: mapstruct-_1.0.0.Final_1.0.0.Final_copy
+file: lattice-maven-build-model-_1.0.17_1.0.17_copy
+file: aws-lambda-java-log_4j2-1.0.0_4j2-1.0.0_copy
+file: bit-lib_4j-1.4_4j-1.4_copy
+--------------------------
+static_Iterative-NodeDegree
+Run number: 1
+--------------------------
+static_Iterative-DynamicJaccard
+Run number: 1
+--------------------------
+static_Iterative-EdgeCount
+Run number: 1
+--------------------------
+dynamic_Iterative-NodeDegree
+Run number: 1
+--------------------------
+dynamic_Iterative-DynamicJaccard
+Run number: 1
+--------------------------
+dynamic_Iterative-EdgeCount
+Run number: 1
+file: dropwizard-util-_3.0.0_3.0.0_copy
+file: play-logback__2.13-2.8.21_2.13-2.8.21_copy

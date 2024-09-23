@@ -5,6 +5,7 @@ from src.Classes.DataContainerFile import DbInstance
 from src.Classes import Terms, Records
 from src.Libraries import ShellLib
 from operator import attrgetter
+import copy
 
 # each MappingContainer has a Strategy and a similarity metric
 class MappingContainer:
@@ -51,6 +52,7 @@ class MappingContainer:
     def init_records_terms_db2(self, db2):
         max_deg2 = self.init_records_terms_db(db2, self.terms_db2, self.records_db2)
         self.similarity_metric.max_deg2 = max_deg2
+
 
     # terms and records need to be initialised together because term.occurrences points to record_obj 
     # and record.terms points to term
@@ -141,9 +143,10 @@ class MappingContainer:
             raise FileNotFoundError(self.mapping_path)
 
     # write mapping results to CSV file
-    def log_mapping(self):
+    def log_mapping(self,run_nr):
         ShellLib.clear_file(self.mapping_path)
-        self.final_mapping.to_csv(self.mapping_path, sep='\t', index=False, header=False)
+        mapping_path = self.add_run_nr_to_path(file_path=self.mapping_path, run_nr=run_nr)
+        self.final_mapping.to_csv(mapping_path, sep='\t', index=False, header=False)
 
     def merge_dbs(self, db1, db2, to_db):
         for file_name in db1.files.keys():
@@ -197,3 +200,10 @@ class MappingContainer:
     def get_result_finger_print(self):
         return {"synthetic_terms" : self.syn_counter, "hub_computations" : self.c_hub_recomp,
                  "uncertain_mappings" : self.c_uncertain_mappings, "computed_mappings" : self.c_mappings}
+
+    def add_run_nr_to_path(self, file_path, run_nr):
+        stem = file_path.stem
+        suffix = file_path.suffix
+        new_stem = f"{stem}_{run_nr}"
+        return file_path.with_name(new_stem).with_suffix(suffix)
+

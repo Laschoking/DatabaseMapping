@@ -4,6 +4,7 @@ from pathlib import Path
 import shutil
 import subprocess
 from prettytable import PrettyTable
+from src.Libraries.PandasUtility import is_series_in_df,add_series_to_df
 import pandas as pd
 import re
 import shutil
@@ -12,6 +13,20 @@ from src.Config_Files.Analysis_Configs import DbConfig
 from src.Libraries import ShellLib,PathLib
 from src.Classes import DataContainerFile
 from src.Libraries.PathLib import sql_con
+import subprocess
+
+
+def get_jar_size(jar_file_path):
+    if os.path.isfile(jar_file_path):
+        # Get the size of the JAR file in bytes
+        file_size = os.path.getsize(jar_file_path)
+
+        # Convert the size to more readable formats (KB, MB)
+        file_size_kb = file_size / 1024
+        print(jar_file_path,file_size_kb)
+        return file_size_kb
+
+
 def retrieve_mvn_jars(MVN_PATH):
     jars = dict()
     for file in MVN_PATH.glob("*.jar"):
@@ -30,6 +45,7 @@ def create_dir(file_name,versions,MVN_PATH,db_config_df):
     JAVA_PATH = PathLib.java_source_dir
     dir = JAVA_PATH.joinpath(file_name)
     df_new_params = pd.DataFrame()
+    found_id_pair = False
 
     if not dir.is_dir():
         dir.mkdir()
@@ -54,9 +70,15 @@ def create_dir(file_name,versions,MVN_PATH,db_config_df):
             # Copy files from db1 to the copy at db1_copy
             shutil.copytree(data.db1_original_facts.path,data.db2_original_facts.path,dirs_exist_ok=True)
 
+            # Jars of >20kb are difficult to evaluate exhaustively
+            if get_jar_size(jar) > 20:
+                continue
+            found_id_pair = True
             # Insert combination into DbConfig, if it does not exist there:
-            if not db_config_df.eq(id_db_config).all(axis=1).any():
-                sql_con.add_series_to_df(series=id_db_params,df=df_new_params)
+            if not is_series_in_df(series=id_db_params, df=db_config_df) and not found_id_pair:
+                df_new_params = add_series_to_df(series=id_db_params,df=df_new_params)
+                # We only want 1 test-file per library
+
 
         except FileNotFoundError:
             print(f"failed to generate facts from jar: {id_db_config.dir_name} version: {id_db_config.db1_name}")
@@ -80,14 +102,14 @@ def create_dir(file_name,versions,MVN_PATH,db_config_df):
             # TODO order the files s.t. db1 is the smaller one!
 
             # Insert combination into DbConfig, if it does not exist there:
-            if not db_config_df.eq(db_config).all(axis=1).any():
-                sql_con.add_series_to_df(series=db_params,df=df_new_params)
+            if not is_series_in_df(series=db_params, df=db_config_df):
+                df_new_params = add_series_to_df(series=db_params,df=df_new_params)
 
         except FileNotFoundError:
             print(f"failed to generate facts from jar: {db_config.dir_name} version: {db_config.db1_name} or {db_config.db2_name}")
 
     if not df_new_params.empty:
-        sql_con.insert_df('DbConfig', df_new_params)
+        sql_con.insert_df('DbConfig', df_new_params,write_index=False)
 
 
 

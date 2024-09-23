@@ -83,7 +83,7 @@ def evaluate_sim_metric(metric, corr_pair, fake_pairs, parsed_res, COMP_NR_SIM,A
 if __name__ == "__main__":
     #############################################################
     # Important parameters:
-    SQL_TABLES = ['rename_attribute','rename_variable','rename_class','rename_method','rename_parameter'] #
+    SQL_TABLES = ['rename_class','rename_attribute','rename_variable','rename_method','rename_parameter']
     fake_pairs = [2,4,6,8,10,12]
     alphas = [0.6,0.8,0.95]
     no_nr_use_combinations = [(fp,False,1) for fp in fake_pairs]
@@ -143,7 +143,7 @@ if __name__ == "__main__":
         for (NR_FAKE_PAIRS, USE_NR_SIM, ALPHA) in combinations:
             new_res = pd.Series({'resource' : SQL_TABLE, 'nr_pairs' : MAX_PAIRS, 'nr_fake_pairs' : NR_FAKE_PAIRS,
                                  'use_nr_sim' : str(USE_NR_SIM),'ALPHA' : ALPHA})
-            # Convert the bool USE_NR_SIM to string, because comparison with df is difficult due to data-type issues
+            # Convert the bool USE_NR_SIM to string, because comparison with res_df is difficult due to data-type issues
 
             # Skip this combination, if it was already computed for the database
             reduced_df = existing_lex_res[['resource','nr_pairs','nr_fake_pairs','use_nr_sim','ALPHA']]
@@ -162,7 +162,7 @@ if __name__ == "__main__":
                 log_it += 1
                 if log_it % 10000 == 0:
                     print(f"evaluated {log_it} pairs")
-                #row = [corr_pair,0]
+
                 fake_tuples = get_fake_tuples(corr_pair,log_it, rename_df, NR_FAKE_PAIRS)
                 for metric in metric_res.keys():
                     corr_pair,corr_sim,det_mapping,rt = evaluate_sim_metric(metric, corr_pair, fake_tuples, parsed_res, USE_NR_SIM, ALPHA)

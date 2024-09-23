@@ -49,7 +49,7 @@ def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen)
     java_path = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_version).joinpath(
         db_file_name + ".java")
     jar_path1 = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_version).joinpath(
-        db_file_name + ".jar")
+        db_version + ".jar")
     jar_path2 = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_version).joinpath(
         db_file_name + db_version + ".jar")
 
@@ -69,14 +69,14 @@ def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen)
     doop_out_path = PathLib.DOOP_OUT.joinpath(doop_out_name).joinpath("database")
 
     # Skip fact-generation, if the target directory contains facts already
-    if any(fact_path.iterdir()) and not force_gen:
+    if not fact_path.exists() and fact_path.is_dir() and any(fact_path.iterdir()) and not force_gen:
         return
 
     # Only run DOOP, if no output with doop_out_name exists
-    if not any(doop_out_path.iterdir()) or force_gen:
+    if not doop_out_path.exists() or not doop_out_path.is_dir() or not any(doop_out_path.iterdir()) or force_gen:
         # Run DOOP to generate new facts for given java or jar
         os.system(f"./doop -a context-insensitive -i {java_path} --id {doop_out_name} --facts-only --Xfacts-subset"
-              f" APP --cache --generate-jimple ")
+              f" APP --cache --generate-jimple --platform java_8")
 
     if not doop_out_path.is_dir():
         raise FileNotFoundError(f"the doop-facts do not exist: {PathLib.DOOP_OUT.joinpath(doop_out_name)}")
@@ -125,3 +125,10 @@ def print_nemo_runtime(runtime):
     t.add_rows(runtime)
     print(t)
 
+
+def count_facts_in_dir(dir):
+    l = 0
+    for file in dir.glob("*.tsv"):
+        with open(file, 'rb') as f:
+            l += len(f.readlines())
+    return l

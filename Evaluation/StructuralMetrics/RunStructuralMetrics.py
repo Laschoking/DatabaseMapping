@@ -1,11 +1,9 @@
-import datetime
 import time
-import git
+from src.Libraries.PandasUtility import is_series_in_df,add_series_to_df
 from src.Libraries.PathLib import sql_con
 from src.Classes.DataContainerFile import DataContainer
 from src.Classes.MappingContainerFile import MappingContainer
 from src.Classes.QuantileAnchorTerms import QuantileAnchorTerms
-from src.Classes.SimOutlier import SimOutlier, QuantileOutlier
 from src.Config_Files.Analysis_Configs import *
 from src.ExpansionStrategies.IterativeAnchorExpansion import IterativeAnchorExpansion
 from src.Libraries.EvaluateMappings import *
@@ -16,8 +14,6 @@ import itertools
 import gc
 import pandas as pd
 
-
-# TODO insert data row by row and catch errors better
 
 def get_mapping_id(new_mapping, existing_mappings_df) -> (int, bool):
     # If mapping_setup is in the DB already, use the existing Mapping_Identifier
@@ -34,16 +30,19 @@ def get_mapping_id(new_mapping, existing_mappings_df) -> (int, bool):
         return curr_mapping_id, False
 
 
-def skip_current_computation(mapping_id,db_config_id, df) -> bool:
-    result_key_df = df[['mapping_id', 'db_config_id']]
-    current_keys = pd.Series({'mapping_id': mapping_id, 'db_config_id': db_config_id})
-    matches = result_key_df.eq(current_keys)
-    if matches.all(axis=1).any():
-        return True
-    else:
-        False
+def skip_current_computation(mapping_id,db_config_id, df,run_nr) -> list:
+    if not run_nr:
+        raise ValueError("no versions given")
+    result_key_df = df[['mapping_id', 'db_config_id','run_nr']]
+    current_keys = pd.Series({'mapping_id': mapping_id, 'db_config_id': db_config_id, "run_nr": 0})
 
-
+    todo_runs = []
+    # Iterate through all version
+    for nr in run_nr:
+        current_keys.at['run_nr'] = nr
+        if not sql_con.is_series_in_df(series=current_keys,df=result_key_df):
+            todo_runs.append(nr)
+    return todo_runs
 
 
 
@@ -54,18 +53,14 @@ if __name__ == "__main__":
     db_config_df = sql_con.query_table(query, ind_col='db_config_id')
 
     # Setup mapping dataframes
-    new_mappings_df = pd.DataFrame()
     existing_mappings_df = sql_con.get_table('MappingSetup')
 
-    # Setup result dataframes
-    new_result_df = pd.DataFrame(columns=["mapping_id", "db_config_id", "unique_records_db1", "unique_records_db2",
-                                      "common_records", "overlap_perc", "synthetic_terms", "hub_computations",
-                                      "uncertain_mappings", "computed_mappings", "max_tuples", "runtime"])
     existing_result_df = sql_con.get_table('StructuralResults')
 
     #########################################################
     # Important parameters:
-
+    # Set this higher if all results should be computed several times (since they are non-deterministic)
+    RUN_NR = [1,2,3,4,5]
     # Set Anchor Quantile to 0, so the cartesian product is expanded (all possible combinations)
     q_0 = QuantileAnchorTerms(0)
 
@@ -84,7 +79,7 @@ if __name__ == "__main__":
 
     ############################################################
 
-    # Iterate through all relevant data base pairs that are used for the structural-evaluation
+    # Iterate through all relevant database pairs that are used for the structural-evaluation
     for curr_db_config_id, db_pair in db_config_df.iterrows():
         #if curr_db_config_id != "Simple_Pointer_v1_v1_copy":
         #   continue
@@ -115,58 +110,65 @@ if __name__ == "__main__":
             if MAPPING_EXISTS:
                 # Make series empty, so it will not be inserted to db later
                 new_mapping = new_mapping[0:0]
-                RES_EXISTS = skip_current_computation(mapping_id=curr_mapping_id,db_config_id=curr_db_config_id,df=existing_result_df)
-                if RES_EXISTS:
+                left_runs = skip_current_computation(mapping_id=curr_mapping_id, db_config_id=curr_db_config_id,
+                                                     df=existing_result_df, run_nr=RUN_NR)
+                if not left_runs:
                     continue
             else:
-                # Otherwise, add the new mapping setup to local df and database
-                existing_mappings_df = sql_con.add_series_to_df(series=new_mapping,df=existing_mappings_df)
-
+                # Otherwise, add the new mapping setup to local res_df and database
+                left_runs = RUN_NR
+                existing_mappings_df = add_series_to_df(series=new_mapping, df=existing_mappings_df)
 
             print("--------------------------")
             print(mapping.name)
-
-            mapping.init_records_terms_db1(data.db1_original_facts)
-            mapping.init_records_terms_db2(data.db2_original_facts)
-
-            t0 = time.time()
-
-            # Find the best mapping for the selected parameters (expansion, metric, metric_weight)
-            # Apply the mapping to populate db1_renamed_facts
-            mapping.compute_mapping(db1_facts, db2_facts, [])
-
-            t1 = time.time()
-            mapping_rt = round(t1 - t0, 4)
+            for run in left_runs:
+                # To be save, that no data problems arise, we create a new mapping object for each iteration
+                print(f"Run number: {run}")
+                temp_mapping_obj = MappingContainer(data.paths,mapping.expansion_strategy,mapping.similarity_metric)
 
 
-            # Merge db1_renamed_facts and db2_facts into db_merged_facts
-            mapping.merge_dbs(mapping.db1_renamed_facts, db2_facts, mapping.db_merged_facts)
-
-            # Log computed mapping and renamed DB1 and merged DB
-            mapping.log_mapping()
-            mapping.db1_renamed_facts.log_db_relations()
-            mapping.db_merged_facts.log_db_relations()
+                temp_mapping_obj.init_records_terms_db1(data.db1_original_facts)
+                temp_mapping_obj.init_records_terms_db2(data.db2_original_facts)
+                c_max_tuples = len(temp_mapping_obj.terms_db1) * len(temp_mapping_obj.terms_db2)
 
 
+                t0 = time.time()
 
-            # Save quality results for the insertion into the StructuralEvaluation table
-            c_max_tuples = len(mapping.terms_db1) * len(mapping.terms_db2)
-            str_res = count_overlap_merge_db(mapping.db_merged_facts)
-            str_res |= mapping.get_result_finger_print()
-            str_res |= {"mapping_id": curr_mapping_id, "db_config_id": curr_db_config_id, "max_tuples": c_max_tuples,
-                        "runtime": mapping_rt}
+                # Find the best mapping for the selected parameters (expansion, metric, metric_weight)
+                # Apply the mapping to populate db1_renamed_facts
+                temp_mapping_obj.compute_mapping(db1_facts, db2_facts, [])
 
-            new_result = pd.Series(str_res)
+                t1 = time.time()
+                mapping_rt = round(t1 - t0, 4)
 
+                # Merge db1_renamed_facts and db2_facts into db_merged_facts
+                temp_mapping_obj.merge_dbs(temp_mapping_obj.db1_renamed_facts, db2_facts, temp_mapping_obj.db_merged_facts)
+
+
+                # Save quality results for the insertion into the StructuralEvaluation table
+                str_res = count_overlap_merge_db(temp_mapping_obj.db_merged_facts)
+                str_res |= temp_mapping_obj.get_result_finger_print()
+                str_res |= {"mapping_id": curr_mapping_id, "db_config_id": curr_db_config_id, "max_tuples": c_max_tuples,
+                            "runtime": mapping_rt,'run_nr' : run}
+
+                new_result = pd.Series(str_res)
+
+                # Log computed mapping and renamed DB1 and merged DB
+                # We only log the last run
+                temp_mapping_obj.log_mapping(run_nr=run)
+                temp_mapping_obj.db1_renamed_facts.log_db_relations(run_nr=run)
+                temp_mapping_obj.db_merged_facts.log_db_relations(run_nr=run)
+
+                # The casting of new_result_df to str is necessary because sqlite sometimes inserts BLOB for other data types
+                if not new_result.empty:
+                    sql_con.insert_series("StructuralResults", series=new_result.astype(str), write_index=False)
+
+                gc.collect()
 
             # Evaluation function to analyse if the mapping reduces storage
             if not new_mapping.empty:
                 sql_con.insert_series("MappingSetup", series=new_mapping, write_index=False)
 
-            # The casting of new_result_df to str is necessary because sqlite sometimes inserts BLOB for other data types
-            if not new_result.empty:
-                sql_con.insert_df("StructuralResults", series=new_result.astype(str), write_index=False)
 
-            break
-        gc.collect()
+
 

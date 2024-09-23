@@ -31,9 +31,3 @@ class SqlConnector:
         return df
 
 
-    def add_series_to_df(self,series, df):
-        if not df.empty:
-            df = pd.concat([df, series.to_frame().T], ignore_index=True)
-        else:
-            df = pd.DataFrame(series).T
-        return df

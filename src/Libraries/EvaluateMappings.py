@@ -13,11 +13,11 @@ def compute_overlap_dbs(db1, db2, print_flag=False):
     div = False
     for file_name, df1 in db1.files.items():
         if file_name not in db2.files:
-            raise FileNotFoundError("df does not exist in db2: " + db2.name + " file: " + file_name)
+            raise FileNotFoundError("res_df does not exist in db2: " + db2.name + " file: " + file_name)
 
         df2 = db2.files[file_name]
         if df1.empty or df2.empty:
-            # create dummy merge-df
+            # create dummy merge-res_df
             df1_only = df1
             df2_only = df2
             df_both = pd.DataFrame()
