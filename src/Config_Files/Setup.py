@@ -54,14 +54,14 @@ if __name__ == "__main__":
         nemo_runtime = ShellLib.chase_nemo(program_config.sep_dl, data.db1_original_facts.path,
                                            data.db1_original_results.path)
         global_log.reasoning_df.loc[len(global_log.reasoning_df)] = [date, commit,
-                                                                     db_config.dir_name + "-" + db_config.db1_name,
+                                                                     db_config.file_name + "-" + db_config.db1_name,
                                                                      None,
                                                                      program_config.sep_dl.stem] + nemo_runtime
 
         nemo_runtime = ShellLib.chase_nemo(program_config.sep_dl, data.db2_original_facts.path,
                                            data.db2_original_results.path)
         global_log.reasoning_df.loc[len(global_log.reasoning_df)] = [date, commit,
-                                                                     db_config.dir_name + "-" + db_config.db2_name,
+                                                                     db_config.file_name + "-" + db_config.db2_name,
                                                                      None, program_config.sep_dl.stem] + nemo_runtime
 
         data.db1_original_results.read_db_relations()
@@ -179,7 +179,7 @@ if __name__ == "__main__":
              mapping.c_uncertain_mappings, mapping.c_mappings,
              str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", mapping_rt])
         if COMP_MAPPING:
-            global_log.existing_mappings_df.loc[len(global_log.existing_mappings_df)] = (
+            global_log.mapping_df.loc[len(global_log.mapping_df)] = (
                     [date, commit, db_config.full_name, mapping.name, mapping.expansion_strategy.name,
                      mapping.similarity_metric.name, mapping.c_mappings,
                      str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", nr_1_1_mappings,

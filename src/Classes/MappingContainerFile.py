@@ -133,11 +133,13 @@ class MappingContainer:
         else:
             return df1_replaced
 
-    def read_mapping(self):
-        if self.mapping_path.exists():
-            df = pd.read_csv(self.mapping_path, sep='\t', header=None)
+    def read_mapping(self,run_nr):
+        mapping_path = self.add_run_nr_to_path(file_path=self.mapping_path, run_nr=run_nr)
+
+        if mapping_path.exists():
+            df = pd.read_csv(mapping_path, sep='\t', header=None)
             # check how many terms have been mapped to synthetic term
-            self.syn_counter = df[1].str.startswith("new_var").value_counts()
+            self.syn_counter = df.iloc[:,1].str.startswith("new_var").value_counts()[True]
             self.final_mapping = df
         else:
             raise FileNotFoundError(self.mapping_path)
@@ -206,4 +208,12 @@ class MappingContainer:
         suffix = file_path.suffix
         new_stem = f"{stem}_{run_nr}"
         return file_path.with_name(new_stem).with_suffix(suffix)
+
+
+    def get_nr_term1(self):
+        return len(self.terms_db1)
+
+    def get_nr_term2(self):
+        return len(self.terms_db2)
+
 

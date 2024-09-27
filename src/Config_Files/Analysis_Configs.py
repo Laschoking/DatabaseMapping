@@ -3,12 +3,12 @@ from src.Libraries import PathLib
 
 
 class DbConfig:
-    def __init__(self, use, type, dir_name, db1_name, db2_name):
+    def __init__(self, use, type, file_name, db1_name, db2_name):
         self.use = use
         self.db_type = type
-        self.dir_name = dir_name
-        self.full_name = dir_name + "_" + db1_name + "_" + db2_name
-        self.base_output_path = PathLib.base_out_path.joinpath(type).joinpath(dir_name).joinpath(
+        self.file_name = file_name
+        self.full_name = file_name + "_" + db1_name + "_" + db2_name
+        self.base_output_path = PathLib.base_out_path.joinpath(type).joinpath(file_name).joinpath(
             db1_name + "_" + db2_name)
         self.db1_name = db1_name
         self.db2_name = db2_name
@@ -17,7 +17,7 @@ class DbConfig:
 
     def get_finger_print(self):
         return {'db_config_id': self.full_name, 'use': self.use, 'type': self.db_type,
-                'file_name': self.dir_name, 'db1': self.db1_name, 'db2': self.db2_name}
+                'file_name': self.file_name, 'db1': self.db1_name, 'db2': self.db2_name}
 
 class DatalogProgram:
     def __init__(self, program_type, class_name, sep_dl, merge_dl, blocked_terms=None):

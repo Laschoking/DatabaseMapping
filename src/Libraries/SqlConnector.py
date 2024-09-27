@@ -29,5 +29,3 @@ class SqlConnector:
         with self.engine.connect() as conn, conn.begin():
             df = pd.read_sql_table(table,con=conn)
         return df
-
-

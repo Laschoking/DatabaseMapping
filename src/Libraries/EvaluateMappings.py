@@ -1,16 +1,18 @@
 import pandas as pd
 from prettytable import PrettyTable
+from typing import Dict, Union
+import pandas as pd
 
 
-def compute_overlap_dbs(db1, db2, print_flag=False):
-    t = PrettyTable()
-    t.field_names = ["file name", db1.name, db2.name, "common rows", "overlap in %"]
-    t.sortby = "common rows"
-
+def compute_overlap_dbs(db1, db2, print_flag=False) -> Dict[str,Union[int,float]]:
     l_records_db1 = 0
     l_records_db2 = 0
     l_records_db_merge = 0
-    div = False
+    if not db1.files:
+        raise ValueError(f"db1 has no entries: {db1.name} ")
+    if not db2.files:
+        raise ValueError(f"db2 has no entries: {db2.name} ")
+
     for file_name, df1 in db1.files.items():
         if file_name not in db2.files:
             raise FileNotFoundError("res_df does not exist in db2: " + db2.name + " file: " + file_name)
@@ -18,17 +20,19 @@ def compute_overlap_dbs(db1, db2, print_flag=False):
         df2 = db2.files[file_name]
         if df1.empty or df2.empty:
             # create dummy merge-res_df
-            df1_only = df1
-            df2_only = df2
+            df1_sep = df1
+            df2_sep = df2
             df_both = pd.DataFrame()
         else:
+            # Merge both dataframes by records
+            # pd will append a new column _merge to explain, for which side (db1,db2,both) the new fact holds
             df = pd.merge(df1, df2, how='outer', indicator=True)
-            df1_only = df[df['_merge'] == 'left_only']
-            df2_only = df[df['_merge'] == 'right_only']
+            df1_sep = df[df['_merge'] == 'left_only']
+            df2_sep = df[df['_merge'] == 'right_only']
             df_both = df[df['_merge'] == 'both']
 
-        l_df1_only = df1_only.shape[0]
-        l_df2_only = df2_only.shape[0]
+        l_df1_only = df1_sep.shape[0]
+        l_df2_only = df2_sep.shape[0]
         l_df_both = df_both.shape[0]
 
         l_records_db1 += l_df1_only
@@ -38,56 +42,21 @@ def compute_overlap_dbs(db1, db2, print_flag=False):
         if l_df1_only > 0 and print_flag:
             print(file_name)
             print("db1 unique-rows: ")
-            print(df1_only)
+            print(df1_sep)
         if l_df2_only > 0 and print_flag:
             print("db2 unique-rows: ")
-            print(df2_only)
+            print(df2_sep)
 
         if l_df1_only + l_df2_only + l_df_both == 0: continue
 
-        cov = round(100 * l_df_both / (l_df1_only + l_df2_only + l_df_both))
-        if cov != 100:
-            r = [file_name, l_df1_only, l_df2_only, l_df_both, str(cov) + "%"]
-            t.add_row(r, divider=div)
-
-            # atoms appearing in more than 1 relation are only counted once
-
-    # t.add_row(['','','','',''],divider=True)
     total_rows = min(l_records_db1, l_records_db2) + l_records_db_merge
-    t.add_row(["SUMMARY", l_records_db1, l_records_db2, l_records_db_merge,
-               str(round(100 * l_records_db_merge / total_rows, 2)) + "%"])
-    if (l_records_db1 > 0 or l_records_db2 > 0) and print_flag:
-        print(t)
-    # we return the nr. of rows for db1, db2, their intersection, and the overlap (inters/ (sum))
-    return [l_records_db1, l_records_db2, l_records_db_merge,
-            str(round(100 * l_records_db_merge / total_rows, 2)) + "%"]
 
+    return pd.Series({'unique_records_db1': l_records_db1,'unique_records_db2': l_records_db2,
+                      'common_records': l_records_db_merge,
+                      'overlap_perc': (100 * l_records_db_merge / total_rows)
+                      })
 
-def verify_merge_results(data, mapping):
-    t = PrettyTable()
-    # Color
-    r = "\033[0;31;40m"  # RED
-    n = "\033[0m"  # Reset
-
-    t.field_names = ["1. DB", "2. DB", "rows of 1.", "rows of 2.", "common rows", "overlap in %"]
-
-    # DB1-separate-results == db1_unravelled_results
-    diff = compute_overlap_dbs(data.db1_original_results, mapping.db1_unravelled_results, print_flag=True)
-    if diff[0] > 0 or diff[1] > 0:
-        l = [r + data.db1_original_results.name, mapping.db1_unravelled_results.name] + diff[:-1] + [diff[-1] + n]
-        t.add_row(l)
-
-    # DB2-separate-results == db2_unravelled_results
-    diff = compute_overlap_dbs(data.db2_original_results, mapping.db2_unravelled_results, print_flag=True)
-    if diff[0] > 0 or diff[1] > 0:
-        l = [r + data.db2_original_results.name, mapping.db2_unravelled_results.name] + diff[:-1] + [diff[-1] + n]
-        t.add_row(l)
-
-    if len(t.rows) > 0:
-        print(t)
-
-
-def count_overlap_merge_db(merge_db) -> [int,int,int,float]:
+def count_overlap_merge_db(merge_db) -> Dict[str,Union[int,float]]:
     c_left = 0
     c_right = 0
     c_both = 0
@@ -110,5 +79,32 @@ def count_overlap_merge_db(merge_db) -> [int,int,int,float]:
         overlap = round(100 * c_both / total_records, 2)
     else:
         overlap = 0.0
-    return {"unique_records_db1" : c_left, "unique_records_db2" : c_right, "common_records" : c_both, "overlap_perc" : overlap}
+    return {"unique_records_db1": c_left, "unique_records_db2": c_right, "common_records": c_both,
+            "overlap_perc": overlap}
+
+
+def verify_merge_results(data, mapping) -> bool:
+    t = PrettyTable()
+    # Color
+    r = "\033[0;31;40m"  # RED
+    n = "\033[0m"  # Reset
+
+    t.field_names = ["1. DB", "2. DB", "rows of 1.", "rows of 2.", "common rows", "overlap in %"]
+
+    # DB1-separate-results == db1_unravelled_results
+    diff_db1 = compute_overlap_dbs(data.db1_original_results, mapping.db1_unravelled_results, print_flag=True)
+    if diff_db1['unique_records1'] > 0 or diff_db1['unique_records2'] > 0:
+        l = [r + data.db1_original_results.name, mapping.db1_unravelled_results.name] + diff[:-1] + [diff[-1] + n]
+        t.add_row(l)
+
+    # DB2-separate-results == db2_unravelled_results
+    diff = compute_overlap_dbs(data.db2_original_results, mapping.db2_unravelled_results, print_flag=True)
+    if diff['unique_records1'] > 0 or diff['unique_records2'] > 0:
+        l = [r + data.db2_original_results.name, mapping.db2_unravelled_results.name] + diff[:-1] + [diff[-1] + n]
+        t.add_row(l)
+
+    if len(t.rows) > 0:
+        print(t)
+
+    return t.rows == 0
 

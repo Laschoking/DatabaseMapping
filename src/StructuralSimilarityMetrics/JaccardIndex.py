@@ -3,7 +3,7 @@ from src.Classes.SimilarityMetric import StructuralSimilarityMetric
 
 class JaccardIndex(StructuralSimilarityMetric):
     def __init__(self,metric_weight):
-        super().__init__("Dynamic Jaccard",metric_weight)
+        super().__init__("Jaccard",metric_weight)
 
     def compute_structural_similarity(self, term1, term2, sub_rec_tuples):
         """ This implements the computation of the common cccurrences """

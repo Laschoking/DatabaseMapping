@@ -26,7 +26,7 @@ def clear_file(file_path):
 
 
 def init_synth_souffle_database(db_config, db_name, fact_path,force_gen):
-    gen_facts_path = PathLib.datalog_programs_path.joinpath(db_config.db_type).joinpath(db_config.dir_name)
+    gen_facts_path = PathLib.datalog_programs_path.joinpath(db_config.db_type).joinpath(db_config.file_name)
     os.chdir(gen_facts_path)
     command = ["./gen_facts.sh", "small", str(fact_path)]
     p = subprocess.run(command, capture_output=True)
@@ -39,18 +39,17 @@ def create_input_facts(db_config, db_version, db_dir_name, fact_path, force_gen)
         create_doop_facts(db_config, db_version, db_dir_name, fact_path, force_gen)
     elif db_config.db_type == "SouffleSynthetic":
         init_synth_souffle_database(db_config, db_version, fact_path, force_gen)
-    print("initialized database: " + db_version)
 
 
 def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen):
     os.chdir(PathLib.DOOP_BASE)
     clear_directory(fact_path)
 
-    java_path = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_version).joinpath(
+    java_path = Path.joinpath(PathLib.java_source_dir, db_config.file_name).joinpath(db_version).joinpath(
         db_file_name + ".java")
-    jar_path1 = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_version).joinpath(
+    jar_path1 = Path.joinpath(PathLib.java_source_dir, db_config.file_name).joinpath(db_version).joinpath(
         db_version + ".jar")
-    jar_path2 = Path.joinpath(PathLib.java_source_dir, db_config.dir_name).joinpath(db_version).joinpath(
+    jar_path2 = Path.joinpath(PathLib.java_source_dir, db_config.file_name).joinpath(db_version).joinpath(
         db_file_name + db_version + ".jar")
 
     # Check if .java file exists
@@ -65,7 +64,7 @@ def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen)
         raise FileNotFoundError("Java & Jar File do not exist: \n" + str(java_path) + "\n"+ str(jar_path1) + "\n"+ str(jar_path2))
 
     # cannot name the java or jar files appart bc. javac would complain that Class name & file-name differ
-    doop_out_name = db_config.dir_name + "_" + db_version
+    doop_out_name = db_config.file_name + "_" + db_version
     doop_out_path = PathLib.DOOP_OUT.joinpath(doop_out_name).joinpath("database")
 
     # Skip fact-generation, if the target directory contains facts already
@@ -74,6 +73,8 @@ def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen)
 
     # Only run DOOP, if no output with doop_out_name exists
     if not doop_out_path.exists() or not doop_out_path.is_dir() or not any(doop_out_path.iterdir()) or force_gen:
+        print("initialize database: " + doop_out_name)
+
         # Run DOOP to generate new facts for given java or jar
         os.system(f"./doop -a context-insensitive -i {java_path} --id {doop_out_name} --facts-only --Xfacts-subset"
               f" APP --cache --generate-jimple --platform java_8")
@@ -114,9 +115,11 @@ def chase_nemo(dl_rule_path, fact_path, result_path):
 def split_nemo_stdout(stdout):
     stdout = stdout.decode("utf-8")
     stdout = stdout.split("\n")
-    nemo_runtime = [re.search('[0-9m]*ms', stdout[0]).group(0), re.search('[0-9m]*ms', stdout[1]).group(0),
-                    re.search('[0-9m]*ms', stdout[2]).group(0), re.search('[0-9m]*ms', stdout[3]).group(0)]
-    return nemo_runtime
+    nemo_runtime = {'total_rt' : re.search('[0-9m]*ms', stdout[0]).group(0),
+                    'loading_rt' : re.search('[0-9m]*ms', stdout[1]).group(0),
+                    'reasoning_rt' : re.search('[0-9m]*ms', stdout[2]).group(0),
+                    'output_rt' : re.search('[0-9m]*ms', stdout[3]).group(0)}
+    return pd.Series(nemo_runtime)
 
 
 def print_nemo_runtime(runtime):

@@ -20,13 +20,32 @@ class DbInstance:
             if os.stat(rel_path).st_size == 0:
                 df = pd.DataFrame()
             else:
-                df = pd.read_csv(rel_path, sep='\t', keep_default_na=False, dtype='string', header=None,
-                                 on_bad_lines='warn')
+                try:
+                    df = pd.read_csv(rel_path, sep='\t', keep_default_na=False, dtype='string', header=None,
+                                     on_bad_lines='warn',lineterminator='\n')
+                except pd.errors.ParserError as e:
+                    print(f"{e} parser error for path: {rel_path}")
             self.insert_df(file_name, df)
         return self
 
     def insert_df(self, file_name, df):
         self.files[file_name] = df
+
+
+    def get_nr_facts_constants(self):
+        """ Returns nr of facts and the number of constants
+            Finding the number of constants is not very elaborate, because only the mapping_obj
+            has normally access to them
+        """
+        terms = set()
+        nr_facts = 0
+        for file_df in self.files.values():
+            nr_facts += len(file_df)
+            for col in file_df.columns:
+                terms.update(file_df[col].unique())
+
+
+        return pd.Series({'nr_facts' : nr_facts,'nr_constants' : len(terms)})
 
     def log_db_relations(self,run_nr):
         ShellLib.clear_directory(self.path)
@@ -68,6 +87,7 @@ class DataContainer:
 
     def add_mappings(self, mappings):
         self.mappings += mappings
+
 
     def log_terms(self):
         terms_db1_df = pd.Series(self.terms_db1.keys())

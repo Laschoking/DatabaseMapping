@@ -13,6 +13,8 @@ from src.Config_Files.Analysis_Configs import DbConfig
 from src.Libraries import ShellLib,PathLib
 from src.Classes import DataContainerFile
 from src.Libraries.PathLib import sql_con
+from src.Libraries.EvaluateMappings import compute_overlap_dbs
+
 import subprocess
 
 
@@ -41,11 +43,12 @@ def retrieve_mvn_jars(MVN_PATH):
 
     return jars
 
-def create_dir(file_name,versions,MVN_PATH,db_config_df):
+def create_dir(file_name,versions,MVN_PATH,db_config_df,db_finger_print_df):
     JAVA_PATH = PathLib.java_source_dir
     dir = JAVA_PATH.joinpath(file_name)
-    df_new_params = pd.DataFrame()
-    found_id_pair = False
+    new_pair_db_df = pd.DataFrame()
+    new_single_db_df = pd.DataFrame()
+
 
     if not dir.is_dir():
         dir.mkdir()
@@ -58,60 +61,73 @@ def create_dir(file_name,versions,MVN_PATH,db_config_df):
         shutil.copy(jar,v_dir.joinpath(version + ".jar"))
 
         # Create Pairs of identical databased for structural evaluation
-        id_db_config = DbConfig(use='structural-evaluation', type='DoopProgramAnalysis', dir_name=file_name,
+        id_db_config = DbConfig(use='structural-evaluation', type='DoopProgramAnalysis', file_name=file_name,
                                 db1_name=version, db2_name=f"{version}_copy")
-        id_db_params = pd.Series(id_db_config.get_finger_print())
+        pair_db_ser = pd.Series(id_db_config.get_finger_print())
         data = DataContainerFile.DataContainer(id_db_config.base_output_path, id_db_config.db1_path, id_db_config.db2_path)
         try:
             ShellLib.create_input_facts(db_config=id_db_config, db_version=id_db_config.db1_name,
-                                        db_dir_name=id_db_config.dir_name, fact_path=data.db1_original_facts.path,
+                                        db_dir_name=id_db_config.file_name, fact_path=data.db1_original_facts.path,
                                         force_gen=False)
 
             # Copy files from db1 to the copy at db1_copy
             shutil.copytree(data.db1_original_facts.path,data.db2_original_facts.path,dirs_exist_ok=True)
 
+            db1_facts = data.db1_original_facts.read_db_relations()
+            single_db_ser = db1_facts.get_nr_facts_constants()
+            single_db_ser['file_name'] = pair_db_ser['file_name']
+            single_db_ser['version'] = pair_db_ser['db1']
+
+            # Insert the characteristics (nr_of_facts, nr_of_terms) of the database into a DB for single instances
+            if not is_series_in_df(series=single_db_ser, df=db_finger_print_df,exclude_col=None):
+                new_single_db_df = add_series_to_df(series=single_db_ser,df=new_single_db_df)
+
+            # Insert combination of (db1,db1_copy) into DbConfig for structural Evaluation
             # Jars of >20kb are difficult to evaluate exhaustively
-            if get_jar_size(jar) > 20:
-                continue
-            found_id_pair = True
-            # Insert combination into DbConfig, if it does not exist there:
-            if not is_series_in_df(series=id_db_params, df=db_config_df) and not found_id_pair:
-                df_new_params = add_series_to_df(series=id_db_params,df=df_new_params)
+            #if get_jar_size(jar) < 20 and not is_series_in_df(series=pair_db_ser, df=db_config_df,exclude_col=None):
+            #    new_pair_db_df = add_series_to_df(series=pair_db_ser,df=new_pair_db_df)
                 # We only want 1 test-file per library
 
 
         except FileNotFoundError:
-            print(f"failed to generate facts from jar: {id_db_config.dir_name} version: {id_db_config.db1_name}")
+            print(f"failed to generate facts from jar: {id_db_config.file_name} version: {id_db_config.db1_name}")
 
     # Create Pairs of databases for final evaluation
     db_pairs = itertools.combinations(versions,r=2)
     for (db1,db2) in db_pairs:
 
-        db_config = DbConfig(use='eval', type='DoopProgramAnalysis', dir_name=file_name, db1_name=db1, db2_name=db2)
+        db_config = DbConfig(use='eval', type='DoopProgramAnalysis', file_name=file_name, db1_name=db1, db2_name=db2)
         db_params = pd.Series(db_config.get_finger_print())
 
         data = DataContainerFile.DataContainer(db_config.base_output_path, db_config.db1_path, db_config.db2_path)
         try:
             ShellLib.create_input_facts(db_config=db_config, db_version=db_config.db1_name,
-                                        db_dir_name=db_config.dir_name,
+                                        db_dir_name=db_config.file_name,
                                         fact_path=data.db1_original_facts.path, force_gen=False)
             ShellLib.create_input_facts(db_config=db_config, db_version=db_config.db2_name,
-                                        db_dir_name=db_config.dir_name,
+                                        db_dir_name=db_config.file_name,
                                         fact_path=data.db2_original_facts.path, force_gen=False)
 
-            # TODO order the files s.t. db1 is the smaller one!
+            db1_facts = data.db1_original_facts.read_db_relations()
+            db2_facts = data.db2_original_facts.read_db_relations()
+            facts = pd.Series(compute_overlap_dbs(db1=db1_facts, db2=db2_facts, print_flag=False))
+            db_params['nr_equal_facts'] = int(facts['common_records'])
+            db_params['equal_facts_perc'] = round(facts['overlap_perc'],2)
 
             # Insert combination into DbConfig, if it does not exist there:
-            if not is_series_in_df(series=db_params, df=db_config_df):
-                df_new_params = add_series_to_df(series=db_params,df=df_new_params)
+            if not is_series_in_df(series=db_params, df=db_config_df,exclude_col='use'):
+                new_pair_db_df = add_series_to_df(series=db_params,df=new_pair_db_df)
 
         except FileNotFoundError:
-            print(f"failed to generate facts from jar: {db_config.dir_name} version: {db_config.db1_name} or {db_config.db2_name}")
+            print(f"failed to generate facts from jar: {db_config.file_name} version: {db_config.db1_name} or {db_config.db2_name}")
 
-    if not df_new_params.empty:
-        sql_con.insert_df('DbConfig', df_new_params,write_index=False)
+    # Insert background information about each database version
+    if not new_single_db_df.empty:
+        sql_con.insert_df('DbFingerPrint2',new_single_db_df,write_index=False)
 
-
+    # Insert information about a database pair (that is the input to the mapping process)
+    if not new_pair_db_df.empty:
+        sql_con.insert_df('DbConfig', new_pair_db_df,write_index=False)
 
 
 
@@ -120,6 +136,8 @@ if __name__ == "__main__":
     MVN_PATH = PathLib.mvn_dir
     jars = retrieve_mvn_jars(MVN_PATH)
     db_config_df = sql_con.get_table('DbConfig')
+    #db_finger_print_df = sql_con.get_table('DbFingerPrint1')
     for file_name, versions in jars.items():
-        create_dir(file_name,versions,MVN_PATH,db_config_df)
+        db_finger_print_df = pd.DataFrame()
+        create_dir(file_name,versions,MVN_PATH,db_config_df,db_finger_print_df)
 
