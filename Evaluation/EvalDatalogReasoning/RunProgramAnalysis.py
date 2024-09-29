@@ -109,6 +109,9 @@ if __name__ == "__main__":
             # Merge db1_renamed_facts and db2_facts into db_merged_facts
             mapping.merge_dbs(mapping.db1_renamed_facts, db2_facts, mapping.db_merged_facts)
 
+            # Execute the common analysis on the merged database
+            run_merged_program_analyses(mapping, dl_programs,nemo_rt_df)
+
 
 
             # check if bijected results correspond to correct results from base

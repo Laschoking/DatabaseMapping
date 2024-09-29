@@ -91,7 +91,6 @@ class ExpansionStrategy:
                 prio_dict.add(new_mapping)
                 w_exp_sim.append(sim)
 
-
             else:
                 new_mapping.gen_active = False
         return exp_mappings

@@ -47,10 +47,11 @@ class DbInstance:
 
         return pd.Series({'nr_facts' : nr_facts,'nr_constants' : len(terms)})
 
-    def log_db_relations(self,run_nr):
-        ShellLib.clear_directory(self.path)
+    def log_db_relations(self,run_nr=1):
+        out_path = PathLib.add_run_nr_to_path(file_path=self.path, run_nr=run_nr)
+        ShellLib.clear_directory(out_path)
         for file_name, df in self.files.items():
-            df.to_csv(self.path.joinpath(file_name + "_" + str(run_nr)).with_suffix('.tsv'), sep="\t",
+            df.to_csv(out_path.joinpath(file_name).with_suffix('.tsv'), sep="\t",
                       index=False, header=False)
 
 

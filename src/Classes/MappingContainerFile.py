@@ -5,6 +5,7 @@ from src.Classes.DataContainerFile import DbInstance
 from src.Classes import Terms, Records
 from src.Libraries import ShellLib
 from operator import attrgetter
+from src.Libraries import PathLib
 import copy
 
 # each MappingContainer has a Strategy and a similarity metric
@@ -104,13 +105,17 @@ class MappingContainer:
                 matched_rec_tuples = self.final_rec_tuples[file_name]
             else:
                 matched_rec_tuples = []
-            mapped_df = self.map_df(matched_rec_tuples, df1, df2, self.final_mapping[0], self.final_mapping[1])
+            mapped_df = self.map_df(matched_rec_tuples, df1, df2, self.final_mapping['constant1'],
+                                    self.final_mapping['constant2'])
             self.db1_renamed_facts.insert_df(file_name, mapped_df)
         return
 
-    def map_df(self, matched_rec_tuples, df1, df2, from_terms, to_terms):
+    def map_df(self, matched_rec_tuples, df1, df2, old_constants_ser, new_constants_ser):
         # assuming that keys & values are unpacked according to insertion order
         matched_records = list()
+
+        # Simplify the renaming if we have information from the expansion strategy, that certain records are equal now
+        # Then we can take them out before renaming
         if matched_rec_tuples:
             rec1_indices = list()
             rec2_indices = list()
@@ -123,7 +128,7 @@ class MappingContainer:
             merged_df = df2.iloc[rec2_indices].reset_index(drop=True)
             df1.drop(rec1_indices, inplace=True)
 
-        df1_replaced = df1.replace(from_terms.to_list(), to_terms.to_list())
+        df1_replaced = df1.replace(old_constants_ser.to_list(), new_constants_ser.to_list())
 
         # Concatenate the DataFrames
         if matched_rec_tuples:
@@ -134,10 +139,10 @@ class MappingContainer:
             return df1_replaced
 
     def read_mapping(self,run_nr):
-        mapping_path = self.add_run_nr_to_path(file_path=self.mapping_path, run_nr=run_nr)
-
-        if mapping_path.exists():
-            df = pd.read_csv(mapping_path, sep='\t', header=None)
+        mapping_path = PathLib.add_run_nr_to_path(file_path=self.mapping_path, run_nr=run_nr)
+        # TODO put run-number into each mapping and as directory suffix for the merged db
+        if self.mapping_path.exists():
+            df = pd.read_csv(self.mapping_path, sep='\t', header=None, names=['constant1','constant2','sim'])
             # check how many terms have been mapped to synthetic term
             self.syn_counter = df.iloc[:,1].str.startswith("new_var").value_counts()[True]
             self.final_mapping = df
@@ -147,7 +152,7 @@ class MappingContainer:
     # write mapping results to CSV file
     def log_mapping(self,run_nr):
         ShellLib.clear_file(self.mapping_path)
-        mapping_path = self.add_run_nr_to_path(file_path=self.mapping_path, run_nr=run_nr)
+        mapping_path = PathLib.add_run_nr_to_path(file_path=self.mapping_path, run_nr=run_nr)
         self.final_mapping.to_csv(mapping_path, sep='\t', index=False, header=False)
 
     def merge_dbs(self, db1, db2, to_db):
@@ -185,8 +190,9 @@ class MappingContainer:
                 df1 = df1.iloc[:, :-1]
                 df2 = pd.concat([df2, df0], axis=0, ignore_index=True)
                 df2 = df2.iloc[:, :-1]
+
                 # reverse columns of mapping to inverse the mapping
-                df1 = self.map_df(df1, self.final_mapping[1], self.final_mapping[0])
+                df1 = self.map_df([], df1, df2, self.final_mapping['constant2'], self.final_mapping['constant1'])
                 self.db1_unravelled_results.insert_df(file_name, df1)
                 self.db2_unravelled_results.insert_df(file_name, df2)
             else:
@@ -203,11 +209,7 @@ class MappingContainer:
         return {"synthetic_terms" : self.syn_counter, "hub_computations" : self.c_hub_recomp,
                  "uncertain_mappings" : self.c_uncertain_mappings, "computed_mappings" : self.c_mappings}
 
-    def add_run_nr_to_path(self, file_path, run_nr):
-        stem = file_path.stem
-        suffix = file_path.suffix
-        new_stem = f"{stem}_{run_nr}"
-        return file_path.with_name(new_stem).with_suffix(suffix)
+
 
 
     def get_nr_term1(self):

@@ -19,7 +19,7 @@ import pandas as pd
 if __name__ == "__main__":
 
     # Retrieve relevant data from Database
-    query = "SELECT * FROM  DbConfig WHERE Use=\"cross-expansion\";"
+    query = "SELECT * FROM  DbConfig WHERE Use LIKE \"expansion%\";"
     db_config_df = sql_con.query_table(query, ind_col='db_config_id')
 
     # Setup mapping dataframes
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     #########################################################
     # Important parameters:
-    RUN_NR = [1]
+    RUN_NR = [1,2,3,4,5]
 
     # Setup 3 Anchor values: (this will expand the 10/5/2% of constants with the highest degree)
     q_90 = QuantileAnchorTerms(0.90)

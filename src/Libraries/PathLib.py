@@ -30,3 +30,10 @@ Engine = Enum("Engine", ["SOUFFLE", "NEMO"])
 NR_LEFT = 1
 NR_RIGHT = 10
 NR_TARGET = 0
+
+
+def add_run_nr_to_path(file_path, run_nr):
+    stem = file_path.stem
+    suffix = file_path.suffix
+    new_stem = f"{stem}_{run_nr}"
+    return file_path.with_name(new_stem).with_suffix(suffix)

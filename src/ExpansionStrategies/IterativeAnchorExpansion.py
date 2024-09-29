@@ -196,7 +196,7 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                 break
 
         # Load all mappings into the dataframe at once
-        mapping.final_mapping = pd.DataFrame.from_records(mapping_dict, columns=None)
+        mapping.final_mapping = pd.DataFrame.from_records(mapping_dict, columns=['constant1','constant2','sim'])
         if PLOT_STATISTICS:
             self.plot_statistics(similarity_metric.name,w_prio_len,w_exp_sim,mapped_sims)
 
