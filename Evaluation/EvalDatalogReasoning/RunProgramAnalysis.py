@@ -89,22 +89,23 @@ if __name__ == "__main__":
         run_separate_program_analyses(data, dl_programs, nemo_rt_df)
 
         # Retrieve all mapping configuration that were used in the ReasoningDB
-        curr_mappings = existing_result_df[existing_result_df['db_config_id'] == curr_db_config_id]
+        mapping_results = existing_result_df[existing_result_df['db_config_id'] == curr_db_config_id]
 
-        for index,mapping_ser in curr_mappings.iterrows():
-            expansion = IterativeAnchorExpansion(anchor_quantile=mapping_ser['anchor_quantile'],
-                                                 DYNAMIC=bool(mapping_ser['dynamic']))
-            if mapping_ser['metric'] == 'Dice':
-                metric = Dice(metric_weight=mapping_ser['importance_weight'])
-            elif mapping_ser['metric'] == 'Jaccard':
-                metric = JaccardIndex(metric_weight=mapping_ser['importance_weight'])
+        for index,mapping_res in mapping_results.iterrows():
+            expansion = IterativeAnchorExpansion(anchor_quantile=mapping_res['anchor_quantile'],
+                                                 DYNAMIC=bool(mapping_res['dynamic']))
+            if mapping_res['metric'] == 'Dice':
+                metric = Dice(metric_weight=mapping_res['importance_weight'])
+            elif mapping_res['metric'] == 'Jaccard':
+                metric = JaccardIndex(metric_weight=mapping_res['importance_weight'])
             else:
-                raise ValueError(f"metric not known: {mapping_ser['metric']}")
+                raise ValueError(f"metric not known: {mapping_res['metric']}")
 
             mapping = MappingContainer(paths=data.paths, expansion_strategy=expansion, similarity_metric=metric,
-                                       mapping_id=mapping_ser['mapping_id'],run=run_nr)
+                                       mapping_id=mapping_res['mapping_id'], run_nr=mapping_res['run_nr'])
+
             # Read mapping results, that were already computed before
-            mapping.read_mapping(mapping_id=mapping_ser['mapping_id'],run_nr=mapping_ser['run_nr'])
+            mapping.read_mapping(mapping_id=mapping_res['mapping_id'], run_nr=mapping_res['run_nr'])
 
             # Merge db1_renamed_facts and db2_facts into db_merged_facts
             mapping.merge_dbs(mapping.db1_renamed_facts, db2_facts, mapping.db_merged_facts)

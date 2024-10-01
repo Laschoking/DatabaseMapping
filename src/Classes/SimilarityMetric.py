@@ -2,10 +2,10 @@ import re
 import math
 
 class SimilarityMetric:
-    def __init__(self,name,metric_weight):
+    def __init__(self,name,metric_weight,str_ratio):
         self.name = name
         self.metric_weight = metric_weight
-
+        self.str_ratio = str_ratio
         # Both value are updated by the mapping function
         self.max_deg1 = 0
         self.max_deg2 = 0
@@ -36,7 +36,7 @@ class SimilarityMetric:
 
 class StructuralSimilarityMetric(SimilarityMetric):
     def __init__(self,name,metric_weight):
-        super().__init__(name,metric_weight)
+        super().__init__(name,metric_weight,str_ratio=1)
 
 
     def compute_similarity(self,term1,term2,sub_rec_tuples):
@@ -56,7 +56,7 @@ class StructuralSimilarityMetric(SimilarityMetric):
 
 class LexicalSimilarityMetric(SimilarityMetric):
     def __init__(self,name,metric_weight):
-        super().__init__(name,metric_weight)
+        super().__init__(name,metric_weight,str_ratio=0)
 
     def compute_similarity(self,term1,term2,sub_rec_tuples):
         ALPHA = 0.95
@@ -120,10 +120,9 @@ class MixedSimilarityMetric(SimilarityMetric):
     def __init__(self,struct_metric, lex_metric,str_ratio,metric_weight):
         self.struct_metric = struct_metric
         self.lex_metric = lex_metric
-        self.str_ratio = str_ratio
         self.name = f"{struct_metric.name}_{str_ratio}_{lex_metric.name}"
 
-        super().__init__(self.name,metric_weight)
+        super().__init__(self.name,metric_weight,str_ratio=str_ratio)
 
 
     def compute_similarity(self, term1, term2, sub_rec_tuples):

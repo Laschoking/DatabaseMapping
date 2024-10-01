@@ -1,229 +1,110 @@
-import datetime
 import time
-import git
-
+from src.Libraries.PandasUtility import is_series_in_df,add_series_to_df,get_mapping_id,skip_current_computation
+from src.Libraries.PathLib import sql_con
 from src.Classes.DataContainerFile import DataContainer
 from src.Classes.MappingContainerFile import MappingContainer
-from src.Classes.QuantileAnchorTerms import QuantileAnchorTerms
-from src.Classes.SimOutlier import SimOutlier,QuantileOutlier
 from src.Config_Files.Analysis_Configs import *
-from src.ExpansionStrategies.IterativeAnchorExpansion import IterativeAnchorExpansion
 from src.Libraries.EvaluateMappings import *
-from src.StructuralSimilarityMetrics.DynamicRecordTupleCount import DynamicRecordTupleCount
-from src.StructuralSimilarityMetrics.JaccardIndex import JaccardIndex
-from src.StructuralSimilarityMetrics.NodeDegree import NodeDegree
-from src.LexicalSimilarityMetrics.ISUB import IsubStringMatcher
-from src.LexicalSimilarityMetrics.LevenshteinSimilarity import LevenshteinSimilarity
-from src.LexicalSimilarityMetrics.JaroWinkler import JaroWinkler
-from src.LexicalSimilarityMetrics.Dice import Dice
-from src.Libraries import ShellLib
+import itertools
+import gc
 import pandas as pd
 
-if __name__ == "__main__":
-    # specify Java-files & Programm Analysis
-    conf = PathLib.db_config_df.loc['lattice-maven-build-model-_1.0.17_1.0.18.7']
-    db_config = DbConfig(*conf.array)
-    program_config = Doop_PointerAnalysis
+def run_mappings_on_dbs(db_config_use,res_table,expansions,metrics,nr_runs):
 
-    # GEN-FACTS requires a Java version depending on the  v.8
-    GEN_FACTS = False  # if true, run doop again for new fact-gen, otherwise just copy from doop/out
-    COMP_MAPPING = True
-    RUN_DL = False
+    # Retrieve relevant data from Database
+    query = f"SELECT * FROM  DbConfig WHERE Use=\"{db_config_use}\";"
+    db_config_df = sql_con.query_table(query, ind_col='db_config_id')
 
-    # Fact Creation of Java-Files (or .Jar)
-    data = DataContainer(db_config.base_output_path, db_config.db1_path, db_config.db2_path)
+    # Setup mapping dataframes
+    existing_mappings_df = sql_con.get_table('MappingSetup')
 
-    # for collecting results
-    global_log = ShellLib.SqlConnector(data.paths.global_log)
-    repo = git.Repo(search_parent_directories=True)
-    commit = repo.head.object.hexsha
-    date = datetime.datetime.now()
+    existing_result_df = sql_con.get_table(res_table)
 
-    if GEN_FACTS:
-        ShellLib.create_input_facts(db_config, db_config.db1_name, db_config.db1_file_name,
-                                    data.db1_original_facts.path, force_gen=True)
-        ShellLib.create_input_facts(db_config, db_config.db2_name, db_config.db2_file_name,
-                                    data.db2_original_facts.path, force_gen=True)
+    # Iterate through all relevant database pairs that are used for the structural-evaluation
+    for curr_db_config_id, db_pair in db_config_df.iterrows():
+        print(f"file: {curr_db_config_id}")
+        db_config = DbConfig(*db_pair[['use', 'type', 'file_name', 'db1', 'db2']])
+        data = DataContainer(db_config.base_output_path, db_config.db1_path, db_config.db2_path)
 
-    # load facts into data-object
-    data.db1_original_facts.read_db_relations()
-    data.db2_original_facts.read_db_relations()
+        # Load facts into the data structure
+        db1_facts = data.db1_original_facts.read_db_relations()
+        db2_facts = data.db2_original_facts.read_db_relations()
 
-    # compute & evaluate equality base line
-    if RUN_DL:
-        nemo_runtime = ShellLib.chase_nemo(program_config.sep_dl, data.db1_original_facts.path,
-                                           data.db1_original_results.path)
-        global_log.reasoning_df.loc[len(global_log.reasoning_df)] = [date, commit,
-                                                                     db_config.file_name + "-" + db_config.db1_name,
-                                                                     None,
-                                                                     program_config.sep_dl.stem] + nemo_runtime
+        # Add combinations as new Mapping Container
+        data.add_mappings([MappingContainer(data.paths, expansion, metric)
+                           for expansion, metric in itertools.product(expansions, metrics)
+                           ])
 
-        nemo_runtime = ShellLib.chase_nemo(program_config.sep_dl, data.db2_original_facts.path,
-                                           data.db2_original_results.path)
-        global_log.reasoning_df.loc[len(global_log.reasoning_df)] = [date, commit,
-                                                                     db_config.file_name + "-" + db_config.db2_name,
-                                                                     None, program_config.sep_dl.stem] + nemo_runtime
+        # iterate through all selected mapping setups
+        for mapping in data.mappings:
 
-        data.db1_original_results.read_db_relations()
-        data.db2_original_results.read_db_relations()
+            # Put results of mapping run into dataframe for insertion into the database
+            new_mapping = pd.Series(mapping.get_finger_print())
 
-        reasoning_res = []
+            curr_mapping_id,MAPPING_EXISTS = get_mapping_id(new_mapping, existing_mappings_df)
+            new_mapping['mapping_id'] = curr_mapping_id
+            new_mapping['str_ratio'] = mapping.similarity_metric.str_ratio
 
-    db1_facts = data.db1_original_facts
-    db2_facts = data.db2_original_facts
 
-    # add mappings to data
-    '''data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "term_equality", term_equality))
-    data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "jaccard_min", jaccard_min))
-    data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "isub", isub_sequence_matcher))
-    data.add_mapping(MappingContainer(data.paths, "full_expansion", full_expansion_strategy, "jaccard+isub",  jaccard_isub_mix))
-    '''
-    # Set Anchor Quantile
-    q_80 = QuantileAnchorTerms(0.80)
-    q_90 = QuantileAnchorTerms(0.90)
-    q_95 = QuantileAnchorTerms(0.95)
-    q_98 = QuantileAnchorTerms(0.98)
-    q_99 = QuantileAnchorTerms(0.99)
+            # Check if the computation can be skipped, because the keys (mapping_id, db_config_id) are already in database
+            if MAPPING_EXISTS:
+                # Make series empty, so it will not be inserted to db later
+                new_mapping = new_mapping[0:0]
+                left_runs = skip_current_computation(mapping_id=curr_mapping_id, db_config_id=curr_db_config_id,
+                                                     df=existing_result_df, run_nr=nr_runs)
+                if not left_runs:
+                    continue
+            else:
+                # Otherwise, add the new mapping setup to local res_df and database
+                left_runs = nr_runs
+                existing_mappings_df = add_series_to_df(series=new_mapping, df=existing_mappings_df)
 
-    # Set SimOutlier
-    sim_outlier = QuantileOutlier()
+            print("--------------------------")
+            print(f"mapping_name: {mapping.name}, mapping_id: {curr_mapping_id}")
+            for run in left_runs:
+                # To be save, that no data problems arise, we create a new mapping object for each iteration
+                print(f"Run number: {run}")
+                temp_mapping_obj = MappingContainer(data.paths,mapping.expansion_strategy,mapping.similarity_metric,
+                                                    mapping_id=curr_mapping_id,run_nr=run)
 
-    # Set Expansion Strategy
-    static_iterative_expansion_80 = IterativeAnchorExpansion(q_80, sim_outlier, DYNAMIC=False)
-    static_iterative_expansion_90 = IterativeAnchorExpansion(q_90, sim_outlier, DYNAMIC=False)
-    static_iterative_expansion_95 = IterativeAnchorExpansion(q_95, sim_outlier, DYNAMIC=False)
-    static_iterative_expansion_98 = IterativeAnchorExpansion(q_98, sim_outlier, DYNAMIC=False)
-    dynamic_iterative_expansion_95 = IterativeAnchorExpansion(q_95, sim_outlier, DYNAMIC=True)
-    dynamic_iterative_expansion_98 = IterativeAnchorExpansion(q_98, sim_outlier, DYNAMIC=True)
-    dynamic_iterative_expansion_99 = IterativeAnchorExpansion(q_99, sim_outlier, DYNAMIC=True)
+                temp_mapping_obj.init_records_terms_db1(data.db1_original_facts)
+                temp_mapping_obj.init_records_terms_db2(data.db2_original_facts)
+                c_max_tuples = len(temp_mapping_obj.terms_db1) * len(temp_mapping_obj.terms_db2)
 
-    # Set up Similarity Metrics
-    jaccard_index = JaccardIndex()
-    dynamic_edge_count = DynamicRecordTupleCount()
-    dice = Dice(n=2)
-    node_degree = NodeDegree()
-    levenshtein = LevenshteinSimilarity()
-    isub = IsubStringMatcher()
-    jaro_winkler = JaroWinkler()
 
-    # Add combinations as new Mapping Container
+                t0 = time.time()
 
-    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, jaro_winkler))
-    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_90, jaro_winkler))
-    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_80, isub))
-    #data.add_mapping(MappingContainer(data.paths, static_iterative_expansion_90, isub))
-    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, jaccard_index))
-    data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, dynamic_edge_count))
-    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, dice))
-    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_99, jaccard_index))
-    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_98, dynamic_edge_count))
-    #data.add_mapping(MappingContainer(data.paths, dynamic_iterative_expansion_99, dynamic_edge_count))
+                # Find the best mapping for the selected parameters (expansion, metric, metric_weight)
+                # Apply the mapping to populate db1_renamed_facts
+                temp_mapping_obj.compute_mapping(db1_facts, db2_facts, [])
 
-    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,dynamic_edge_count))
-    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,node_degree))
+                t1 = time.time()
+                mapping_rt = round(t1 - t0, 4)
 
-    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,isub))
+                # Merge db1_renamed_facts and db2_facts into db_merged_facts
+                temp_mapping_obj.merge_dbs(temp_mapping_obj.db1_renamed_facts, db2_facts, temp_mapping_obj.db_merged_facts)
 
-    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,levenshtein_dist))
-    #data.add_mapping(MappingContainer(data.paths, "dynamic", iterative_anchor_expansion,jaro_winkler))
 
-    # data.add_mapping(MappingContainer(data.paths, "local_expansion", iterative_anchor_expansion, "isub", isub_sequence_matcher))
-    # data.add_mapping(MappingContainer(data.paths,"local_expansion",iterative_anchor_expansion,"jaccard+isub",jaccard_isub_mix))
+                # Save quality results for the insertion into the StructuralEvaluation table
+                str_res = count_overlap_merge_db(temp_mapping_obj.db_merged_facts)
+                str_res |= temp_mapping_obj.get_result_finger_print()
+                str_res |= {"mapping_id": curr_mapping_id, "db_config_id": curr_db_config_id, "max_tuples": c_max_tuples,
+                            "runtime": mapping_rt,'run_nr' : run}
 
-    eval_tab = PrettyTable()
-    eval_tab.field_names = ["Method", "data set", "unique rows DB1", "unique rows DB2", "Common Rows",
-                            "overlap in %"]
-    eval_tab.add_row(
-        ["No mapping", "original facts"] + compute_overlap_dbs(data.db1_original_facts, data.db2_original_facts,
-                                                               print_flag=False))
+                new_result = pd.Series(str_res)
 
-    time_tab = PrettyTable()
-    time_tab.field_names = ["MappingContainer", "#blocked Mappings", "# 1:1 Mappings", "#synthetic Terms", "# hub comp.",
-                            "uncertain mappings", "# comp. tuples", "comp. tuples in %", "run-time"]
+                # Log computed mapping and renamed DB1 and merged DB
+                # We only log the last run
+                temp_mapping_obj.log_mapping()
+                temp_mapping_obj.db1_renamed_facts.log_db_relations(mapping_id=curr_mapping_id, run_nr=run)
+                temp_mapping_obj.db_merged_facts.log_db_relations(mapping_id=curr_mapping_id, run_nr=run)
 
-    # iterate through all selected mapping functions
-    for mapping in data.mappings:
-        print("--------------------------")
-        print(mapping.name)
-        mapping.init_records_terms_db1(data.db1_original_facts)
-        mapping.init_records_terms_db2(data.db2_original_facts)
-        c_max_tuples = len(mapping.terms_db1) * len(mapping.terms_db2)
+                # The casting of new_result_df to str is necessary because sqlite sometimes inserts BLOB for other data types
+                if not new_result.empty:
+                    sql_con.insert_series(res_table, series=new_result.astype(str), write_index=False)
 
-        # calculate similarity_matrix & compute maximal mapping from db1_facts to db2_facts
-        if COMP_MAPPING:
-            t0 = time.time()
-            mapping.compute_mapping(db1_facts,db2_facts, program_config.blocked_terms)
-            t1 = time.time()
-            mapping.db1_renamed_facts.log_db_relations()
-            mapping_rt = round(t1 - t0, 4)
-        else:
-            mapping.read_mapping()
-            mapping_rt = 0.0
+                gc.collect()
 
-        nr_1_1_mappings = len(mapping.final_mapping)
-        # execute best mapping and create merged database: merge(map(db1_facts), db2_facts) -> merge_db2
-        mapping.merge_dbs(mapping.db1_renamed_facts, db2_facts, mapping.db_merged_facts)
-
-        mapping.log_mapping()
-        mapping.db_merged_facts.log_db_relations()
-        res = count_overlap_merge_db(mapping.db_merged_facts)
-        if mapping == data.mappings[-1]:
-            eval_tab.add_row([mapping.name, "merged facts"] + res, divider=True)
-        else:
-            eval_tab.add_row([mapping.name, "merged facts"] + res, divider=False)
-
-        l_blocked_terms = len(program_config.blocked_terms)
-
-        time_tab.add_row(
-            [mapping.name, l_blocked_terms, nr_1_1_mappings, mapping.syn_counter, mapping.c_hub_recomp,
-             mapping.c_uncertain_mappings, mapping.c_mappings,
-             str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", mapping_rt])
-        if COMP_MAPPING:
-            global_log.mapping_df.loc[len(global_log.mapping_df)] = (
-                    [date, commit, db_config.full_name, mapping.name, mapping.expansion_strategy.name,
-                     mapping.similarity_metric.name, mapping.c_mappings,
-                     str(round(mapping.c_mappings * 100 / c_max_tuples, 2)) + "%", nr_1_1_mappings,
-                     mapping.syn_counter, mapping.c_hub_recomp, mapping.c_uncertain_mappings] + res + [mapping_rt])
-            print(f"expanded anchor nodes: {len(mapping.anchor_nodes[0]),len(mapping.anchor_nodes[1])}")
-            print(f"accepted mappings: {mapping.c_accepted_anchor_mappings}")
-
-        if RUN_DL:
-            # run Nemo-Rules on merged facts (merge_db2 )
-            nemo_runtime = ShellLib.chase_nemo(program_config.merge_dl, mapping.db_merged_facts.path,
-                                               mapping.db_merged_results.path)
-
-            # Read PA-results
-            mapping.db_merged_results.read_db_relations()
-
-            # Apply mapping to merged-result (from db2_facts)
-            # mapping.map_df(mapping.db_merged_results, mapping.db1_unravelled_results)
-            mapping.unravel_merge_dbs()
-            mapping.db1_unravelled_results.log_db_relations()
-            mapping.db2_unravelled_results.log_db_relations()
-
-            # check if bijected results correspond to correct results from base
-            verify_merge_results(data, mapping)
-            overlap = count_overlap_merge_db(mapping.db_merged_results)
-            # noinspection PyUnboundLocalVariable
-            reasoning_res.append([mapping.name, "merged results"] + overlap)
-            # global_log nemo-runtime
-            global_log.reasoning_df.loc[len(global_log.reasoning_df)] = [date, commit, db_config.full_name,
-                                                                         mapping.name,
-                                                                         program_config.merge_dl.stem] + nemo_runtime
-            # "Date","SHA","MergeDB","MappingContainer","Expansion","Metric", "Unique Records DB1","Unique Records DB2","Mutual Records","Overlap in %"
-            global_log.merge_db_df.loc[len(global_log.merge_db_df)] = [date, commit, db_config.full_name, mapping.name,
-                                                                       mapping.expansion_strategy.__name__,
-                                                                       mapping.similarity_metric.name] + overlap
-
-    # Evaluation function to analyse if the mapping reduces storage
-    print(time_tab)
-    if RUN_DL:
-        eval_tab.add_row(["No mapping", "original results"] + compute_overlap_dbs(data.db1_original_results,
-                                                                                  data.db2_original_results))
-        # unfortunately we cant evalute this during the mapping bc. eval_tab should be separated by fact-eval & DL-eval
-        eval_tab.add_rows(reasoning_res)
-
-    print(eval_tab)
-
-    # data.log_terms()
-    #global_log.save_results()
+            # Evaluation function to analyse if the mapping reduces storage
+            if not new_mapping.empty:
+                sql_con.insert_series("MappingSetup", series=new_mapping, write_index=False)
