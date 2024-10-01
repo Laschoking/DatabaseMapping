@@ -11,8 +11,6 @@ from src.Libraries.SqlConnector import SqlConnector
 # The quality of a metric is measured, by how good it can identify the correct pair from a set of fake pairs
 
 
-# TODO in best case: meld data in Lexical Results (with 1 Result-record per Metric)
-
 def get_fake_tuples(corr_pair, corr_id, rename_df, NR_FAKE_PAIRS):
     fake_pairs = pd.DataFrame(columns=rename_df.columns)
     i = corr_id

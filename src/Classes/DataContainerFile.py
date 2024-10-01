@@ -12,7 +12,10 @@ class DbInstance:
 
         # ShellLib.clear_directory(self.path)
 
-    def read_db_relations(self):
+    def read_db_relations(self,mapping_id=None, run_nr=None):
+        if mapping_id is not None and run_nr is not None:
+            PathLib.get_mapping_dir(self.path,mapping_id,run_nr)
+            self.path = self.path.with_name(f"id_{mapping_id}_run_{run_nr}")
         if not self.path.is_dir():
             raise FileNotFoundError("Directory does not exist: " + str(self.path))
         for rel_path in self.path.glob("*"):
@@ -47,8 +50,12 @@ class DbInstance:
 
         return pd.Series({'nr_facts' : nr_facts,'nr_constants' : len(terms)})
 
-    def log_db_relations(self,run_nr=1):
-        out_path = PathLib.add_run_nr_to_path(file_path=self.path, run_nr=run_nr)
+    def log_db_relations(self, mapping_id=None, run_nr=None):
+        if mapping_id is not None and run_nr is not None:
+            PathLib.get_mapping_dir(self.path,mapping_id,run_nr)
+            out_path = self.path.with_name(f"id_{mapping_id}_run_{run_nr}")
+        else:
+            out_path = PathLib.add_run_nr_to_path(file_path=self.path, run_nr=run_nr)
         ShellLib.clear_directory(out_path)
         for file_name, df in self.files.items():
             df.to_csv(out_path.joinpath(file_name).with_suffix('.tsv'), sep="\t",

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from sortedcontainers import SortedDict,SortedList,SortedSet
-from src.Config_Files.Debug_Flags import DEBUG_TERMS, DEBUG_RECORDS, debug_set,HUB_RECOMPUTE, PLOT_STATISTICS
+from src.Config_Files.Debug_Flags import DEBUG_TERMS, DEBUG_RECORDS, debug_set, PLOT_STATISTICS
 from src.Classes.ExpansionStrategy import  ExpansionStrategy
 import src.Classes.Terms
 
@@ -60,7 +60,7 @@ class IterativeAnchorExpansion(ExpansionStrategy):
 
                 sub_rec_tuples = accepted_mapping.get_clean_record_tuples()
 
-                related_mappings, altered_mappings,finished_record_tuples = accepted_mapping.accept_this_mapping()
+                related_mappings, altered_mappings,finished_record_tuples = accepted_mapping.accept_this_mapping(DYNAMIC=self.DYNAMIC)
 
                 # Save complete record tuples for efficient matching of databases
                 for file_name, rec_tuples in finished_record_tuples.items():

@@ -8,7 +8,7 @@ from src.Config_Files.Analysis_Configs import *
 from src.ExpansionStrategies.IterativeAnchorExpansion import IterativeAnchorExpansion
 from src.Libraries.EvaluateMappings import *
 from src.StructuralSimilarityMetrics.JaccardIndex import JaccardIndex
-from src.MixedSimilarityMetrics.Jaccard_Dice_Mix import JaccardDiceMix
+from src.Classes.SimilarityMetric import MixedSimilarityMetric
 from src.LexicalSimilarityMetrics.Dice import Dice
 import itertools
 import gc
@@ -29,26 +29,24 @@ if __name__ == "__main__":
 
     #########################################################
     # Important parameters:
-    RUN_NR = [1,2,3,4,5]
+    RUN_NR = [1]
 
     # Setup 3 Anchor values: (this will expand the 10/5/2% of constants with the highest degree)
-    q_90 = QuantileAnchorTerms(0.90)
-    q_95 = QuantileAnchorTerms(0.95)
-    q_98 = QuantileAnchorTerms(0.98)
-    quantiles = [q_90, q_95, q_98]
+    q = QuantileAnchorTerms(0.95)
 
     # Set Expansion Strategies
-    expansions = [IterativeAnchorExpansion(anchor_quantile=q, DYNAMIC=True) for q in quantiles]
-    expansions += [IterativeAnchorExpansion(anchor_quantile=q, DYNAMIC=False) for q in quantiles]
-
+    expansions = [IterativeAnchorExpansion(anchor_quantile=q,DYNAMIC=True)]
 
     # Since we want to evaluate the quality of each structural metric (without any expansion) we only evaluate the str. metrics
     # The best metric weight will be chosen in the evaluation of Expansion Strategy
     # Set up Structural similarity metrics
-    metric_weights = [0.8,0.9,1]
-    #metrics  = [JaccardDiceMix(str_ratio=1,metric_weight=1)]
-    metrics = [JaccardIndex(metric_weight=w) for w in metric_weights]
-    metrics += [Dice(n=2,metric_weight=w) for w in metric_weights]
+    weight = 0.8
+    ratios = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+
+    jaccard = JaccardIndex(metric_weight=weight)
+    dice = Dice(n=2, metric_weight=weight)
+    metrics = [MixedSimilarityMetric(struct_metric=jaccard,lex_metric=dice,
+                                     str_ratio=s,metric_weight=1) for s in ratios]
 
     ############################################################
 
@@ -76,6 +74,7 @@ if __name__ == "__main__":
 
             curr_mapping_id,MAPPING_EXISTS = get_mapping_id(new_mapping, existing_mappings_df)
             new_mapping['mapping_id'] = curr_mapping_id
+            new_mapping['str_ratio'] = mapping.similarity_metric.str_ratio
 
             # Check if the computation can be skipped, because the keys (mapping_id, db_config_id) are already in database
             if MAPPING_EXISTS:
@@ -126,9 +125,9 @@ if __name__ == "__main__":
 
                 # Log computed mapping and renamed DB1 and merged DB
                 # We only log the last run
-                temp_mapping_obj.log_mapping(run_nr=run)
-                temp_mapping_obj.db1_renamed_facts.log_db_relations(run_nr=run)
-                temp_mapping_obj.db_merged_facts.log_db_relations(run_nr=run)
+                temp_mapping_obj.log_mapping(mapping_id=curr_mapping_id,run_nr=run)
+                temp_mapping_obj.db1_renamed_facts.log_db_relations(mapping_id=curr_mapping_id, run_nr=run)
+                temp_mapping_obj.db_merged_facts.log_db_relations(mapping_id=curr_mapping_id, run_nr=run)
 
                 # The casting of new_result_df to str is necessary because sqlite sometimes inserts BLOB for other data types
                 if not new_result.empty:

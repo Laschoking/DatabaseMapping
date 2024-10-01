@@ -10,7 +10,7 @@ import copy
 
 # each MappingContainer has a Strategy and a similarity metric
 class MappingContainer:
-    def __init__(self, paths, expansion_strategy, similarity_metric):
+    def __init__(self, paths, expansion_strategy, similarity_metric,mapping_id=None,run_nr=None):
 
         if expansion_strategy.DYNAMIC:
             exp_type = "dynamic"
@@ -30,7 +30,7 @@ class MappingContainer:
         self.final_mapping = pd.DataFrame()
         self.final_rec_tuples = dict()
 
-        self.mapping_path = paths.mapping_results.joinpath(self.name).with_suffix('.tsv')
+
         self.syn_counter = 0
         self.expansion_strategy = expansion_strategy
         self.similarity_metric = similarity_metric
@@ -47,12 +47,26 @@ class MappingContainer:
         self.c_hub_recomp = 0
         self.c_mappings = 0
 
+        # Initialise mapping-identifier with potential dummies
+        self.mapping_path = paths.mapping_results
+        self.mapping_id = mapping_id
+        self.run_nr = run_nr
+        if mapping_id is not None and run_nr is not None:
+            self.set_mapping_id(mapping_id, run_nr)
+
+
+
+    def set_mapping_id(self,mapping_id, run_nr):
+        self.mapping_id = mapping_id
+        self.run_nr = run_nr
+        self.mapping_path = PathLib.get_mapping_file(path=self.mapping_path, mapping_id=mapping_id,run_nr=run_nr)
+
     def init_records_terms_db1(self, db1):
         max_deg1 = self.init_records_terms_db(db1, self.terms_db1, self.records_db1)
-        self.similarity_metric.max_deg1 = max_deg1
+        self.similarity_metric.set_max_deg1(max_deg1)
     def init_records_terms_db2(self, db2):
         max_deg2 = self.init_records_terms_db(db2, self.terms_db2, self.records_db2)
-        self.similarity_metric.max_deg2 = max_deg2
+        self.similarity_metric.set_max_deg2(max_deg2)
 
 
     # terms and records need to be initialised together because term.occurrences points to record_obj 
@@ -92,7 +106,8 @@ class MappingContainer:
         self.final_mapping = mapping
 
     def compute_mapping(self, db1, db2, DL_blocked_terms):
-        c_mappings = self.expansion_strategy.accept_expand_mappings(self, self.terms_db1, self.terms_db2,DL_blocked_terms, self.similarity_metric)
+        c_mappings = self.expansion_strategy.accept_expand_mappings(self, self.terms_db1, self.terms_db2,
+                                                                    DL_blocked_terms, self.similarity_metric)
         self.c_mappings = c_mappings
 
         # do the renaming of Terms1 & matching of records
@@ -138,9 +153,9 @@ class MappingContainer:
         else:
             return df1_replaced
 
-    def read_mapping(self,run_nr):
-        mapping_path = PathLib.add_run_nr_to_path(file_path=self.mapping_path, run_nr=run_nr)
-        # TODO put run-number into each mapping and as directory suffix for the merged db
+    def read_mapping(self):
+        if self.mapping_id is None:
+            raise ValueError(f"expected mapping_id{self.mapping_path, self.mapping_id}")
         if self.mapping_path.exists():
             df = pd.read_csv(self.mapping_path, sep='\t', header=None, names=['constant1','constant2','sim'])
             # check how many terms have been mapped to synthetic term
@@ -150,10 +165,9 @@ class MappingContainer:
             raise FileNotFoundError(self.mapping_path)
 
     # write mapping results to CSV file
-    def log_mapping(self,run_nr):
+    def log_mapping(self):
         ShellLib.clear_file(self.mapping_path)
-        mapping_path = PathLib.add_run_nr_to_path(file_path=self.mapping_path, run_nr=run_nr)
-        self.final_mapping.to_csv(mapping_path, sep='\t', index=False, header=False)
+        self.final_mapping.to_csv(self.mapping_path, sep='\t', index=False, header=False)
 
     def merge_dbs(self, db1, db2, to_db):
         for file_name in db1.files.keys():

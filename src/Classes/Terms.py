@@ -1,5 +1,5 @@
 import itertools
-from src.Config_Files.Debug_Flags import DEBUG_TERMS,DEBUG_RECORDS, debug_set, debug_term_names1,debug_term_names2,DYNAMIC_EXPANSION
+from src.Config_Files.Debug_Flags import DEBUG_TERMS,DEBUG_RECORDS, debug_set, debug_term_names1,debug_term_names2
 from src.Classes.Records import RecordTuple
 
 
@@ -80,18 +80,21 @@ class Mapping:
 
 
     def __lt__(self, other):
+        if self.sim is None or other.sim is None:
+            raise ValueError(f"sim does not exist {self.term1.name,self.term2.name,self.sim}, "
+                             f"{other.term1.name, other.term2.name,other.sim}")
         if self.sim < other.sim:
             return True
         elif self.sim > other.sim:
             return False
-        elif min(self.term1.degree,self.term2.degree) < min(other.term1.degree,other.term2.degree):
-            return True
-        elif min(self.term1.degree,self.term2.degree) > min(other.term1.degree,other.term2.degree):
-            return False
-        return id(self) < id(other) # self.term1.name + "///" + self.term2.name < other.term1.name + "///" + other.term2.name
+        #elif min(self.term1.degree,self.term2.degree) < min(other.term1.degree,other.term2.degree):
+        #    return True
+        #elif min(self.term1.degree,self.term2.degree) > min(other.term1.degree,other.term2.degree):
+        #    return False
+        return id(self) < id(other)
 
     def eq_values(self,other):
-        return self.sim == other.sim and min(self.term1.degree,self.term2.degree) == min(other.term1.degree,other.term2.degree)
+        return self.sim == other.sim #and min(self.term1.degree,self.term2.degree) == min(other.term1.degree,other.term2.degree)
 
 
     def is_active(self):
@@ -136,7 +139,6 @@ class Mapping:
                 else:
                     continue
 
-
                 record1.record_tuples.add(rec_tuple)
                 record2.record_tuples.add(rec_tuple)
                 rec_tuple.add_subscriber(self, mapped_cols)
@@ -154,7 +156,7 @@ class Mapping:
     def recompute_similarity(self):
         self.get_clean_record_tuples()  # make sure, that all records & record_objects are still valid
         sim = self.similarity_metric.recompute_similarity(self.sim,self.term1, self.term2, self.sub_rec_tuples)
-        self.sim = round(sim,5)
+        self.sim = sim
         return self.sim
 
     def compute_similarity(self):
@@ -182,7 +184,7 @@ class Mapping:
         return self.sub_rec_tuples
 
 
-    def accept_this_mapping(self):
+    def accept_this_mapping(self,DYNAMIC):
 
         # Update all record-tuples, that one or more cells are filled now by the current mapping
         remaining_records = set()
@@ -216,7 +218,7 @@ class Mapping:
         related_mappings.remove(self)  # We don't want to delete the current mapping from the prio-dict
 
         altered_mappings = set()
-        if DYNAMIC_EXPANSION:
+        if DYNAMIC:
             # Gather all records where the two terms are involved individually
             all_records = set()
             for records in itertools.chain(self.term1.occurrences.values(), self.term2.occurrences.values()):

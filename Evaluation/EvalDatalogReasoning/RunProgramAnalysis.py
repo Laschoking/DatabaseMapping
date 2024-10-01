@@ -91,7 +91,6 @@ if __name__ == "__main__":
         # Retrieve all mapping configuration that were used in the ReasoningDB
         curr_mappings = existing_result_df[existing_result_df['db_config_id'] == curr_db_config_id]
 
-        expansions = {()}
         for index,mapping_ser in curr_mappings.iterrows():
             expansion = IterativeAnchorExpansion(anchor_quantile=mapping_ser['anchor_quantile'],
                                                  DYNAMIC=bool(mapping_ser['dynamic']))
@@ -102,9 +101,10 @@ if __name__ == "__main__":
             else:
                 raise ValueError(f"metric not known: {mapping_ser['metric']}")
 
-            mapping = MappingContainer(paths=data.paths, expansion_strategy=expansion, similarity_metric=metric)
+            mapping = MappingContainer(paths=data.paths, expansion_strategy=expansion, similarity_metric=metric,
+                                       mapping_id=mapping_ser['mapping_id'],run=run_nr)
             # Read mapping results, that were already computed before
-            mapping.read_mapping(run_nr=mapping_ser['run_nr'])
+            mapping.read_mapping(mapping_id=mapping_ser['mapping_id'],run_nr=mapping_ser['run_nr'])
 
             # Merge db1_renamed_facts and db2_facts into db_merged_facts
             mapping.merge_dbs(mapping.db1_renamed_facts, db2_facts, mapping.db_merged_facts)
@@ -117,6 +117,7 @@ if __name__ == "__main__":
             # check if bijected results correspond to correct results from base
             verify_merge_results(data, mapping)
             overlap = count_overlap_merge_db(mapping.db_merged_results)
+
     '''
             # noinspection PyUnboundLocalVariable
             reasoning_res.append([mapping.name, "merged results"] + overlap)

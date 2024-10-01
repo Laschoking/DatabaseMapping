@@ -27,6 +27,12 @@ class SimilarityMetric:
         return self.metric_weight * sim + (1 - self.metric_weight) * norm_importance
 
 
+    def set_max_deg1(self,max_deg1):
+        self.max_deg1 = max_deg1
+
+    def set_max_deg2(self,max_deg2):
+        self.max_deg2 = max_deg2
+
 
 class StructuralSimilarityMetric(SimilarityMetric):
     def __init__(self,name,metric_weight):
@@ -103,11 +109,47 @@ class LexicalSimilarityMetric(SimilarityMetric):
                 sim += 1
             elif max_nr:
                 sim += 1 - abs(n1 - n2) / max_nr
-                # Testen für mehrfach Zahlen?
-                # TODO handle negative cases
+
             i += 1
         return sim / min(l_nr1,l_nr2)
 
 
 
+
+class MixedSimilarityMetric(SimilarityMetric):
+    def __init__(self,struct_metric, lex_metric,str_ratio,metric_weight):
+        self.struct_metric = struct_metric
+        self.lex_metric = lex_metric
+        self.str_ratio = str_ratio
+        self.name = f"{struct_metric.name}_{str_ratio}_{lex_metric.name}"
+
+        super().__init__(self.name,metric_weight)
+
+
+    def compute_similarity(self, term1, term2, sub_rec_tuples):
+
+        # propagate  (which would trigger, application of importance weight)
+        str_sim = self.str_ratio * self.struct_metric.compute_similarity(term1, term2, sub_rec_tuples)
+        lex_sim = (1 - self.str_ratio) * self.lex_metric.compute_similarity(term1, term2,sub_rec_tuples)
+        mixed_sim = str_sim + lex_sim
+        if mixed_sim is None:
+            raise ValueError(f"mixed similarity is NONE ")
+        return mixed_sim
+
+    # Overwrites other behaviour
+    def set_max_deg1(self, max_deg1):
+        self.max_deg1 = max_deg1
+        self.struct_metric.set_max_deg1(self.max_deg1)
+        self.lex_metric.set_max_deg1(self.max_deg1)
+
+    def set_max_deg2(self, max_deg2):
+        self.max_deg2 = max_deg2
+        self.struct_metric.set_max_deg2(self.max_deg2)
+        self.lex_metric.set_max_deg2(self.max_deg2)
+
+    def recompute_similarity(self,old_sim,term1,term2,sub_rec_tuples):
+        str_sim = self.str_ratio * self.struct_metric.recompute_similarity(old_sim,term1, term2, sub_rec_tuples)
+        lex_sim = (1 - self.str_ratio) * self.lex_metric.recompute_similarity(old_sim,term1, term2,sub_rec_tuples)
+        mixed_sim = str_sim + lex_sim
+        return mixed_sim
 

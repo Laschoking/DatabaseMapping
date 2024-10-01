@@ -25,12 +25,14 @@ if __name__ == "__main__":
     # Setup mapping dataframes
     existing_mappings_df = sql_con.get_table('MappingSetup')
 
-    existing_result_df = sql_con.get_table('StructuralResults')
+    existing_result_df = sql_con.get_table('StructuralResults_New2')
 
     #########################################################
     # Important parameters:
     # Set this higher if all results should be computed several times (since they are non-deterministic)
-    RUN_NR = [1,2,3,4,5]
+    RUN_NR = [1,2,3] # 3,4,5
+    # TODO: 1 more run
+
     # Set Anchor Quantile to 0, so the cartesian product is expanded (all possible combinations)
     q_0 = QuantileAnchorTerms(0)
 
@@ -42,10 +44,11 @@ if __name__ == "__main__":
     # Since we want to evaluate the quality of each structural metric (without any expansion) we only evaluate the str. metrics
     # The best metric weight will be chosen in the evaluation of Expansion Strategy
     # Set up Structural similarity metrics
-    jaccard_index = JaccardIndex(metric_weight=1)
-    dynamic_edge_count = DynamicRecordTupleCount(metric_weight=1)
-    node_degree = NodeDegree(metric_weight=1)
-    metrics = [node_degree, jaccard_index,dynamic_edge_count] # 3 combinations
+    metric_weights = [0.8,0.9,1]
+    metrics = [JaccardIndex(metric_weight=w) for w in metric_weights]
+    metrics += [DynamicRecordTupleCount(metric_weight=w) for w in metric_weights]
+    metrics += [NodeDegree(metric_weight=w) for w in metric_weights]
+
 
     ############################################################
 
@@ -73,6 +76,8 @@ if __name__ == "__main__":
 
             curr_mapping_id,MAPPING_EXISTS = get_mapping_id(new_mapping, existing_mappings_df)
             new_mapping['mapping_id'] = curr_mapping_id
+            new_mapping['str_ratio'] = 1
+
 
             # Check if the computation can be skipped, because the keys (mapping_id, db_config_id) are already in database
             if MAPPING_EXISTS:
@@ -92,8 +97,8 @@ if __name__ == "__main__":
             for run in left_runs:
                 # To be save, that no data problems arise, we create a new mapping object for each iteration
                 print(f"Run number: {run}")
-                temp_mapping_obj = MappingContainer(data.paths,mapping.expansion_strategy,mapping.similarity_metric)
-
+                temp_mapping_obj = MappingContainer(data.paths,mapping.expansion_strategy,mapping.similarity_metric,
+                                                    mapping_id=curr_mapping_id,run_nr=run)
 
                 temp_mapping_obj.init_records_terms_db1(data.db1_original_facts)
                 temp_mapping_obj.init_records_terms_db2(data.db2_original_facts)
@@ -123,13 +128,13 @@ if __name__ == "__main__":
 
                 # Log computed mapping and renamed DB1 and merged DB
                 # We only log the last run
-                temp_mapping_obj.log_mapping(run_nr=run)
-                temp_mapping_obj.db1_renamed_facts.log_db_relations(run_nr=run)
-                temp_mapping_obj.db_merged_facts.log_db_relations(run_nr=run)
+                temp_mapping_obj.log_mapping()
+                temp_mapping_obj.db1_renamed_facts.log_db_relations(mapping_id=curr_mapping_id, run_nr=run)
+                temp_mapping_obj.db_merged_facts.log_db_relations(mapping_id=curr_mapping_id, run_nr=run)
 
                 # The casting of new_result_df to str is necessary because sqlite sometimes inserts BLOB for other data types
                 if not new_result.empty:
-                    sql_con.insert_series("StructuralResults", series=new_result.astype(str), write_index=False)
+                    sql_con.insert_series("StructuralResults_New2", series=new_result.astype(str), write_index=False)
 
                 gc.collect()
 
