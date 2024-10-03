@@ -14,7 +14,7 @@ if __name__ == "__main__":
     # Important parameters:
     RUN_NR = [1,2,3]
     USE = 'expansion%'
-    RES_TABLE = 'ExpansionResults_New'
+    RES_TABLE = 'ExpansionResults'
 
     # Setup 3 Anchor values: (this will expand the 10/5/2% of constants with the highest degree)
     quantiles = [QuantileAnchorTerms(0.9), QuantileAnchorTerms(0.95), QuantileAnchorTerms(0.98)]

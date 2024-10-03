@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     # Setup mapping dataframes
     mapping_df = sql_con.get_table('MappingSetup')
-    existing_result_df = sql_con.get_table('StructuralResults_New2')
+    existing_result_df = sql_con.get_table('StructuralResults')
 
 
     # Get mapping information

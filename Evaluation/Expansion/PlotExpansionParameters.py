@@ -13,7 +13,7 @@ if __name__ == "__main__":
     NR_RUNS = 3
     db_config_df = sql_con.query_table(query="SELECT * FROM DbConfig WHERE use LIKE \'expansion-same-lib\';")
     single_db_char_df = sql_con.get_table(table="DbFingerPrint")
-    res_df = sql_con.get_table(table="ExpansionResults_New")
+    res_df = sql_con.get_table(table="ExpansionResults")
     mapping_df = sql_con.get_table(table="MappingSetup")
 
     """ Merge all databases together and add db information for each db pair"""

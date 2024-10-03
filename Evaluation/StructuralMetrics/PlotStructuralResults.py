@@ -11,7 +11,7 @@ if __name__ == "__main__":
     NR_RUNS = 3
     db_config_df = sql_con.query_table(query="SELECT * FROM DbConfig WHERE use=\'structural-evaluation\';")
     single_db_char_df = sql_con.get_table(table="DbFingerPrint")
-    res_df = sql_con.get_table(table="StructuralResults_New2")
+    res_df = sql_con.get_table(table="StructuralResults")
     mapping_df = sql_con.get_table(table="MappingSetup")
     res_df = pd.merge(res_df,mapping_df, left_on='mapping_id', right_on='mapping_id')
     db_config_df = pd.merge(db_config_df,single_db_char_df, left_on=['file_name','db1'], right_on=['file_name','version'])

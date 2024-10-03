@@ -15,7 +15,7 @@ if __name__ == "__main__":
     # Set this higher if all results should be computed several times (since they are non-deterministic)
     RUN_NR = [1, 2, 3]  # 3,4,5
     USE = 'structural-evaluation'
-    RES_TABLE = 'StructuralResults_New2'
+    RES_TABLE = 'StructuralResults'
 
     # Set Anchor Quantile to 0, so the cartesian product is expanded (all possible combinations)
     q_0 = QuantileAnchorTerms(0)
