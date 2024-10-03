@@ -25,7 +25,7 @@ def get_mapping_id(new_mapping, existing_mappings_df) -> (int, bool):
     """ Retrieve the mapping id from MappingSetup"""
     # If mapping_setup is in the DB already, use the existing Mapping_Identifier
     matches = existing_mappings_df[
-        ['expansion', 'anchor_quantile', 'importance_weight', 'dynamic', 'metric']].eq(new_mapping).all(axis=1)
+        ['expansion', 'anchor_quantile', 'importance_weight', 'dynamic', 'metric','str_ratio']].eq(new_mapping).all(axis=1)
     if matches.any():
         # The index which has the match is exactly the mapping_id we are looking for
         curr_mapping_id = existing_mappings_df.loc[matches.idxmax(), 'mapping_id']

@@ -21,7 +21,7 @@ class DynamicRecordTupleCount(StructuralSimilarityMetric):
             edge_count += 1 / max(rec1_deg, rec2_deg)
 
         total_occurrences = term1.degree + term2.degree
-        # weight matches higher to prefer important nodes
+        # str_weight matches higher to prefer important nodes
         return edge_count / total_occurrences
 
 

@@ -14,7 +14,6 @@ if __name__ == "__main__":
     # Important parameters:
     # Set this higher if all results should be computed several times (since they are non-deterministic)
     RUN_NR = [1, 2, 3]  # 3,4,5
-    # TODO: 1 more run
     USE = 'structural-evaluation'
     RES_TABLE = 'StructuralResults_New2'
 
@@ -27,7 +26,7 @@ if __name__ == "__main__":
     expansions = [stat_cross_product, dyn_cross_product]
 
     # Since we want to evaluate the quality of each structural metric (without any expansion) we only evaluate the str. metrics
-    # The best metric weight will be chosen in the evaluation of Expansion Strategy
+    # The best metric str_weight will be chosen in the evaluation of Expansion Strategy
     # Set up Structural similarity metrics
     metric_weights = [0.8, 0.9, 1]
     metrics = [JaccardIndex(metric_weight=w) for w in metric_weights]

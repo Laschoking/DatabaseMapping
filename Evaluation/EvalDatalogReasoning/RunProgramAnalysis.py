@@ -54,12 +54,12 @@ def run_merged_program_analyses(mapping, dl_programs, nemo_rt_df):
 if __name__ == "__main__":
 
     # Retrieve relevant data from Database
-    query = "SELECT * FROM  DbConfig WHERE Use=\"expansion-same-lib\";"
+    query = "SELECT * FROM  DbConfig WHERE Use=\"structural-evaluation\";"
     db_config_df = sql_con.query_table(query, ind_col='db_config_id')
 
     # Setup mapping dataframes
     mapping_df = sql_con.get_table('MappingSetup')
-    existing_result_df = sql_con.get_table('ExpansionResults')
+    existing_result_df = sql_con.get_table('StructuralResults_New2')
 
 
     # Get mapping information
@@ -105,7 +105,7 @@ if __name__ == "__main__":
                                        mapping_id=mapping_res['mapping_id'], run_nr=mapping_res['run_nr'])
 
             # Read mapping results, that were already computed before
-            mapping.read_mapping(mapping_id=mapping_res['mapping_id'], run_nr=mapping_res['run_nr'])
+            mapping.read_mapping()
 
             # Merge db1_renamed_facts and db2_facts into db_merged_facts
             mapping.merge_dbs(mapping.db1_renamed_facts, db2_facts, mapping.db_merged_facts)
@@ -162,7 +162,7 @@ def generate_pa_dbs():
                   IterativeAnchorExpansion(anchor_quantile=q, DYNAMIC=True)]
 
     # Since we want to evaluate the quality of each structural metric (without any expansion) we only evaluate the str. metrics
-    # The best metric weight will be chosen in the evaluation of Expansion Strategy
+    # The best metric str_weight will be chosen in the evaluation of Expansion Strategy
     # Set up Structural similarity metrics
     w = 0.8
     metrics = [JaccardIndex(metric_weight=w), Dice(n=2, metric_weight=w)]

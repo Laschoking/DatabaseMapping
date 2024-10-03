@@ -12,15 +12,12 @@ import copy
 class MappingContainer:
     def __init__(self, paths, expansion_strategy, similarity_metric,mapping_id=None,run_nr=None):
 
-        if expansion_strategy.DYNAMIC:
-            exp_type = "dynamic"
-        else:
-            exp_type = "static"
-        name = exp_type + "_" + expansion_strategy.name + "-" + similarity_metric.name.replace(" ", "")
+        name = f"id_{mapping_id}_run_{run_nr}"
         self.name = name
 
         self.db1_renamed_facts = DbInstance(paths.db1_facts, name)
 
+        # SET those to
         self.db_merged_facts = DbInstance(paths.merge_facts, name)
         self.db_merged_results = DbInstance(paths.merge_results, name)
 
@@ -48,18 +45,9 @@ class MappingContainer:
         self.c_mappings = 0
 
         # Initialise mapping-identifier with potential dummies
-        self.mapping_path = paths.mapping_results
+        self.mapping_path = paths.mapping_results.joinpath(self.name).with_suffix('.tsv')
         self.mapping_id = mapping_id
         self.run_nr = run_nr
-        if mapping_id is not None and run_nr is not None:
-            self.set_mapping_id(mapping_id, run_nr)
-
-
-
-    def set_mapping_id(self,mapping_id, run_nr):
-        self.mapping_id = mapping_id
-        self.run_nr = run_nr
-        self.mapping_path = PathLib.get_mapping_file(path=self.mapping_path, mapping_id=mapping_id,run_nr=run_nr)
 
     def init_records_terms_db1(self, db1):
         max_deg1 = self.init_records_terms_db(db1, self.terms_db1, self.records_db1)
@@ -157,9 +145,17 @@ class MappingContainer:
         if self.mapping_id is None:
             raise ValueError(f"expected mapping_id{self.mapping_path, self.mapping_id}")
         if self.mapping_path.exists():
-            df = pd.read_csv(self.mapping_path, sep='\t', header=None, names=['constant1','constant2','sim'])
+            df = pd.read_csv(self.mapping_path, sep='\t', header=None, names=['constant1','constant2','sim'],
+                             keep_default_na=False,lineterminator='\n')
             # check how many terms have been mapped to synthetic term
-            self.syn_counter = df.iloc[:,1].str.startswith("new_var").value_counts()[True]
+            syn_counter = df.iloc[:,1].str.startswith("new_var").value_counts()
+            if True in syn_counter:
+                self.syn_counter = syn_counter[True]
+            elif False in syn_counter:
+                self.syn_counter = 0
+            else:
+                raise ValueError(f"{syn_counter}")
+
             self.final_mapping = df
         else:
             raise FileNotFoundError(self.mapping_path)

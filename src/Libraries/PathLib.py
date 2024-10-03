@@ -38,9 +38,6 @@ def add_run_nr_to_path(file_path, run_nr):
     new_stem = f"{stem}_{run_nr}"
     return file_path.with_name(new_stem).with_suffix(suffix)
 
-def get_mapping_file(path,mapping_id,run_nr):
-    return path.joinpath(f"id_{mapping_id}_run_{run_nr}").with_suffix(".tsv")
-
 
 def get_mapping_dir(path,mapping_id,run_nr):
     return path.joinpath(f"id_{mapping_id}_run_{run_nr}")

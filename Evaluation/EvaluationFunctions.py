@@ -88,11 +88,10 @@ def plot_best_overlap_per_resource(res_df, PLOT_FIG):
         fig = px.bar(plot_df,x='file_name',y="overlap_perc",title='Test',color='metric',barmode="group")
         fig.show()
 
-def calc_best_anchor_quantile(res_df):
-    res_df = res_df[res_df['dynamic'] == 'True']
-    res_df = res_df[['anchor_quantile','common_records','use','file_name','nr_poss_facts','metric',
-                     'runtime','computed_mappings']]
-    group_df = res_df.groupby(['use','anchor_quantile','metric'])
+def calc_best_anchor_quantile(res_df,gr_cols):
+    #res_df = res_df[['anchor_quantile','common_records','use','file_name','nr_poss_facts','metric',
+    #                 'runtime','computed_mappings']]
+    group_df = res_df.groupby(gr_cols)
     s = group_df.size()
 
     group_df = group_df.sum(numeric_only=True)
@@ -104,16 +103,16 @@ def calc_best_anchor_quantile(res_df):
 
     group_df.reset_index(inplace=True)
 
-    return group_df[['anchor_quantile','use','metric','avg_overlap','avg_rt','avg_comp_mappings']]
+    return group_df[gr_cols + ['anchor_quantile','avg_overlap','avg_rt','avg_comp_mappings']]
 
 
-def calc_best_importance_weight(res_df):
+def calc_best_importance_weight(res_df,gr_cols):
     res_df = res_df[res_df['dynamic'] == 'True']
     res_df = res_df[res_df['anchor_quantile'] == 0.95]
 
     res_df = res_df[['importance_weight','common_records','use','file_name','nr_poss_facts','metric',
                      'runtime','computed_mappings','uncertain_mappings']]
-    group_df = res_df.groupby(['use','importance_weight'])
+    group_df = res_df.groupby(gr_cols)
     s = group_df.size()
 
     group_df = group_df.sum(numeric_only=True)
@@ -158,9 +157,10 @@ def count_correct_mappings(res_df, config_df,gb_cols):
     return group_df[gb_cols + ['corr_mappings']]
 
 
-def calc_dynamic_impact_per_metric(res_df):
-    group_df = res_df.groupby(['metric','dynamic'])
+def calc_dynamic_impact_per_metric(res_df,gr_cols):
+    group_df = res_df.groupby(gr_cols)
     group_df = group_df.sum(numeric_only=True)
     group_df = group_df.reset_index()
     group_df['avg_overlap'] = round(group_df['common_records'] * 100 / group_df['nr_poss_facts'],2)
     return group_df[['metric','dynamic','avg_overlap']]
+

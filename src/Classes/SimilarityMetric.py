@@ -127,7 +127,7 @@ class MixedSimilarityMetric(SimilarityMetric):
 
     def compute_similarity(self, term1, term2, sub_rec_tuples):
 
-        # propagate  (which would trigger, application of importance weight)
+        # propagate  (which would trigger, application of importance str_weight)
         str_sim = self.str_ratio * self.struct_metric.compute_similarity(term1, term2, sub_rec_tuples)
         lex_sim = (1 - self.str_ratio) * self.lex_metric.compute_similarity(term1, term2,sub_rec_tuples)
         mixed_sim = str_sim + lex_sim

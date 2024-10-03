@@ -73,11 +73,13 @@ class ExpansionStrategy:
         exp_mappings = set()
         for term1, term2 in new_mapping_tuples:
             if not term1.is_active():
-                print(f"term1 was mapped already: {term1.name} to {term2.name}")
+                if DEBUG_TERMS:
+                    print(f"term1 was mapped already: {term1.name} to {term2.name}")
                 continue
 
             if not term2.is_active():
-                print(f"term2 was mapped already: {term1.name} to {term2.name}")
+                if DEBUG_TERMS:
+                    print(f"term2 was mapped already: {term1.name} to {term2.name}")
                 continue
 
             new_mapping = Mapping(term1, term2, expanded_record_tuples, similarity_metric)

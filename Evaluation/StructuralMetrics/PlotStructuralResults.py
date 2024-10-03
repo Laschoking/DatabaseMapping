@@ -7,8 +7,8 @@ pd.set_option('display.max_columns', None)  # Display all columns
 pd.options.plotting.backend = "plotly"
 
 if __name__ == "__main__":
-    PLOT_FIG = True
-    NR_RUNS = 2
+    PLOT_FIG = False
+    NR_RUNS = 3
     db_config_df = sql_con.query_table(query="SELECT * FROM DbConfig WHERE use=\'structural-evaluation\';")
     single_db_char_df = sql_con.get_table(table="DbFingerPrint")
     res_df = sql_con.get_table(table="StructuralResults_New2")
@@ -27,6 +27,9 @@ if __name__ == "__main__":
     overlap_df = calc_overlap_perc_all_resources(res_df,gb_cols)
 
     runtime_df = calc_rt_average(res_df,gb_cols)
+    rt_dynamic = calc_rt_average(res_df,['dynamic'])
+    print(rt_dynamic)
+
 
     std_dev_df = plot_std_dev_over_runs(res_df,PLOT_FIG,gb_cols,nr_total_records)
     print(std_dev_df)
@@ -50,10 +53,11 @@ if __name__ == "__main__":
     df['avg_corr_mappings'] = df['corr_mappings'] * 100 / (nr_total_constants * NR_RUNS)
 
 
+    df['rt_normalised']  = df['runtime'] / max(df['runtime'])
     df = df.round(2)
 
     # Change order of columns slightly
-    df = df[['metric','dynamic','importance_weight','overlap_perc','avg_corr_mappings','avg_uncertain_mappings','std_dev','runtime']]
+    df = df[['metric','dynamic','importance_weight','overlap_perc','avg_corr_mappings','avg_uncertain_mappings','rt_normalised']]
     db_config_df = db_config_df[['file_name','version','nr_facts','nr_constants']]
     print(df.sort_values(['metric','dynamic',"importance_weight"]).to_latex())
     print(db_config_df.to_latex())
