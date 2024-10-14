@@ -66,7 +66,7 @@ Alergias
 alfresco
 Algorithms
 alibris
-aliendroid-activerecord
+aliendroid-activefact
 AlienModTool
 alienz2git
 AlignmentTool
@@ -226,7 +226,7 @@ AndroidOauthGoogleApiJavaClient
 AndroidProgram
 AndroidProgressDialogSample
 androidquery
-androidrecord
+androidfact
 androidsqlitebook
 AndroidSQLLiteOrm
 androidStuff
@@ -518,7 +518,7 @@ camel-websocket
 camel-zookeeper
 Camera
 cameraptp
-CameraRecorder
+Camerafacter
 CaMML
 CampFahrplan
 CanaryBridge
@@ -2857,7 +2857,7 @@ Rebate-Calc
 rebuild-plugin
 recherchebench
 recomende
-RecordBreaker
+factBreaker
 Recursion-Class
 Recxx
 red5-server
@@ -3188,7 +3188,7 @@ Sone
 sonet
 SoPra
 sounder
-SoundRecorder
+Soundfacter
 SourceCode
 Sources
 SouthamptonUniversityMap

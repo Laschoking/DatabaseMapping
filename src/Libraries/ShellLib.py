@@ -26,7 +26,7 @@ def clear_file(file_path):
 
 
 def init_synth_souffle_database(db_config, db_name, fact_path,force_gen):
-    gen_facts_path = PathLib.datalog_programs_path.joinpath(db_config.db_type).joinpath(db_config.file_name)
+    gen_facts_path = PathLib.datalog_programs_path.joinpath(db_config.db_type).joinpath(db_config.file)
     os.chdir(gen_facts_path)
     command = ["./gen_facts.sh", "small", str(fact_path)]
     p = subprocess.run(command, capture_output=True)
@@ -45,11 +45,11 @@ def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen)
     os.chdir(PathLib.DOOP_BASE)
     clear_directory(fact_path)
 
-    java_path = Path.joinpath(PathLib.java_source_dir, db_config.file_name).joinpath(db_version).joinpath(
+    java_path = Path.joinpath(PathLib.java_source_dir, db_config.file).joinpath(db_version).joinpath(
         db_file_name + ".java")
-    jar_path1 = Path.joinpath(PathLib.java_source_dir, db_config.file_name).joinpath(db_version).joinpath(
+    jar_path1 = Path.joinpath(PathLib.java_source_dir, db_config.file).joinpath(db_version).joinpath(
         db_version + ".jar")
-    jar_path2 = Path.joinpath(PathLib.java_source_dir, db_config.file_name).joinpath(db_version).joinpath(
+    jar_path2 = Path.joinpath(PathLib.java_source_dir, db_config.file).joinpath(db_version).joinpath(
         db_file_name + db_version + ".jar")
 
     # Check if .java file exists
@@ -64,7 +64,7 @@ def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen)
         raise FileNotFoundError("Java & Jar File do not exist: \n" + str(java_path) + "\n"+ str(jar_path1) + "\n"+ str(jar_path2))
 
     # cannot name the java or jar files appart bc. javac would complain that Class name & file-name differ
-    doop_out_name = db_config.file_name + "_" + db_version
+    doop_out_name = db_config.file + "_" + db_version
     doop_out_path = PathLib.DOOP_OUT.joinpath(doop_out_name).joinpath("database")
 
     # Skip fact-generation, if the target directory contains facts already
@@ -97,6 +97,10 @@ def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen)
             except subprocess.CalledProcessError as e:
                 raise ChildProcessError(f"Command failed with error: {e}")
 
+def add_dl_name_to_path(dl_name,path):
+    mapping_id = path.name
+    path = path.with_name(dl_name).joinpath(mapping_id)
+    return path
 def chase_nemo(dl_rule_path, fact_path, result_path):
     if not dl_rule_path:
         return
@@ -119,7 +123,8 @@ def split_nemo_stdout(stdout):
                     'loading_rt' : re.search('[0-9m]*ms', stdout[1]).group(0),
                     'reasoning_rt' : re.search('[0-9m]*ms', stdout[2]).group(0),
                     'output_rt' : re.search('[0-9m]*ms', stdout[3]).group(0)}
-    return pd.Series(nemo_runtime)
+    ser = pd.Series(nemo_runtime).str.replace('ms', '',regex=False).astype(float)
+    return ser
 
 
 def print_nemo_runtime(runtime):

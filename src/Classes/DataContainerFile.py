@@ -22,7 +22,7 @@ class DbInstance:
             else:
                 try:
                     df = pd.read_csv(rel_path, sep='\t', keep_default_na=False, dtype='string', header=None,
-                                     on_bad_lines='warn',lineterminator='\n')
+                                     on_bad_lines='warn', lineelementinator='\n')
                 except pd.errors.ParserError as e:
                     print(f"{e} parser error for path: {rel_path}")
             self.insert_df(file_name, df)
@@ -31,21 +31,19 @@ class DbInstance:
     def insert_df(self, file_name, df):
         self.files[file_name] = df
 
-
     def get_nr_facts_constants(self):
         """ Returns nr of facts and the number of constants
             Finding the number of constants is not very elaborate, because only the mapping_obj
             has normally access to them
         """
-        terms = set()
+        elements = set()
         nr_facts = 0
         for file_df in self.files.values():
             nr_facts += len(file_df)
             for col in file_df.columns:
-                terms.update(file_df[col].unique())
+                elements.update(file_df[col].unique())
 
-
-        return pd.Series({'nr_facts' : nr_facts,'nr_constants' : len(terms)})
+        return pd.Series({'nr_facts': nr_facts, 'nr_constants': len(elements)})
 
     def log_db_relations(self):
         ShellLib.clear_directory(self.path)
@@ -63,22 +61,24 @@ class BasePaths:
         self.merge_facts = base_output_path.joinpath("merge_db").joinpath("facts")
         self.merge_results = base_output_path.joinpath("merge_db").joinpath("results")
         self.mapping_results = base_output_path.joinpath("mappings")
-        self.terms_db1 = base_output_path.joinpath("Terms1.tsv")
-        self.terms_db2 = base_output_path.joinpath("Terms2.tsv")
-        self.global_log = PathLib.base_out_path.joinpath("Results")
 
 
-class DataContainer:
+class DlSeparateResultsContainer:
+    def __init__(self, base_output_path,  db1_base_path, db2_base_path,dl_name):
+
+        self.paths = BasePaths(base_output_path, db1_base_path, db2_base_path)
+        # set up the databse instances for separate Program Analysis without Mapping & merging
+        self.db1_original_results = DbInstance(self.paths.db1_results.joinpath(dl_name), "db1_sep")
+        self.db2_original_results = DbInstance(self.paths.db2_results.joinpath(dl_name), "db2_sep")
+
+
+class OriginalFactsContainer:
     def __init__(self, base_output_path, db1_base_path, db2_base_path):
         self.paths = BasePaths(base_output_path, db1_base_path, db2_base_path)
         # origin of the facts for both databases
 
         self.db1_original_facts = DbInstance(self.paths.db1_facts, "db1")
         self.db2_original_facts = DbInstance(self.paths.db2_facts, "db2")
-
-        # origin for separate Program Analysis without Bijection
-        self.db1_original_results = DbInstance(self.paths.db1_results, "db1")
-        self.db2_original_results = DbInstance(self.paths.db2_results, "db2")
 
         self.mappings = []
 
@@ -88,12 +88,11 @@ class DataContainer:
     def add_mappings(self, mappings):
         self.mappings += mappings
 
+    def log_elements(self):
+        elements_db1_df = pd.Series(self.elements_db1.keys())
+        if not self.paths.elements_db1.exists():
+            elements_db1_df.to_csv(self.paths.elements_db1, sep='\t', index=False, header=False)
 
-    def log_terms(self):
-        terms_db1_df = pd.Series(self.terms_db1.keys())
-        if not self.paths.terms_db1.exists():
-            terms_db1_df.to_csv(self.paths.terms_db1, sep='\t', index=False, header=False)
-
-        terms_db2_df = pd.Series(self.terms_db2.keys())
-        if not self.paths.terms_db2.exists():
-            terms_db2_df.to_csv(self.paths.terms_db2, sep='\t', index=False, header=False)
+        elements_db2_df = pd.Series(self.elements_db2.keys())
+        if not self.paths.elements_db2.exists():
+            elements_db2_df.to_csv(self.paths.elements_db2, sep='\t', index=False, header=False)

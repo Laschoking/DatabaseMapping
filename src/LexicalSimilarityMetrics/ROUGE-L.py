@@ -13,5 +13,5 @@ class RougeSimilarity(LexicalSimilarityMetric):
         self.model = AutoModel.from_pretrained("microsoft/codebert-base")
 
 
-    def compute_lexical_similarity(self, term_name1, term_name2):
+    def compute_lexical_similarity(self, element_name1, element_name2):
 

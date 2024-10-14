@@ -4,7 +4,7 @@ static_Iterative-NodeDegree
 expanded anchor nodes: (1509, 1509)
 accepted mappings: 1509
 --------------------------
-static_Iterative-DynamicJaccard
+static_Iterative-Dynamicfact_sim
 expanded anchor nodes: (1509, 1509)
 accepted mappings: 1509
 --------------------------
@@ -15,7 +15,7 @@ accepted mappings: 1509
 |         MappingContainer        | #blocked Mappings | # 1:1 Mappings | #synthetic Terms | # hub comp. | uncertain mappings | # comp. tuples | comp. tuples in % | run-time |
 +---------------------------------+-------------------+----------------+------------------+-------------+--------------------+----------------+-------------------+----------+
 |   static_Iterative-NodeDegree   |         0         |      1509      |        0         |      2      |        1393        |    2277081     |       100.0%      | 249.5769 |
-| static_Iterative-DynamicJaccard |         0         |      1509      |        0         |      1      |        1303        |    2277081     |       100.0%      | 252.2474 |
+| static_Iterative-Dynamicfact_sim |         0         |      1509      |        0         |      1      |        1303        |    2277081     |       100.0%      | 252.2474 |
 |    static_Iterative-EdgeCount   |         0         |      1509      |        0         |      1      |        1292        |    2277081     |       100.0%      | 621.2387 |
 +---------------------------------+-------------------+----------------+------------------+-------------+--------------------+----------------+-------------------+----------+
 +---------------------------------+----------------+-----------------+-----------------+-------------+--------------+
@@ -23,6 +23,6 @@ accepted mappings: 1509
 +---------------------------------+----------------+-----------------+-----------------+-------------+--------------+
 |            No mapping           | original facts |        0        |        0        |     2744    |    100.0%    |
 |   static_Iterative-NodeDegree   |  merged facts  |       2023      |       2023      |     721     |    26.28%    |
-| static_Iterative-DynamicJaccard |  merged facts  |       1850      |       1850      |     894     |    32.58%    |
+| static_Iterative-Dynamicfact_sim |  merged facts  |       1850      |       1850      |     894     |    32.58%    |
 |    static_Iterative-EdgeCount   |  merged facts  |       1815      |       1815      |     929     |    33.86%    |
 +---------------------------------+----------------+-----------------+-----------------+-------------+--------------+

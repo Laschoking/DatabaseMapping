@@ -17,18 +17,18 @@ class DbConfig:
 
     def get_finger_print(self):
         return {'db_config_id': self.full_name, 'use': self.use, 'type': self.db_type,
-                'file_name': self.file_name, 'db1': self.db1_name, 'db2': self.db2_name}
+                'file': self.file_name, 'db1': self.db1_name, 'db2': self.db2_name}
 
 class DatalogProgram:
-    def __init__(self, program_type, class_name, sep_dl, merge_dl, blocked_terms=None):
+    def __init__(self, program_type, name, sep_dl, merge_dl, blocked_elements=None):
         self.program_type = program_type
-        self.class_name = class_name
-        self.execution_path = PathLib.datalog_programs_path.joinpath(program_type).joinpath(class_name)
+        self.name = name
+        self.execution_path = PathLib.datalog_programs_path.joinpath(program_type).joinpath(name)
         self.sep_dl = self.execution_path.joinpath(sep_dl)
         self.merge_dl = self.execution_path.joinpath(merge_dl)
-        if not blocked_terms:
-            blocked_terms = {}
-        self.blocked_terms = blocked_terms
+        if not blocked_elements:
+            blocked_elements = {}
+        self.blocked_elements = blocked_elements
 
 
 

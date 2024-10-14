@@ -3,24 +3,24 @@ import pandas as pd
 from sortedcontainers import SortedDict,SortedList,SortedSet
 from src.Config_Files.Debug_Flags import DEBUG_TERMS, DEBUG_RECORDS, debug_set, PLOT_STATISTICS
 from src.Classes.ExpansionStrategy import  ExpansionStrategy
-import src.Classes.Terms
+import src.Classes.DomainElements
 
 class IterativeAnchorExpansion(ExpansionStrategy):
     def __init__(self,anchor_quantile,DYNAMIC):
-        super().__init__("Iterative",anchor_quantile,DYNAMIC)
+        super().__init__("Local",anchor_quantile,DYNAMIC)
 
 
-    def accept_expand_mappings(self,mapping, terms_db1, terms_db2, blocked_terms,similarity_metric):
+    def accept_expand_mappings(self, mapping_func, elements_db1, elements_db2, blocked_elements, similarity_metric):
         self.anchor_quantile.reset_quantile() # Reset quantile since it is a shared object with other MappingContainers
-        prio_dict = SortedList()
+        Q = SortedList()
 
-        expanded_record_tuples = dict()
+        expanded_fact_pairs = dict()
         exp_anchor_mappings = set()
         processed_mappings = set()
 
-        # Count how many terms in DB1 and DB2 are still vacant
-        c_free_terms_db1 = len(terms_db1.keys())
-        c_free_terms_db2 = len(terms_db2.keys())
+        # Count how many elements in DB1 and DB2 are still vacant
+        c_free_elements_db1 = len(elements_db1.keys())
+        c_free_elements_db2 = len(elements_db2.keys())
 
         mapping_dict = []
 
@@ -30,80 +30,63 @@ class IterativeAnchorExpansion(ExpansionStrategy):
         # Flag to signalise the detection of new anchor mappings
         new_anchor_mappings = True
 
-        # If Datalog Rules are executed on the merged database, match the following terms to themselves
-        '''for blocked_term in blocked_terms:
-            if blocked_term in terms_db1.keys():
-                term = terms_db1[blocked_term]
-                term.deactivate_term_and_all_tt()
-                # map term to itself
-                mapping_dict.append((blocked_term, blocked_term))
-                c_free_terms_db1 -= 1
-                # if in terms_db2 then delete occurrence there
-                if blocked_term in terms_db2.keys():
-                    terms_db2[blocked_term].deactivate_term_and_all_tt()
-                    c_free_terms_db2 -= 1
-                else:
-                    # for counting, how many terms are mapped to synthetic values (that do not exist in db2)
-                    mapping.syn_counter += 1
-        '''
-
         while 1:
-            if prio_dict and not new_anchor_mappings:
+            if Q and not new_anchor_mappings:
                 # The prio_dict is sorted in ascending order, so the last value has the highest similarity
-                accepted_mapping = prio_dict.pop(index=-1)
+                accepted_mapping = Q.pop(index=-1)
 
                 # Update & expand its neighbourhood
                 accepted_sim = accepted_mapping.get_similarity()
                 if DEBUG_TERMS or accepted_mapping in debug_set:
                     print("-----------------------------")
-                    print(f"{accepted_mapping.term1.name}  -> {accepted_mapping.term2.name} with sim: {accepted_sim}")
+                    print(f"{accepted_mapping.element1.name}  -> {accepted_mapping.element2.name} with sim: {accepted_sim}")
 
-                sub_rec_tuples = accepted_mapping.get_clean_record_tuples()
+                sub_fact_pairs = accepted_mapping.get_clean_fact_pairs()
 
-                related_mappings, altered_mappings,finished_record_tuples = accepted_mapping.accept_this_mapping(DYNAMIC=self.DYNAMIC)
+                # Accept_this_mapping also handles the deactivation of records, that cannot get matched anymore
+                related_mappings, altered_mappings,finished_fact_pairs = accepted_mapping.accept_this_mapping(DYNAMIC=self.DYNAMIC)
 
                 # Save complete record tuples for efficient matching of databases
-                for file_name, rec_tuples in finished_record_tuples.items():
-                    mapping.final_rec_tuples.setdefault(file_name,set()).update(rec_tuples)
+                for file_name, fact_pairs in finished_fact_pairs.items():
+                    mapping_func.final_fact_pairs.setdefault(file_name, set()).update(fact_pairs)
 
-                # Reduce free term counter
-                c_free_terms_db1 -= 1
-                c_free_terms_db2 -= 1
+                # Reduce free element counter
+                c_free_elements_db1 -= 1
+                c_free_elements_db2 -= 1
 
-                # Save selected mapping
-                mapping_dict.append((accepted_mapping.term1.name, accepted_mapping.term2.name,accepted_sim))
-                if (accepted_mapping.term1,accepted_mapping.term2) in exp_anchor_mappings:
-                    mapping.c_accepted_anchor_mappings += 1
+                # Save selected mapping_func
+                mapping_dict.append((accepted_mapping.element1.name, accepted_mapping.element2.name,accepted_sim))
+                if (accepted_mapping.element1,accepted_mapping.element2) in exp_anchor_mappings:
+                    mapping_func.c_accepted_anchor_mappings += 1
 
                 # Remove the mappings that are now not possible anymore from prio_dict
-                c_uncertain_mapping = self.delete_from_prio_dict(related_mappings, accepted_mapping, prio_dict)
-                mapping.c_uncertain_mappings += c_uncertain_mapping
+                c_uncertain_mapping = self.delete_from_prio_dict(related_mappings, accepted_mapping, Q)
+                mapping_func.c_uncertain_mappings += c_uncertain_mapping
 
-                w_prio_len.append(len(prio_dict))
+                w_prio_len.append(len(Q))
                 mapped_sims.append(accepted_sim)
 
-                expansion_rid_tuples = set() # this is to make sure a coherent ordered of expansion
-                outdated_rid_tuples = set()
+                expansion_fact_pairs = set()
+                outdated_fact_pairs = set()
 
-                # Iterate through the subscribed record tuples by record (from DB1 or DB2), and connected record_tuples
-                for record, mapped_rec_tuples in sub_rec_tuples.items():
+                # Iterate through the subscribed record tuples by record (from DB1 or DB2), and connected fact_pairs
+                for record, mapped_fact_pairs in sub_fact_pairs.items():
 
-                    # Find Record_tuples that have record inside but are not fulfilled by the accepted mapping
-                    outdated_rid_tuples |= record.get_all_record_tuples() - mapped_rec_tuples
+                    # Find fact_pairs that have record inside but are not fulfilled by the accepted mapping_func
+                    outdated_fact_pairs |= record.get_all_fact_pairs() - mapped_fact_pairs
 
-                    # If the record is not in_process, no terms within have been already mapped (except the current)
-                    # Therefor the connected record_tuples should be expanded
+                    # If the record is not in_process, no elements within have been already mapped (except the current)
+                    # Therefor the connected fact_pairs should be expanded
                     if not record.is_in_process():
                         record.in_process = True
                         if DEBUG_TERMS:
-                            print(f"make record in process: {record.file_name, record.rid}")
+                            print(f"make record in process: {record.file, record.index}")
 
-                        expansion_rid_tuples.update(mapped_rec_tuples - outdated_rid_tuples)
+                        expansion_fact_pairs.update(mapped_fact_pairs - outdated_fact_pairs)
 
-
-                # Deactivate invalid record_tuples and save mappings were subscribed to the record_tuples
-                for outdated_rid_tuple in outdated_rid_tuples.copy():
-                    altered_tuples = outdated_rid_tuple.make_inactive()
+                # Deactivate invalid fact_pairs and save all mappings that subscribed to the fact_pairs
+                for outdated_fact_pair in outdated_fact_pairs.copy():
+                    altered_tuples = outdated_fact_pair.make_inactive()
                     if self.DYNAMIC:
                         altered_mappings |= altered_tuples
 
@@ -111,55 +94,55 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                 altered_mappings -= related_mappings
 
                 # Update the similarity score and possibly change the position of the updated mappings in the prio_dict
-                self.update_tuples_prio_dict(altered_mappings, prio_dict)
+                self.update_tuples_prio_dict(altered_mappings, Q)
 
-                # Reveal the two records of each expanded record_tuple and
-                # add term-tuples in the same column as potential new mappings
+                # Reveal the two records of each expanded fact_pair and
+                # add element-tuples in the same column as potential new mappings
 
                 new_mappings = set()
-                for rec_tuple in expansion_rid_tuples:
-                    if DEBUG_TERMS or rec_tuple in debug_set:
+                for fact_pair in expansion_fact_pairs:
+                    if DEBUG_TERMS or fact_pair in debug_set:
                         print(
-                            f"expand record tuple: {rec_tuple.record1.file_name}({rec_tuple.record1.rid},{rec_tuple.record2.rid})")
-                    new_cols = rec_tuple.record1.vacant_cols  # has the same result as record2.vacant_cols, because both are updated at the same time
+                            f"expand record tuple: {fact_pair.fact1.file}({fact_pair.fact1.index},{fact_pair.fact2.index})")
+                    new_cols = fact_pair.fact1.vacant_cols  # has the same result as fact2.vacant_cols, because both are updated at the same time
                     for col in new_cols:
-                        term1 = rec_tuple.record1.terms[col]
-                        term2 = rec_tuple.record2.terms[col]
-                        new_mappings.add((term1, term2))
+                        element1 = fact_pair.fact1.elements[col]
+                        element2 = fact_pair.fact2.elements[col]
+                        new_mappings.add((element1, element2))
 
+                # couldnt it be that we have f1(a,b,c) & f2(a,b,b), b -> b is getting expanded even though there are no fact pairs?
                 # Make sure to only expand mappings, that have not been processed before
+                # This could happen for anchor pairs, that were expanded, and then get expanded again, bc. the facts are activated now
                 new_mappings -= processed_mappings
 
                 # Create new mappings from the mappings and insert them into prio_dict
-                processed_mappings |= self.add_mappings_to_pq(new_mappings, prio_dict,
-                                   w_exp_sim, similarity_metric, expanded_record_tuples)
+                processed_mappings |= self.add_mappings_to_pq(new_mappings, Q,
+                                   w_exp_sim, similarity_metric, expanded_fact_pairs)
 
 
                 # Trigger new anchor mappings if the prio_dict is empty after expansion
-                if not prio_dict:
+                if not Q:
                     new_anchor_mappings = True
 
-                w_prio_len.append(len(prio_dict))
+                w_prio_len.append(len(Q))
 
-
-            # Find anchor mappings if some terms are still vacant
-            elif c_free_terms_db1 > 0 and c_free_terms_db2 > 0 and new_anchor_mappings:
+            # Find anchor mappings if some elements are still vacant
+            elif c_free_elements_db1 > 0 and c_free_elements_db2 > 0 and new_anchor_mappings:
                 if DEBUG_TERMS or DEBUG_RECORDS:
-                    print(f"Find new hubs: {c_free_terms_db1}")
-                new_anchor_mappings = False  # idea is to only find new hubs if in last iteration at least 1 mapping was added
-                mapping.c_hub_recomp += 1
+                    print(f"Find new hubs: {c_free_elements_db1}")
+                new_anchor_mappings = False  # idea is to only find new hubs if in last iteration at least 1 mapping_func was added
+                mapping_func.c_hub_recomp += 1
 
+                # Find anchor elements for DB1 and DB2
+                anchor_elements1 = self.anchor_quantile.calc_anchor_elements(elements_db1)
+                anchor_elements2 = self.anchor_quantile.calc_anchor_elements(elements_db2)
 
-                # Find anchor terms for DB1 and DB2
-                anchor_terms1 = self.anchor_quantile.calc_anchor_terms(terms_db1)
-                anchor_terms2 = self.anchor_quantile.calc_anchor_terms(terms_db2)
+                mapping_func.anchor_nodes[0] |= anchor_elements1
+                mapping_func.anchor_nodes[1] |= anchor_elements2
 
-                mapping.anchor_nodes[0] |= anchor_terms1
-                mapping.anchor_nodes[1] |= anchor_terms2
-
-                # Combine anchor terms pairwise and insert them into the prio_dict
-                new_mappings = set((term1, term2) for term1 in anchor_terms1 for term2 in anchor_terms2)
-                exp_mappings = self.add_mappings_to_pq(new_mappings,prio_dict, w_exp_sim, similarity_metric, expanded_record_tuples)
+                # Combine anchor elements pairwise and insert them into the prio_dict
+                new_mappings = set((element1, element2) for element1 in anchor_elements1 for element2 in anchor_elements2)
+                exp_mappings = self.add_mappings_to_pq(new_mappings,Q, w_exp_sim, similarity_metric, expanded_fact_pairs)
                 exp_anchor_mappings |= exp_mappings
                 processed_mappings |= exp_mappings
 
@@ -168,35 +151,35 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                     self.anchor_quantile.double_quantile()
                     new_anchor_mappings = True
 
-                w_prio_len.append(len(prio_dict))
+                w_prio_len.append(len(Q))
 
 
             # Exit Strategy
             else:
-                # Map remaining terms to dummy strings
-                for term in terms_db1.values():
-                    if term.is_active():
-                        new_term = "new_var_" + str(mapping.syn_counter)
-                        mapping_dict.append((term.name, new_term,0.01))
-                        mapping.syn_counter += 1
-                        if DEBUG_TERMS or term in debug_set:
-                            print(f"added synthetic term ({term.name},{new_term})")
+                # Map remaining elements to dummy strings
+                for element in elements_db1.values():
+                    if element.is_active():
+                        new_element = "new_var_" + str(mapping_func.syn_counter)
+                        mapping_dict.append((element.name, new_element,0.01))
+                        mapping_func.syn_counter += 1
+                        if DEBUG_TERMS or element in debug_set:
+                            print(f"added synthetic element ({element.name},{new_element})")
 
-                # Make quality check if each element in DB1 received mapping
-                if len(mapping_dict) != len(terms_db1):
+                # Make quality check if each element in DB1 received mapping_func
+                if len(mapping_dict) != len(elements_db1):
                     print(len(mapping_dict))
-                    print(len(terms_db1))
+                    print(len(elements_db1))
                     s1 = set([x for (x, y, z) in mapping_dict])
                     s2 = set([y for (x, y, z) in mapping_dict])
 
-                    print(s1 ^ set(terms_db1.keys()))
-                    print(s2 ^ set(terms_db2.keys()))
+                    print(s1 ^ set(elements_db1.keys()))
+                    print(s2 ^ set(elements_db2.keys()))
                     raise ValueError(
-                        "not same nr of mappings than terms: " + str(len(mapping_dict)) + " " + str(len(terms_db1)))
+                        "not same nr of mappings than elements: " + str(len(mapping_dict)) + " " + str(len(elements_db1)))
                 break
 
         # Load all mappings into the dataframe at once
-        mapping.final_mapping = pd.DataFrame.from_records(mapping_dict, columns=['constant1','constant2','sim'])
+        mapping_func.final_mapping = pd.DataFrame.from_records(mapping_dict, columns=['constant1', 'constant2', 'sim'])
         if PLOT_STATISTICS:
             self.plot_statistics(similarity_metric.name,w_prio_len,w_exp_sim,mapped_sims)
 

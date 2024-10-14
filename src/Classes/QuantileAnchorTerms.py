@@ -6,13 +6,13 @@ class QuantileAnchorTerms:
         self.q = q
         self.initial_q = q
 
-    def calc_anchor_terms(self, terms):
+    def calc_anchor_elements(self, elements):
         nodes = []
         potential_anchors = []
-        for term in terms.values():
-            if term.is_active():
-                nodes.append(term.degree)
-                potential_anchors.append(term)
+        for element in elements.values():
+            if element.is_active():
+                nodes.append(element.degree)
+                potential_anchors.append(element)
         quantile = np.quantile(nodes, q=self.q)
         return set(potential_anchors[i] for i in range(len(nodes)) if nodes[i] >= quantile)
 

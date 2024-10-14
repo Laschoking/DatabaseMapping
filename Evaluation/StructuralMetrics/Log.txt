@@ -14,7 +14,7 @@ Run number: 3
 Run number: 4
 Run number: 5
 --------------------------
-static_Iterative-DynamicJaccard
+static_Iterative-Dynamicfact_sim
 Run number: 1
 Run number: 2
 Run number: 3
@@ -35,7 +35,7 @@ Run number: 3
 Run number: 4
 Run number: 5
 --------------------------
-dynamic_Iterative-DynamicJaccard
+dynamic_Iterative-Dynamicfact_sim
 Run number: 1
 Run number: 2
 Run number: 3
@@ -56,7 +56,7 @@ file: bit-lib_4j-1.4_4j-1.4_copy
 static_Iterative-NodeDegree
 Run number: 1
 --------------------------
-static_Iterative-DynamicJaccard
+static_Iterative-Dynamicfact_sim
 Run number: 1
 --------------------------
 static_Iterative-EdgeCount
@@ -65,7 +65,7 @@ Run number: 1
 dynamic_Iterative-NodeDegree
 Run number: 1
 --------------------------
-dynamic_Iterative-DynamicJaccard
+dynamic_Iterative-Dynamicfact_sim
 Run number: 1
 --------------------------
 dynamic_Iterative-EdgeCount

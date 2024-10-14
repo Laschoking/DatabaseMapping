@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from src.Config_Files.Debug_Flags import DEBUG_TERMS, debug_set
-from src.Classes.Terms import Mapping
+from src.Classes.DomainElements import Mapping
 
 
 class ExpansionStrategy:
@@ -11,7 +11,7 @@ class ExpansionStrategy:
         self.DYNAMIC = DYNAMIC
 
 
-    def accept_expand_mappings(self,mapping, terms_db1, terms_db2, blocked_terms,
+    def accept_expand_mappings(self,mapping, elements_db1, elements_db2, blocked_elements,
                                    similarity_metric):
         pass
 
@@ -26,9 +26,9 @@ class ExpansionStrategy:
             old_sim = sub_mapping.get_similarity()
             new_sim = sub_mapping.recompute_similarity()
             # similarity stayed the same
-            if DEBUG_TERMS or sub_mapping.term1 in debug_set or sub_mapping.term2 in debug_set:
+            if DEBUG_TERMS or sub_mapping.element1 in debug_set or sub_mapping.element2 in debug_set:
                 print(
-                    f"recompute sim : ({sub_mapping.term1.name},{sub_mapping.term2.name}) old sim: {old_sim}, new sim: {new_sim}")
+                    f"recompute sim : ({sub_mapping.element1.name},{sub_mapping.element2.name}) old sim: {old_sim}, new sim: {new_sim}")
 
 
 
@@ -41,11 +41,11 @@ class ExpansionStrategy:
             if new_sim == 0:
                 sub_mapping.gen_active = False
 
-                if DEBUG_TERMS or sub_mapping.term1 in debug_set or sub_mapping.term2 in debug_set:
+                if DEBUG_TERMS or sub_mapping.element1 in debug_set or sub_mapping.element2 in debug_set:
                     print(
-                        f" deleted Term Tuple {sub_mapping.term1.name},{sub_mapping.term2.name} with Similarity = 0")
+                        f" deleted Term Tuple {sub_mapping.element1.name},{sub_mapping.element2.name} with Similarity = 0")
 
-            # Insert mapping in prio_dict with updated similarity score
+            # Insert mapping_func in prio_dict with updated similarity score
             else:
                 update_mappings.append(sub_mapping)
 
@@ -53,7 +53,7 @@ class ExpansionStrategy:
             prio_dict.update(update_mappings)
 
     def delete_from_prio_dict(self,remove_mappings, accepted_mapping, prio_dict):
-        # This logs, if the accepted mapping was insecure because a related mapping had the same similarity score
+        # This logs, if the accepted mapping_func was insecure because a related mapping_func had the same similarity score
         uncertain_mapping = 0
         for mapped_tuple in remove_mappings:
             if mapped_tuple not in prio_dict:
@@ -63,33 +63,33 @@ class ExpansionStrategy:
             if (accepted_mapping.eq_values
                 (mapped_tuple)):
                 uncertain_mapping = 1
-            if DEBUG_TERMS or mapped_tuple.term1 in debug_set or mapped_tuple.term2 in debug_set:
-                print(f"remove ({mapped_tuple.term1.name},{mapped_tuple.term2.name}) with sim {sim} from prio-dict")
+            if DEBUG_TERMS or mapped_tuple.element1 in debug_set or mapped_tuple.element2 in debug_set:
+                print(f"remove ({mapped_tuple.element1.name},{mapped_tuple.element2.name}) with sim {sim} from prio-dict")
 
         return uncertain_mapping
 
     def add_mappings_to_pq(self,new_mapping_tuples,
-                           prio_dict, w_exp_sim, similarity_metric, expanded_record_tuples):
+                           prio_dict, w_exp_sim, similarity_metric, expanded_fact_pairs):
         exp_mappings = set()
-        for term1, term2 in new_mapping_tuples:
-            if not term1.is_active():
+        for element1, element2 in new_mapping_tuples:
+            if not element1.is_active():
                 if DEBUG_TERMS:
-                    print(f"term1 was mapped already: {term1.name} to {term2.name}")
+                    print(f"element1 was mapped already: {element1.name} to {element2.name}")
                 continue
 
-            if not term2.is_active():
+            if not element2.is_active():
                 if DEBUG_TERMS:
-                    print(f"term2 was mapped already: {term1.name} to {term2.name}")
+                    print(f"element2 was mapped already: {element1.name} to {element2.name}")
                 continue
 
-            new_mapping = Mapping(term1, term2, expanded_record_tuples, similarity_metric)
+            new_mapping = Mapping(element1, element2, expanded_fact_pairs, similarity_metric)
 
             sim = new_mapping.compute_similarity()
-            exp_mappings.add((term1, term2))
+            exp_mappings.add((element1, element2))
             if sim > 0:
-                # Insert mapping into priority_queue
-                if DEBUG_TERMS or term1 in debug_set or term2 in debug_set:
-                    print(f"expanded tuple: {new_mapping.term1.name},{new_mapping.term2.name}, sim: {sim}")
+                # Insert mapping_func into priority_queue
+                if DEBUG_TERMS or element1 in debug_set or element2 in debug_set:
+                    print(f"expanded tuple: {new_mapping.element1.name},{new_mapping.element2.name}, sim: {sim}")
                 prio_dict.add(new_mapping)
                 w_exp_sim.append(sim)
 

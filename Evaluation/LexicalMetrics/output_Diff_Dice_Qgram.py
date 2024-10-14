@@ -7,11 +7,11 @@ import time
 import re
 from src.Libraries.SqlConnector import SqlConnector
 
-# This evaluation is based on true data, that is pairs of renamed variables, classes, methods, and parameters
+# This evaluation is based on true facts, that is pairs of renamed variables, classes, methods, and parameters
 # The quality of a metric is measured, by how good it can identify the correct pair from a set of fake pairs
 
 
-# TODO in best case: meld data in Lexical Results (with 1 Result-record per Metric)
+# TODO in best case: meld facts in Lexical Results (with 1 Result-record per Metric)
 
 def get_fake_tuples(corr_pair, corr_id, rename_df, NR_FAKE_PAIRS):
     fake_pairs = pd.DataFrame(columns=rename_df.columns)
@@ -22,7 +22,7 @@ def get_fake_tuples(corr_pair, corr_id, rename_df, NR_FAKE_PAIRS):
             i += 1
         else:
             i -= 1
-        # Handle end of data, where sliding window would cause IndexError
+        # Handle end of facts, where sliding window would cause IndexError
         if i >= len(rename_df):
             go_backwards = True
             continue
@@ -129,22 +129,22 @@ if __name__ == "__main__":
         parsed_res = dict()
 
 
-        for index,(term_name1,term_name2) in rename_df.iterrows():
-            red_name1 = term_name1.lower()
-            red_name2 = term_name2.lower()
+        for index,(element_name1,element_name2) in rename_df.iterrows():
+            red_name1 = element_name1.lower()
+            red_name2 = element_name2.lower()
 
             # Filter both strings for numbers, and process numbers separately
             nrs1 = re.findall(r'\d+', red_name1)
             nrs2 = re.findall(r'\d+', red_name2)
             red_name1 = re.sub(r'\d+', "",red_name1)
             red_name2 = re.sub(r'\d+', "",red_name2)
-            parsed_res[term_name1] = (red_name1,nrs1)
-            parsed_res[term_name2] = (red_name2,nrs2)
+            parsed_res[element_name1] = (red_name1,nrs1)
+            parsed_res[element_name2] = (red_name2,nrs2)
 
         for (NR_FAKE_PAIRS, USE_NR_SIM, ALPHA) in combinations:
             new_res = pd.Series({'resource' : SQL_TABLE, 'nr_pairs' : MAX_PAIRS, 'nr_fake_pairs' : NR_FAKE_PAIRS,
                                  'use_nr_sim' : str(USE_NR_SIM),'ALPHA' : ALPHA})
-            # Convert the bool USE_NR_SIM to string, because comparison with res_df is difficult due to data-type issues
+            # Convert the bool USE_NR_SIM to string, because comparison with res_df is difficult due to facts-type issues
 
             # Skip this combination, if it was already computed for the database
             reduced_df = existing_lex_res[['resource','nr_pairs','nr_fake_pairs','use_nr_sim','ALPHA']]

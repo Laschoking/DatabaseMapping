@@ -40,21 +40,28 @@ def calc_rt_average(res_df,gb_cols):
     mean_df = mean_df.reset_index()
     return mean_df[gb_cols + ['runtime']]
 
-def calc_overlap_perc_all_resources(res_df,gb_cols):
+def calc_overlap_perc_all_resources(res_df,gb_cols,NR_DBS):
     """ Calculate the average by collecting common records  and divide by nr of constants (using overlap perc. is inaccurate)"""
     df = res_df[['mapping_id', 'metric', 'dynamic','anchor_quantile','importance_weight','common_records','computed_mappings']]
+    gr_size = df.groupby(gb_cols).size()
+    gr_size = gr_size.rename('size')
+    gr_size /= NR_DBS
+    #gr_size.reset_index(inplace=True)
     group_df = df.groupby(gb_cols)
     sum_df = group_df.sum(numeric_only=True)
+
     sum_df = sum_df.reset_index()
+    group_df = pd.merge(left=sum_df,right=gr_size,on=gb_cols)
 
-    return sum_df
+    group_df['common_records'] = group_df['common_records'] / group_df['size']
+    return group_df
 
-def plot_overlap_per_mapping(overlap_df):
+def plot_overlap_per_mapping(overlap_df,color=None,group=None):
     for ind,row in overlap_df.iterrows():
         overlap_df['name'] = overlap_df.apply(
             lambda row: f"q={row['anchor_quantile']},w={row['importance_weight']},m={row['metric']},d={row['dynamic']}",
             axis=1)
-    fig = px.bar(overlap_df, x='name', y="overlap_perc", title='Overlap of each combination',color='metric')
+    fig = px.bar(overlap_df, x='name', y="overlap_perc", title='Overlap of each combination',color=color,barmode='group')
     fig.show()
 
 def plot_overlap_per_resource(res_df, PLOT_FIG):
@@ -68,10 +75,10 @@ def plot_overlap_per_resource(res_df, PLOT_FIG):
             fig.show()
 
 def plot_best_overlap_per_resource(res_df, PLOT_FIG):
-    res_df = res_df[['metric','dynamic','anchor_quantile','importance_weight','overlap_perc','db_config_id','file_name'
+    res_df = res_df[['metric','dynamic','anchor_quantile','importance_weight','overlap_perc','db_config_id','file'
         ,'equal_facts_perc']]
     plot_df = pd.DataFrame()
-    equal_facts_df = pd.DataFrame(res_df[['db_config_id','equal_facts_perc','file_name']])
+    equal_facts_df = pd.DataFrame(res_df[['db_config_id','equal_facts_perc','file']])
     equal_facts_df.rename(columns={'equal_facts_perc':'overlap_perc'},inplace=True)
     equal_facts_df['metric'] = 'equal_facts'
     res_df = pd.concat([res_df,equal_facts_df],axis=0,ignore_index=True)
@@ -85,11 +92,11 @@ def plot_best_overlap_per_resource(res_df, PLOT_FIG):
             #plot_df['name'] = df.apply(
             #    lambda row: f"q={row['anchor_quantile']},w={row['importance_weight']},m={row['metric']},d={row['dynamic']}", axis=1)
 
-        fig = px.bar(plot_df,x='file_name',y="overlap_perc",title='Test',color='metric',barmode="group")
+        fig = px.bar(plot_df,x='file',y="overlap_perc",title='Test',color='metric',barmode="group")
         fig.show()
 
 def calc_best_anchor_quantile(res_df,gr_cols):
-    #res_df = res_df[['anchor_quantile','common_records','use','file_name','nr_poss_facts','metric',
+    #res_df = res_df[['anchor_quantile','common_records','use','file','nr_poss_facts','metric',
     #                 'runtime','computed_mappings']]
     group_df = res_df.groupby(gr_cols)
     s = group_df.size()
@@ -103,29 +110,23 @@ def calc_best_anchor_quantile(res_df,gr_cols):
 
     group_df.reset_index(inplace=True)
 
-    return group_df[gr_cols + ['anchor_quantile','avg_overlap','avg_rt','avg_comp_mappings']]
+    return group_df[gr_cols + ['avg_overlap','avg_rt','avg_comp_mappings']]
 
 
 def calc_best_importance_weight(res_df,gr_cols):
-    res_df = res_df[res_df['dynamic'] == 'True']
-    res_df = res_df[res_df['anchor_quantile'] == 0.95]
-
-    res_df = res_df[['importance_weight','common_records','use','file_name','nr_poss_facts','metric',
-                     'runtime','computed_mappings','uncertain_mappings']]
     group_df = res_df.groupby(gr_cols)
     s = group_df.size()
 
     group_df = group_df.sum(numeric_only=True)
     gr_size = s.iat[0]
-    group_df['avg_overlap'] = round(group_df['common_records'] * 100 / (group_df['nr_poss_facts']),2)
+    group_df['avg_overlap'] = round(group_df['common_records'] * 100 / (group_df['nr_poss_facts']),3)
     group_df['avg_rt'] = round(group_df['runtime'] / (gr_size),1)
     group_df['avg_comp_mappings'] = round(group_df['computed_mappings'] / (gr_size * 1000))
 
 
-
     group_df.reset_index(inplace=True)
 
-    return group_df[['importance_weight','use','avg_overlap','avg_rt','avg_comp_mappings']]
+    return group_df[gr_cols + ['avg_overlap','avg_rt','avg_comp_mappings']]
 
 
 
@@ -136,7 +137,7 @@ def count_correct_mappings(res_df, config_df,gb_cols):
     res_df = res_df.merge(config_df, left_on='db_config_id', right_on='db_config_id')
     # Iterate through each DB-setup (inlcuding the run-nr)
     for index, row in res_df.iterrows():
-        mapping_path = (base_out_path.joinpath(row.at['type']).joinpath(row.at['file_name'])
+        mapping_path = (base_out_path.joinpath(row.at['type']).joinpath(row.at['file'])
                         .joinpath(row.at['db1'] + "_" + row.at['db2']).joinpath('mappings'))
 
         # Generate the path where the accepted mappings are saved for each run

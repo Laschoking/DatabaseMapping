@@ -12,12 +12,12 @@ class SqlConnector:
     def __init__(self, db_path):
         self.engine = create_engine(f"sqlite:///{db_path}")
 
-    def insert_df(self, table, df, write_index):
-        df.to_sql(name=table, con=self.engine, if_exists='append', index=write_index)
+    def insert_df(self, table, df):
+        df.to_sql(name=table, con=self.engine, if_exists='append',index=False)
 
-    def insert_series(self, table, series, write_index):
+    def insert_series(self, table, series):
         df = series.to_frame().T
-        self.insert_df(table, df, write_index)
+        self.insert_df(table, df)
 
 
     def query_table(self,query,ind_col=None):

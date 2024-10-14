@@ -235,7 +235,7 @@ AlgorithmsNYC
 AlgorithmsProject
 Alias
 Alice
-aliendroid-activerecord_1
+aliendroid-activefact_1
 aliendroid-core
 alkacon-oamp
 All-Spark-Cube
@@ -423,7 +423,7 @@ android-acra-demo-app
 android-acra-json-sender
 android-actionbar
 Android-ActionBar-UI-Pattern
-android-active-record
+android-active-fact
 Android-Activity-Tracker
 Android-Adapter-Image-Loader
 Android-Agenda
@@ -2241,7 +2241,7 @@ Cotentin
 cotopaxi-core
 cotopaxi-extensions
 cotta
-couch-audio-recorder
+couch-audio-facter
 Couch-RQS
 couchbase-java-client
 CouchbaseJsonLoader
@@ -3324,7 +3324,7 @@ fest-test
 fest-util
 festomat
 FF1-Battle-System
-FFmpeg-Screen-Recording-Interface
+FFmpeg-Screen-facting-Interface
 ffpojo
 FFT
 fha_arb
@@ -3361,7 +3361,7 @@ Final-Frontier---2D-Space-Shooter
 FinalAsg
 FinalProject
 FinalProject_1
-FinancialRecorder
+Financialfacter
 finch
 findbugs-guice
 findbugs-plugin
@@ -6136,7 +6136,7 @@ Media-Markup
 MediaButtonTest
 MediaLabUC---Snake
 mediaphone
-medicalrecord
+medicalfact
 medioqre
 MEditor
 MediumEvidenceManager
@@ -7548,9 +7548,9 @@ platform_packages_apps_phone
 platform_packages_apps_Protips
 platform_packages_apps_Provision
 platform_packages_apps_settings
-platform_packages_apps_soundrecorder
+platform_packages_apps_soundfacter
 platform_packages_apps_SpareParts
-platform_packages_apps_SpeechRecorder
+platform_packages_apps_Speechfacter
 platform_packages_apps_stk
 platform_packages_apps_voicedialer
 platform_packages_providers_contactsprovider
@@ -8139,8 +8139,8 @@ RebelHotel
 reboundme
 recitedictcn
 recommenders
-recordloader
-RecordPlayer
+factloader
+factPlayer
 RecruitingOnJava
 Recupera
 recurly-client-java
@@ -8664,7 +8664,7 @@ seneca-Project-Management
 sensei
 SensorLibrary
 SensorLogger
-sensors-recorder
+sensors-facter
 SEOmozAPISamples
 SEPA_GroupB
 seph
@@ -10281,7 +10281,7 @@ unb-sica
 unedifact
 unfolding
 Unibeer
-UniqRecorder
+Uniqfacter
 uniquery
 UniRank
 unisay

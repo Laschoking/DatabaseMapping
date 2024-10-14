@@ -1,4 +1,4 @@
-# This file defines all necessary paths for the comparison pipeline
+# This file defines all necessary fact_paths for the comparison pipeline
 from pathlib import Path
 from enum import Enum
 import pandas as pd

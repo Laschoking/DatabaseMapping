@@ -27,7 +27,7 @@ def check_rate_limit():
     }
     """
     response = client.execute(query=query, headers=HEADERS)
-    rate_limit = response["data"]["rateLimit"]
+    rate_limit = response["facts"]["rateLimit"]
     remaining = rate_limit["remaining"]
     reset_time = rate_limit["resetAt"]
     return remaining, reset_time
@@ -67,7 +67,7 @@ def search_repositories(after_cursor=None):
     """
     variables = {"after": after_cursor}
     response = client.execute(query=query, variables=variables, headers=HEADERS)
-    return response["data"]["search"]
+    return response["facts"]["search"]
 
 
 def download_jar(asset_url, download_path):

@@ -5,11 +5,11 @@ import re
 
 
 class LCS(LexicalSimilarityMetric):
-    def __init__(self,metric_weight=1):
-        super().__init__("LCS",metric_weight)
+    def __init__(self,imp_alpha=0):
+        super().__init__("LCS",imp_alpha)
         self.lcs = LongestCommonSubsequence()
 
-    def compute_lexical_similarity(self, term_name1, term_name2):
-        score = self.lcs.length(term_name1, term_name2) / max(len(term_name1), len(term_name2))
+    def compute_lexical_similarity(self, element_name1, element_name2):
+        score = self.lcs.length(element_name1, element_name2) / max(len(element_name1), len(element_name2))
         return score
 

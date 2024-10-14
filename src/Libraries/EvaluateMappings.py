@@ -4,7 +4,7 @@ from typing import Dict, Union
 import pandas as pd
 
 
-def compute_overlap_dbs(db1, db2, print_flag=False) -> Dict[str,Union[int,float]]:
+def compute_overlap_dbs(db1, db2, print_flag=False) -> pd.Series:
     l_records_db1 = 0
     l_records_db2 = 0
     l_records_db_merge = 0
@@ -40,21 +40,21 @@ def compute_overlap_dbs(db1, db2, print_flag=False) -> Dict[str,Union[int,float]
         l_records_db_merge += l_df_both
 
         if l_df1_only > 0 and print_flag:
-            print(file_name)
-            print("db1 unique-rows: ")
-            print(df1_sep)
+            print(f"\n db1 unique-rows in: {file_name} ")
+            print(df1_sep.to_csv(sep='\t', index=False, header=False))
         if l_df2_only > 0 and print_flag:
-            print("db2 unique-rows: ")
-            print(df2_sep)
+            print(f"\n db2 unique-rows in: {file_name} ")
+            print(df2_sep.to_csv(sep='\t', index=False, header=False))
 
-        if l_df1_only + l_df2_only + l_df_both == 0: continue
+        if l_df1_only + l_df2_only + l_df_both == 0:
+            continue
 
     total_rows = min(l_records_db1, l_records_db2) + l_records_db_merge
 
-    return pd.Series({'unique_records_db1': l_records_db1,'unique_records_db2': l_records_db2,
-                      'common_records': l_records_db_merge,
-                      'overlap_perc': (100 * l_records_db_merge / total_rows)
-                      })
+    return pd.Series({'unique_records_db1': int(l_records_db1),'unique_records_db2': int(l_records_db2),
+            'common_records': int(l_records_db_merge),'overlap_perc': round(100 * l_records_db_merge / total_rows,2)
+            })
+
 
 def count_overlap_merge_db(merge_db) -> Dict[str,Union[int,float]]:
     c_left = 0
@@ -83,24 +83,27 @@ def count_overlap_merge_db(merge_db) -> Dict[str,Union[int,float]]:
             "overlap_perc": overlap}
 
 
-def verify_merge_results(data, mapping) -> bool:
+def verify_merge_results(dl_sep_results, mapping) -> bool:
     t = PrettyTable()
     # Color
     r = "\033[0;31;40m"  # RED
     n = "\033[0m"  # Reset
 
-    t.field_names = ["1. DB", "2. DB", "rows of 1.", "rows of 2.", "common rows", "overlap in %"]
+    t.field_names = ["1. DB", "2. DB (merge dl)", "rows of 1.", "rows of 2.", "common rows", "overlap in %"]
 
     # DB1-separate-results == db1_unravelled_results
-    diff_db1 = compute_overlap_dbs(data.db1_original_results, mapping.db1_unravelled_results, print_flag=True)
-    if diff_db1['unique_records1'] > 0 or diff_db1['unique_records2'] > 0:
-        l = [r + data.db1_original_results.name, mapping.db1_unravelled_results.name] + diff[:-1] + [diff[-1] + n]
+    diff_db1 = compute_overlap_dbs(dl_sep_results.db1_original_results, mapping.db1_unravelled_results, print_flag=True)
+    if diff_db1['unique_records_db1'] > 0 or diff_db1['unique_records_db2'] > 0:
+        l = ([r + dl_sep_results.db1_original_results.name, mapping.db1_unravelled_results.name] +
+             list(diff_db1[['unique_records_db1','unique_records_db2','common_records']]) +
+             [str(diff_db1['overlap_perc']) + n])
         t.add_row(l)
 
     # DB2-separate-results == db2_unravelled_results
-    diff = compute_overlap_dbs(data.db2_original_results, mapping.db2_unravelled_results, print_flag=True)
-    if diff['unique_records1'] > 0 or diff['unique_records2'] > 0:
-        l = [r + data.db2_original_results.name, mapping.db2_unravelled_results.name] + diff[:-1] + [diff[-1] + n]
+    diff_db2 = compute_overlap_dbs(dl_sep_results.db2_original_results, mapping.db2_unravelled_results, print_flag=True)
+    if diff_db2['unique_records_db1'] > 0 or diff_db2['unique_records_db2'] > 0:
+        l = ([r + dl_sep_results.db2_original_results.name, mapping.db2_unravelled_results.name] +
+             list(diff_db2[['unique_records_db1','unique_records_db2','common_records']]) + [str(diff_db2['overlap_perc']) + n])
         t.add_row(l)
 
     if len(t.rows) > 0:

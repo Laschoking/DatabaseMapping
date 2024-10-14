@@ -1,0 +1,5 @@
+/home/kotname/Documents/Diplom/Code/DatabaseMapping/venv10/lib/python3.10/site-packages/pandas/io/sql.py:1725: SAWarning: Skipped unsupported reflection of expression-based index ix_DLResults_index
+  self.meta.reflect(bind=self.con, only=[table_name], views=True)
+file: aws-lambda-java-log_4j2-1.0.0_4j2-1.6.0
+Run datalog program: CFG
+mapping_id: 8
