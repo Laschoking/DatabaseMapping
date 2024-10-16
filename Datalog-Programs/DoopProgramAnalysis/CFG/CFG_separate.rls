@@ -1,8 +1,4 @@
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-true("true"^^xsd:boolean).
-
 @import MainClass :- tsv{resource="MainClass.tsv",format=(string)}. 
-
 @import A_ArrayType :-tsv{resource="ArrayType.tsv",format=(string)} .
 @import A_ActualParam :-tsv{resource="ActualParam.tsv",format=(int,string,string)} .
 @import A_Var_Type :-tsv{resource="Var-Type.tsv",format=(string,string )} .
@@ -28,7 +24,7 @@ true("true"^^xsd:boolean).
 @import A_AssignNull :- tsv{resource="AssignNull.tsv", format=(string, int, string, string)} .
 @import A_AssignNumConstant :- tsv{resource="AssignNumConstant.tsv", format=(string, int, string, string, string)} .
 @import A_AssignOperFrom :- tsv{resource="AssignOperFrom.tsv", format=(string, int, string)} .
-@import A_AssignOperFromConstant :- tsv{resource="AssignOperFromConstant.tsv", format=(string, int, double)} .
+@import A_AssignOperFromConstant :- tsv{resource="AssignOperFromConstant.tsv", format=(string, int, int)} .
 @import A_AssignPhantomInvoke :- tsv{resource="AssignPhantomInvoke.tsv", format=(string, int, string)} .
 @import A_AssignReturnValue :- tsv{resource="AssignReturnValue.tsv", format=(string, string)} .
 @import A_AssignUnop :- tsv{resource="AssignUnop.tsv", format=(string, int, string, string)} .
@@ -97,6 +93,10 @@ true("true"^^xsd:boolean).
 @import A_VirtualMethodInvocation :- tsv{resource="VirtualMethodInvocation.tsv",format=(string,int,string,string,string)}.
 
 
+
+MainClass(?b):-
+  A_ClassModifier(_,?b),
+  MainClass(_).
 
 
 % extended Facts:
@@ -220,7 +220,9 @@ isOpaqueInstruction(?instruction) :-
 isOpaqueInstruction(?instruction) :-
    A_VirtualMethodInvocation(?instruction, _, ?signature, _, _),
    isOpaqueMethod(?signature).
-isOpaqueMethod(?m) :- isMethod(?m), ?m = "<sun.misc.ProxyGenerator: byte[] generateClassFile()>" .
+
+isOpaqueMethod(?m) :- isMethod(?m).
+
 isType(?t) :- isPrimitiveType(?t).
 isType(?t) :- isReferenceType(?t).
 
@@ -388,26 +390,11 @@ AssignReturnValue(?invocation, ?to) :-
   A_AssignReturnValue(?invocation, ?to).
   
 
-MainClass(?b):-
-  A_ClassModifier(_,?b),
-  MainClass(?a),
-  true(CONTAINS(?a,?b)).
-
-
-
 isType(?type),
 isNormalHeap(?id),
 OriginalHeapAllocation_Type(?id, ?type),
 HeapAllocation_Type(?id, ?type) :-
   A_NormalHeap(?id, ?type).
-
-isClassType("java.lang.String").
-
-isStringConstant(?id),
-OriginalHeapAllocation_Type(?id, "java.lang.String"),
-HeapAllocation_Type(?id, "java.lang.String") :-
-  A_StringConstant(?id).
-
 
 isStringRaw(?id),
 String_toRaw(?id, ?rawId) :-
@@ -415,32 +402,23 @@ String_toRaw(?id, ?rawId) :-
 
 isType(?instanceType),
 isClassHeap(?id),
-ClassHeap_InstanceType(?id, ?instanceType),
-OriginalHeapAllocation_Type(?id, "java.lang.Class"),
-HeapAllocation_Type(?id, "java.lang.Class") :-
+ClassHeap_InstanceType(?id, ?instanceType) :-
   A_ClassHeap(?id, ?instanceType).
 
 
-isType("java.lang.invoke.MethodHandle").
-isReferenceType("java.lang.invoke.MethodHandle").
-isClassType("java.lang.invoke.MethodHandle").
 
 isMethodHandleConstant(?id),
-OriginalHeapAllocation_Type(?id, "java.lang.invoke.MethodHandle"),
 MethodHandleConstant_Method(?id, ?method),
 MethodHandleConstant_Arity(?id, ?arity),
 MethodHandleConstant_ReturnType(?id, ?retType),
-MethodHandleConstant_ParamTypes(?id, ?paramTypes),
-HeapAllocation_Type(?id, "java.lang.invoke.MethodHandle") :-
+MethodHandleConstant_ParamTypes(?id, ?paramTypes):-
   A_MethodHandleConstant(?id, ?method, ?retType, ?paramTypes, ?arity).
 
 
 isMethodTypeConstant(?id),
-HeapAllocation_Type(?id, "java.lang.invoke.MethodType"),
 MethodTypeConstant_Arity(?id, ?arity),
 MethodTypeConstant_ReturnType(?id, ?retType),
-MethodTypeConstant_ParamTypes(?id, ?paramTypes),
-OriginalHeapAllocation_Type(?id, "java.lang.invoke.MethodType") :-
+MethodTypeConstant_ParamTypes(?id, ?paramTypes):-
   A_MethodTypeConstant(?id, ?arity, ?retType, ?paramTypes).
 
 
@@ -789,20 +767,11 @@ isAnnotation(?annotation) :- isReferenceType(?annotation), A_Field_Annotation(_,
 isAnnotation(?annotation) :- isReferenceType(?annotation), A_Param_Annotation(_, _, ?annotation).
 
 
-isHeapAllocation(?heap), isMethodHandleConstant(?heap), MethodHandleConstant_Method(?heap, ?method), HeapAllocation_Type(?heap, "java.lang.invoke.MethodHandle")  :-
+isHeapAllocation(?heap), 
+isMethodHandleConstant(?heap), 
+MethodHandleConstant_Method(?heap, ?method):-
   MethodHandleConstant_Method(?heap, ?method).
 
-
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type) ,
-MainMethodArgArray(?heap) :-
-  ?heap = "<<main method array>>",
-  ?type = "java.lang.String[]".
-
-isHeapAllocation(?heap), HeapAllocation_Type(?heap, ?type) ,
-MainMethodArgArrayContent(?heap) :-
-  ?heap = "<<main method array content>>",
-  ?type = "java.lang.String".
 
 ApplicationField(?field) :-
   Field_DeclaringType(?field, ?type),
@@ -1184,7 +1153,7 @@ ExistsPreviousNonDomPredecessorToSameBB(?pred, ?insn) :-
 @export A_AssignNull :- tsv{resource="AssignNull.tsv", format=(string, int, string, string)} .
 @export A_AssignNumConstant :- tsv{resource="AssignNumConstant.tsv", format=(string, int, string, string, string)} .
 @export A_AssignOperFrom :- tsv{resource="AssignOperFrom.tsv", format=(string, int, string)} .
-@export A_AssignOperFromConstant :- tsv{resource="AssignOperFromConstant.tsv", format=(string, int, any)} .
+@export A_AssignOperFromConstant :- tsv{resource="AssignOperFromConstant.tsv", format=(string, int, string)} .
 @export A_AssignPhantomInvoke :- tsv{resource="AssignPhantomInvoke.tsv", format=(string, int, string)} .
 @export A_AssignReturnValue :- tsv{resource="AssignReturnValue.tsv", format=(string, string)} .
 @export A_AssignUnop :- tsv{resource="AssignUnop.tsv", format=(string, int, string, string)} .

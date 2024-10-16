@@ -1,6 +1,6 @@
 import numpy as np
 
-class QuantileAnchorTerms:
+class QuantileAnchorElements:
     def __init__(self,q):
         self.name = f"quantile {q}"
         self.q = q

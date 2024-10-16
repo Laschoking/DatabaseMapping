@@ -1,8 +1,3 @@
-% Update of analysis: no more import of alternated MainClass or Method_Descriptor, since CONCAT & CONTAINS work now :)
-
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-true("true"^^xsd:boolean).
-
 @import ClassModifier :- tsv{resource="ClassModifier.tsv",format=(string, string,int)}.
 @import MainClass :- tsv{resource="MainClass.tsv",format=(string,int)}. 
 
@@ -41,13 +36,6 @@ true("true"^^xsd:boolean).
 % assume that no relations with more than 9 relations exist
 
 
-
-
-MainClass(?b,?side):-
-  ClassModifier(_,?b,?side),
-  MainClass(?a,_),
-  true(CONTAINS(?a,?b)).
-
 A(1).A(10).C(1).C(2).C(3).C(4).C(5).C(6).C(7).C(8).C(9).
 
 merge_strat(?n, ?a * ?m,?a):-
@@ -56,11 +44,9 @@ merge_strat(?a,0,0):-
    C(?a).
 
 % Fat schema
-
-HeapAllocation_Type("<<main method array>>", "java.lang.String[]",0).
-
-
-HeapAllocation_Type("<<main method array content>>", "java.lang.String",0).
+MainClass(?b,?side):-
+  ClassModifier(_,?b,?side),
+  MainClass(_,_).
 
 % imports
 isType(?class,?side):-    
@@ -97,8 +83,6 @@ isType(?type,?side),
 HeapAllocation_Type(?id, ?type,?side):-
   z_NormalHeap(?id, ?type,?side).
 
-HeapAllocation_Type(?id, "java.lang.String",?side):-
-  z_StringConstant(?id,?side).
 
 Instruction_Method(?instruction, ?method,?side),
 AssignInstruction_To(?instruction, ?to,?side),
@@ -135,13 +119,11 @@ SpecialMethodInvocation_Base(?instruction, ?base,?side),
 MethodInvocation_Method(?instruction, ?signature,?side):-
   z_SpecialMethodInvocation(?instruction, _, ?signature, ?base, ?method,?side).
 
-
 Instruction_Method(?instruction, ?method,?side),
 isVirtualMethodInvocation_Insn(?instruction,?side),
 VirtualMethodInvocation_Base(?instruction, ?base,?side),
 MethodInvocation_Method(?instruction, ?signature,?side):-
   z_VirtualMethodInvocation(?instruction, _, ?signature, ?base, ?method,?side).
-
 
 
 Method_SimpleName(?method, ?simplename,?side),
@@ -271,21 +253,11 @@ StaticMethodInvocation(?invocation, ?signature, ?inmethod,?side):-
   merge_strat(3,?sum,?side).
 
 
-VirtualMethodInvocation_Descriptor(?invocation, ?descriptor,?side):-
+VirtualMethodInvocation_Descriptor(?invocation, ?descriptor,?side),
+VirtualMethodInvocation_SimpleName(?invocation, ?simplename,?side):-
   isVirtualMethodInvocation_Insn(?invocation,?side_1),
   MethodInvocation_Method(?invocation, ?signature,?side_2),
   Method_SimpleName(?signature, ?simplename,?side_3),
-  Method_Descriptor(?signature, ?descriptor,?side_4),
-  ?sum = ?side_1 + ?side_2 + ?side_3 + ?side_4,
-  merge_strat(4,?sum,?side).
-
-
-
-VirtualMethodInvocation_Descriptor(?invocation, ?descriptor,?side),
-VirtualMethodInvocation_SimpleName(?invocation, ?simplename,?side):-
-  isVirtualMethodInvocation_Insn(?invocation,?side_1), % 1,2
-  MethodInvocation_Method(?invocation, ?signature,?side_2), % 1,2
-  Method_SimpleName(?signature, ?simplename,?side_3), % play,0
   Method_Descriptor(?signature, ?descriptor,?side_4),
   ?sum = ?side_1 + ?side_2 + ?side_3 + ?side_4,
   merge_strat(4,?sum,?side).
@@ -378,7 +350,6 @@ SubtypeOf(?s, ?t,?side):-
   ?sum = ?side_1 + ?side_2,
   merge_strat(2,?sum,?side).
 
-
 SubtypeOf(?s, ?t,?side):-
   isArrayType(?s,?side_1),
   isType(?t,?side_2),
@@ -400,7 +371,6 @@ SubtypeOf(?s, ?t,?side):-
   isArrayType(?s,?side_1),
   isInterfaceType(?t,?side_2),
   isType(?t,?side_3),
-  ?t = _,
   ?sum = ?side_1 + ?side_2 + ?side_3,
   merge_strat(3,?sum,?side).
 
@@ -409,7 +379,6 @@ SubtypeOf(?s, ?t,?side):-
   isArrayType(?s,?side_1),
   isInterfaceType(?t,?side_2),
   isType(?t,?side_3),
-  ?t = _,
   ?sum = ?side_1 + ?side_2 + ?side_3,
   merge_strat(3,?sum,?side).
 
@@ -417,15 +386,6 @@ SubtypeOf(?s, ?t,?side):-
 SubtypeOf(?t, ?t,?side):-
   isType(?t,?side).
   
-%SubtypeOfDifferent(?s, ?t,?side):-
-%  SubtypeOf(?s,?t,?side),
-%  ?s != ?t.
-
-
-SameMethod("<java.util.prefs.Base64: void main(java.lang.String[])>",0).
-SameMethod("<sun.java2d.loops.GraphicsPrimitiveMgr: void main(java.lang.String[])>",0).
-SameMethod("<sun.security.provider.PolicyParser: void main(java.lang.String[])>",0).
-
 
 MainMethodDeclaration(?method,?side):-
   MainClass(?type,?side),
@@ -721,7 +681,6 @@ Reachable(?method,?side):-
 @export Superinterface :- tsv{resource="Superinterface.tsv",format=(string,string,int)}.
 @export SubtypeOf :- tsv{resource="SubtypeOf.tsv",format=(string,string,int)}.
 @export SupertypeOf :- tsv{resource="SupertypeOf.tsv",format=(string,string,int)}.
-%@export SubtypeOfDifferent :- tsv{resource="SubtypeOfDifferent.tsv",format=(string,string,int)}.
 @export MainMethodDeclaration :- tsv{resource="MainMethodDeclaration.tsv",format=(string,int)}.
 @export LoadInstanceField :- tsv{resource="LoadInstanceField.tsv",format=(string,string,string,string,int)}.
 @export StoreInstanceField :- tsv{resource="StoreInstanceField.tsv",format=(string,string,string,string,int)}.
@@ -742,5 +701,3 @@ Reachable(?method,?side):-
 @export ArrayIndexPointsTo :- tsv{resource="ArrayIndexPointsTo.tsv",format=(string,string,int)}.
 @export MainClass :- tsv{resource="MainClass.tsv",format=(string,int)}.
 @export merge_strat :- tsv{resource="merge_strat.tsv",format=(string,string,int)}.
-
-% Vergleichsversion, wo folding nur am Ende funktioniert
