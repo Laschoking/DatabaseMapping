@@ -1,6 +1,7 @@
 @import ClassModifier :- tsv{resource="ClassModifier.tsv",format=(string, string,int)}.
 @import MainClass :- tsv{resource="MainClass.tsv",format=(string,int)}. 
 
+@import z_NormalHeap :- tsv{resource="NormalHeap.tsv",format=(string, string,int)}.
 @import DirectSuperclass :- tsv{resource="DirectSuperclass.tsv",format=(string, string,int)}.
 @import DirectSuperinterface :- tsv{resource="DirectSuperinterface.tsv",format=(string, string,int)}.
 @import Method_Modifier :- tsv{resource="Method-Modifier.tsv",format=(string, string,int)}.
@@ -15,7 +16,6 @@
 @import z_Var_DeclaringMethod :- tsv{resource="Var-DeclaringMethod.tsv",format=(string, string,int)}.
 @import z_ApplicationClass :- tsv{resource="ApplicationClass.tsv",format=(string,int)}.
 @import z_ThisVar :- tsv{resource="ThisVar.tsv",format=(string, string,int)}.
-@import z_NormalHeap :- tsv{resource="NormalHeap.tsv",format=(string, string,int)}.
 @import z_StringConstant :- tsv{resource="StringConstant.tsv",format=(string,int)}.
 @import z_AssignHeapAllocation :- tsv{resource="AssignHeapAllocation.tsv",format=(string, string, string,string, string,string,int)}.
 @import z_AssignLocal :- tsv{resource="AssignLocal.tsv",format=(string, string, string,string, string,int)}.
@@ -334,12 +334,16 @@ SubtypeOf(?s, ?t,?side):-
   Subclass(?t, ?s,?side).
 
 SubtypeOf(?s, ?t,?side):-
-  isClassType(?s,?side),
-  Superinterface(?t, ?s,?side).
+  isClassType(?s,?side_1),
+  Superinterface(?t, ?s,?side_2),
+  ?sum = ?side_1 + ?side_2,
+  merge_strat(2,?sum,?side).
 
 SubtypeOf(?s, ?t,?side):-
-  isInterfaceType(?s,?side),
-  isType(?t,?side).
+  isInterfaceType(?s,?side_1),
+  isType(?t,?side_2),
+  ?sum = ?side_1 + ?side_2,
+  merge_strat(2,?sum,?side).
 
 SubtypeOf(?s, ?s,?side):-
   isInterfaceType(?s,?side).

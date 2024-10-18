@@ -3,6 +3,7 @@
 
 @import MainClass :- tsv{resource="MainClass.tsv",format=(string)}. %facts file is not modified, csv file comes from souffle
 
+@import z_NormalHeap :- tsv{resource="NormalHeap.tsv",format=(string, string)}.
 @import ClassModifier :- tsv{resource="ClassModifier.tsv",format=(string, string)}.
 @import DirectSuperclass :- tsv{resource="DirectSuperclass.tsv",format=(string, string)}.
 @import DirectSuperinterface :- tsv{resource="DirectSuperinterface.tsv",format=(string, string)}.
@@ -18,7 +19,6 @@
 @import z_Var_DeclaringMethod :- tsv{resource="Var-DeclaringMethod.tsv",format=(string, string)}.
 @import z_ApplicationClass :- tsv{resource="ApplicationClass.tsv",format=(string)}.
 @import z_ThisVar :- tsv{resource="ThisVar.tsv",format=(string, string)}.
-@import z_NormalHeap :- tsv{resource="NormalHeap.tsv",format=(string, string)}.
 @import z_StringConstant :- tsv{resource="StringConstant.tsv",format=(string)}.
 @import z_AssignHeapAllocation :- tsv{resource="AssignHeapAllocation.tsv",format=(string, int, string,string, string,int)}.
 @import z_AssignLocal :- tsv{resource="AssignLocal.tsv",format=(string, int, string,string, string)}.
@@ -281,6 +281,7 @@ SubtypeOf(?s, ?t):-
   isClassType(?s),
   Superinterface(?t, ?s).
 
+% either this org.apache.commons.logging.Log
 SubtypeOf(?s, ?t):-
   isInterfaceType(?s),
   isType(?t).
@@ -292,6 +293,7 @@ SubtypeOf(?s, ?t):-
   isInterfaceType(?s),
   Superinterface(?t, ?s).
 
+% or this org.apache.commons.logging.Log
 SubtypeOf(?s, ?t):-
   isArrayType(?s),
   isType(?t).
