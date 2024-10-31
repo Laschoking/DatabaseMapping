@@ -1,0 +1,828 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/redisson/redisson.git",
+	"sha1": "84ea15ca729c23cd4f7d2a85f1e9bbbb4d5afae0",
+	"url": "https://github.com/redisson/redisson/commit/84ea15ca729c23cd4f7d2a85f1e9bbbb4d5afae0",
+	"refactorings": [{
+	"type": "Add Method Modifier",
+	"description": "Add Method Modifier final in method protected copyAsync(commandExecutor CommandAsyncExecutor, keys List<Object>, database int, replace boolean) : RFuture<Boolean> from class org.redisson.RedissonObject",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 181,
+		"endLine": 218,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "private copyAsync(commandExecutor CommandAsyncExecutor, keys List<Object>, database int, replace boolean) : RFuture<Boolean>"
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 190,
+		"endLine": 227,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with added modifier",
+		"codeElement": "protected copyAsync(commandExecutor CommandAsyncExecutor, keys List<Object>, database int, replace boolean) : RFuture<Boolean>"
+}]
+},
+{
+	"type": "Change Method Access Modifier",
+	"description": "Change Method Access Modifier private to protected in method protected copyAsync(commandExecutor CommandAsyncExecutor, keys List<Object>, database int, replace boolean) : RFuture<Boolean> from class org.redisson.RedissonObject",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 181,
+		"endLine": 218,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "private copyAsync(commandExecutor CommandAsyncExecutor, keys List<Object>, database int, replace boolean) : RFuture<Boolean>"
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 190,
+		"endLine": 227,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with changed access modifier",
+		"codeElement": "protected copyAsync(commandExecutor CommandAsyncExecutor, keys List<Object>, database int, replace boolean) : RFuture<Boolean>"
+}]
+},
+{
+	"type": "Change Variable Type",
+	"description": "Change Variable Type future : RFuture<Boolean> to kks : List<Object> in method public renamenxAsync(newName String) : RFuture<Boolean> from class org.redisson.RedissonBloomFilter",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 427,
+		"endLine": 434,
+		"startColumn": 26,
+		"endColumn": 90,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "original variable declaration",
+		"codeElement": "future : RFuture<Boolean>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 427,
+		"endLine": 434,
+		"startColumn": 9,
+		"endColumn": 91,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 435,
+		"endLine": 441,
+		"startColumn": 9,
+		"endColumn": 12,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 423,
+		"endLine": 424,
+		"startColumn": 22,
+		"endColumn": 35,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "changed-type variable declaration",
+		"codeElement": "kks : List<Object>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 423,
+		"endLine": 424,
+		"startColumn": 9,
+		"endColumn": 36,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the variable with changed type",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 425,
+		"endLine": 430,
+		"startColumn": 9,
+		"endColumn": 12,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "statement referencing the variable with changed type",
+		"codeElement": null
+}]
+},
+{
+	"type": "Change Variable Type",
+	"description": "Change Variable Type future : RFuture<Void> to kks : List<Object> in method public renameAsync(newName String) : RFuture<Void> from class org.redisson.RedissonBloomFilter",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 410,
+		"endLine": 415,
+		"startColumn": 23,
+		"endColumn": 90,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "original variable declaration",
+		"codeElement": "future : RFuture<Void>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 410,
+		"endLine": 415,
+		"startColumn": 9,
+		"endColumn": 91,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 416,
+		"endLine": 420,
+		"startColumn": 9,
+		"endColumn": 12,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 411,
+		"endLine": 412,
+		"startColumn": 22,
+		"endColumn": 35,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "changed-type variable declaration",
+		"codeElement": "kks : List<Object>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 411,
+		"endLine": 412,
+		"startColumn": 9,
+		"endColumn": 36,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the variable with changed type",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 413,
+		"endLine": 416,
+		"startColumn": 9,
+		"endColumn": 12,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "statement referencing the variable with changed type",
+		"codeElement": null
+}]
+},
+{
+	"type": "Extract And Move Method",
+	"description": "Extract And Move Method protected renameAsync(commandExecutor CommandAsyncExecutor, keys List<Object>, runnable Runnable) : RFuture<Void> extracted from public renameAsync(newName String) : RFuture<Void> in class org.redisson.RedissonBloomFilter & moved to class org.redisson.RedissonObject",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 407,
+		"endLine": 422,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "source method declaration before extraction",
+		"codeElement": "public renameAsync(newName String) : RFuture<Void>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 421,
+		"endLine": 421,
+		"startColumn": 9,
+		"endColumn": 50,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "extracted code from source method declaration",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 229,
+		"endLine": 249,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "extracted method declaration",
+		"codeElement": "protected renameAsync(commandExecutor CommandAsyncExecutor, keys List<Object>, runnable Runnable) : RFuture<Void>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 248,
+		"endLine": 248,
+		"startColumn": 9,
+		"endColumn": 50,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "extracted code to extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 407,
+		"endLine": 417,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "source method declaration after extraction",
+		"codeElement": "public renameAsync(newName String) : RFuture<Void>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 413,
+		"endLine": 416,
+		"startColumn": 16,
+		"endColumn": 11,
+		"codeElementType": "METHOD_INVOCATION",
+		"description": "extracted method invocation",
+		"codeElement": "renameAsync(commandExecutor,kks,() -> {\n  setName(newName);\n  this.configName=newConfigName;\n}\n)"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 231,
+		"endLine": 231,
+		"startColumn": 13,
+		"endColumn": 52,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 232,
+		"endLine": 232,
+		"startColumn": 13,
+		"endColumn": 35,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 233,
+		"endLine": 233,
+		"startColumn": 13,
+		"endColumn": 35,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 234,
+		"endLine": 234,
+		"startColumn": 13,
+		"endColumn": 148,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 235,
+		"endLine": 235,
+		"startColumn": 13,
+		"endColumn": 66,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 236,
+		"endLine": 236,
+		"startColumn": 13,
+		"endColumn": 54,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 247,
+		"endLine": 247,
+		"startColumn": 9,
+		"endColumn": 47,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 239,
+		"endLine": 246,
+		"startColumn": 9,
+		"endColumn": 23,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 235,
+		"endLine": 235,
+		"startColumn": 35,
+		"endColumn": 64,
+		"codeElementType": "LAMBDA_EXPRESSION_BODY",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 230,
+		"endLine": 237,
+		"startColumn": 31,
+		"endColumn": 10,
+		"codeElementType": "BLOCK",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 230,
+		"endLine": 237,
+		"startColumn": 9,
+		"endColumn": 10,
+		"codeElementType": "IF_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}]
+},
+{
+	"type": "Extract And Move Method",
+	"description": "Extract And Move Method protected renamenxAsync(commandExecutor CommandAsyncExecutor, keys List<Object>, callback Consumer<Boolean>) : RFuture<Boolean> extracted from public renamenxAsync(newName String) : RFuture<Boolean> in class org.redisson.RedissonBloomFilter & moved to class org.redisson.RedissonObject",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 424,
+		"endLine": 443,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "source method declaration before extraction",
+		"codeElement": "public renamenxAsync(newName String) : RFuture<Boolean>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 440,
+		"endLine": 440,
+		"startColumn": 13,
+		"endColumn": 26,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "extracted code from source method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 442,
+		"endLine": 442,
+		"startColumn": 9,
+		"endColumn": 50,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "extracted code from source method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 435,
+		"endLine": 441,
+		"startColumn": 64,
+		"endColumn": 10,
+		"codeElementType": "BLOCK",
+		"description": "extracted code from source method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 435,
+		"endLine": 441,
+		"startColumn": 9,
+		"endColumn": 12,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "extracted code from source method declaration",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 251,
+		"endLine": 283,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "extracted method declaration",
+		"codeElement": "protected renamenxAsync(commandExecutor CommandAsyncExecutor, keys List<Object>, callback Consumer<Boolean>) : RFuture<Boolean>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 261,
+		"endLine": 261,
+		"startColumn": 17,
+		"endColumn": 30,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "extracted code to extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 282,
+		"endLine": 282,
+		"startColumn": 9,
+		"endColumn": 50,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "extracted code to extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 257,
+		"endLine": 262,
+		"startColumn": 38,
+		"endColumn": 14,
+		"codeElementType": "BLOCK",
+		"description": "extracted code to extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 257,
+		"endLine": 262,
+		"startColumn": 13,
+		"endColumn": 16,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "extracted code to extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 256,
+		"endLine": 256,
+		"startColumn": 13,
+		"endColumn": 153,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "extracted code to extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 419,
+		"endLine": 431,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "source method declaration after extraction",
+		"codeElement": "public renamenxAsync(newName String) : RFuture<Boolean>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 425,
+		"endLine": 430,
+		"startColumn": 16,
+		"endColumn": 11,
+		"codeElementType": "METHOD_INVOCATION",
+		"description": "extracted method invocation",
+		"codeElement": "renamenxAsync(commandExecutor,kks,value -> {\n  if (value) {\n    setName(newName);\n    this.configName=newConfigName;\n  }\n}\n)"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 253,
+		"endLine": 253,
+		"startColumn": 13,
+		"endColumn": 52,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 254,
+		"endLine": 254,
+		"startColumn": 13,
+		"endColumn": 35,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 255,
+		"endLine": 255,
+		"startColumn": 13,
+		"endColumn": 35,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 263,
+		"endLine": 263,
+		"startColumn": 13,
+		"endColumn": 54,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 278,
+		"endLine": 281,
+		"startColumn": 9,
+		"endColumn": 12,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 259,
+		"endLine": 259,
+		"startColumn": 21,
+		"endColumn": 51,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 266,
+		"endLine": 277,
+		"startColumn": 9,
+		"endColumn": 23,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 252,
+		"endLine": 264,
+		"startColumn": 31,
+		"endColumn": 10,
+		"codeElementType": "BLOCK",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 252,
+		"endLine": 264,
+		"startColumn": 9,
+		"endColumn": 10,
+		"codeElementType": "IF_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 258,
+		"endLine": 260,
+		"startColumn": 17,
+		"endColumn": 18,
+		"codeElementType": "IF_STATEMENT",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonObject.java",
+		"startLine": 258,
+		"endLine": 260,
+		"startColumn": 28,
+		"endColumn": 18,
+		"codeElementType": "BLOCK",
+		"description": "added statement in extracted method declaration",
+		"codeElement": null
+}]
+},
+{
+	"type": "Extract Variable",
+	"description": "Extract Variable nn : String in method public renameAsync(newName String) : RFuture<Void> from class org.redisson.RedissonBloomFilter",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 409,
+		"endLine": 409,
+		"startColumn": 9,
+		"endColumn": 71,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement with the initializer of the extracted variable",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 410,
+		"endLine": 415,
+		"startColumn": 9,
+		"endColumn": 91,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement with the initializer of the extracted variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 409,
+		"endLine": 409,
+		"startColumn": 16,
+		"endColumn": 37,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "extracted variable declaration",
+		"codeElement": "nn : String"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 410,
+		"endLine": 410,
+		"startColumn": 9,
+		"endColumn": 57,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement with the name of the extracted variable",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 411,
+		"endLine": 412,
+		"startColumn": 9,
+		"endColumn": 36,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement with the name of the extracted variable",
+		"codeElement": null
+}]
+},
+{
+	"type": "Extract Variable",
+	"description": "Extract Variable nn : String in method public renamenxAsync(newName String) : RFuture<Boolean> from class org.redisson.RedissonBloomFilter",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 426,
+		"endLine": 426,
+		"startColumn": 9,
+		"endColumn": 71,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement with the initializer of the extracted variable",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 427,
+		"endLine": 434,
+		"startColumn": 9,
+		"endColumn": 91,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement with the initializer of the extracted variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 421,
+		"endLine": 421,
+		"startColumn": 16,
+		"endColumn": 37,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "extracted variable declaration",
+		"codeElement": "nn : String"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 422,
+		"endLine": 422,
+		"startColumn": 9,
+		"endColumn": 57,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement with the name of the extracted variable",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 423,
+		"endLine": 424,
+		"startColumn": 9,
+		"endColumn": 36,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement with the name of the extracted variable",
+		"codeElement": null
+}]
+},
+{
+	"type": "Remove Attribute Modifier",
+	"description": "Remove Attribute Modifier final in attribute private allocationSizeName : String from class org.redisson.RedissonIdGenerator",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonIdGenerator.java",
+		"startLine": 46,
+		"endLine": 46,
+		"startColumn": 26,
+		"endColumn": 44,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "original attribute declaration",
+		"codeElement": "private allocationSizeName : String"
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonIdGenerator.java",
+		"startLine": 46,
+		"endLine": 46,
+		"startColumn": 20,
+		"endColumn": 38,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "attribute declaration with removed modifier",
+		"codeElement": "private allocationSizeName : String"
+}]
+},
+{
+	"type": "Remove Attribute Modifier",
+	"description": "Remove Attribute Modifier final in attribute private timeoutSetName : String from class org.redisson.RedissonTimeSeries",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonTimeSeries.java",
+		"startLine": 48,
+		"endLine": 48,
+		"startColumn": 26,
+		"endColumn": 40,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "original attribute declaration",
+		"codeElement": "private timeoutSetName : String"
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonTimeSeries.java",
+		"startLine": 48,
+		"endLine": 48,
+		"startColumn": 20,
+		"endColumn": 34,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "attribute declaration with removed modifier",
+		"codeElement": "private timeoutSetName : String"
+}]
+},
+{
+	"type": "Rename Variable",
+	"description": "Rename Variable future : RFuture<Boolean> to kks : List<Object> in method public renamenxAsync(newName String) : RFuture<Boolean> from class org.redisson.RedissonBloomFilter",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 427,
+		"endLine": 434,
+		"startColumn": 26,
+		"endColumn": 90,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "original variable declaration",
+		"codeElement": "future : RFuture<Boolean>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 427,
+		"endLine": 434,
+		"startColumn": 9,
+		"endColumn": 91,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 435,
+		"endLine": 441,
+		"startColumn": 9,
+		"endColumn": 12,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 423,
+		"endLine": 424,
+		"startColumn": 22,
+		"endColumn": 35,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "renamed variable declaration",
+		"codeElement": "kks : List<Object>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 423,
+		"endLine": 424,
+		"startColumn": 9,
+		"endColumn": 36,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 425,
+		"endLine": 430,
+		"startColumn": 9,
+		"endColumn": 12,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}]
+},
+{
+	"type": "Rename Variable",
+	"description": "Rename Variable future : RFuture<Void> to kks : List<Object> in method public renameAsync(newName String) : RFuture<Void> from class org.redisson.RedissonBloomFilter",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 410,
+		"endLine": 415,
+		"startColumn": 23,
+		"endColumn": 90,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "original variable declaration",
+		"codeElement": "future : RFuture<Void>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 410,
+		"endLine": 415,
+		"startColumn": 9,
+		"endColumn": 91,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 416,
+		"endLine": 420,
+		"startColumn": 9,
+		"endColumn": 12,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 411,
+		"endLine": 412,
+		"startColumn": 22,
+		"endColumn": 35,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "renamed variable declaration",
+		"codeElement": "kks : List<Object>"
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 411,
+		"endLine": 412,
+		"startColumn": 9,
+		"endColumn": 36,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}, {
+		"filePath": "redisson/src/main/java/org/redisson/RedissonBloomFilter.java",
+		"startLine": 413,
+		"endLine": 416,
+		"startColumn": 9,
+		"endColumn": 12,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}]
+}
+]
+}]
+}

@@ -1,0 +1,66 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/YunaiV/ruoyi-vue-pro.git",
+	"sha1": "0c8ee55a172a97aa99847c36ec1809ea1e2110c0",
+	"url": "https://github.com/YunaiV/ruoyi-vue-pro/commit/0c8ee55a172a97aa99847c36ec1809ea1e2110c0",
+	"refactorings": [{
+	"type": "Add Method Annotation",
+	"description": "Add Method Annotation @SneakyThrows in method private percentCode(str String) : String from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 187,
+		"endLine": 202,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public percentCode(str String) : String"
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 191,
+		"endLine": 191,
+		"startColumn": 5,
+		"endColumn": 18,
+		"codeElementType": "ANNOTATION",
+		"description": "added annotation",
+		"codeElement": "@SneakyThrows"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 185,
+		"endLine": 198,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with added annotation",
+		"codeElement": "private percentCode(str String) : String"
+}]
+},
+{
+	"type": "Change Method Access Modifier",
+	"description": "Change Method Access Modifier public to private in method private percentCode(str String) : String from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 187,
+		"endLine": 202,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "public percentCode(str String) : String"
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 185,
+		"endLine": 198,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with changed access modifier",
+		"codeElement": "private percentCode(str String) : String"
+}]
+}
+]
+}]
+}

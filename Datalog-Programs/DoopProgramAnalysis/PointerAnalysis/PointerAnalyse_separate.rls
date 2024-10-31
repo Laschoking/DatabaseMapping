@@ -1,10 +1,9 @@
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-true("true"^^xsd:boolean).
 
 % Update of analysis: no more import of alternated MainClass or Method_Descriptor, since CONCAT & CONTAINS work now :)
 
-@import MainClass :- tsv{resource="MainClass.tsv",format=(string)}. %facts file is not modified, csv file comes from souffle
+@import MainClass :- tsv{resource="MainClass.tsv",format=(string,)}. %facts file is not modified, csv file comes from souffle
 
+@import z_NormalHeap :- tsv{resource="NormalHeap.tsv",format=(string, string)}.
 @import ClassModifier :- tsv{resource="ClassModifier.tsv",format=(string, string)}.
 @import DirectSuperclass :- tsv{resource="DirectSuperclass.tsv",format=(string, string)}.
 @import DirectSuperinterface :- tsv{resource="DirectSuperinterface.tsv",format=(string, string)}.
@@ -14,14 +13,13 @@ true("true"^^xsd:boolean).
 @import ComponentType :- tsv{resource="ComponentType.tsv",format=(string, string)}.
 @import AssignReturnValue :- tsv{resource="AssignReturnValue.tsv",format=(string, string)}.
 @import ActualParam :- tsv{resource="ActualParam.tsv",format=(int,string, string)}.
-@import ClassType :- tsv{resource="ClassType.tsv",format=(string)}.
-@import z_ArrayType :- tsv{resource="ArrayType.tsv",format=(string)}.
-@import z_InterfaceType :- tsv{resource="InterfaceType.tsv",format=(string)}.
+@import ClassType :- tsv{resource="ClassType.tsv",format=(string,)}.
+@import z_ArrayType :- tsv{resource="ArrayType.tsv",format=(string,)}.
+@import z_InterfaceType :- tsv{resource="InterfaceType.tsv",format=(string,)}.
 @import z_Var_DeclaringMethod :- tsv{resource="Var-DeclaringMethod.tsv",format=(string, string)}.
-@import z_ApplicationClass :- tsv{resource="ApplicationClass.tsv",format=(string)}.
+@import z_ApplicationClass :- tsv{resource="ApplicationClass.tsv",format=(string,)}.
 @import z_ThisVar :- tsv{resource="ThisVar.tsv",format=(string, string)}.
-@import z_NormalHeap :- tsv{resource="NormalHeap.tsv",format=(string, string)}.
-@import z_StringConstant :- tsv{resource="StringConstant.tsv",format=(string)}.
+@import z_StringConstant :- tsv{resource="StringConstant.tsv",format=(string,)}.
 @import z_AssignHeapAllocation :- tsv{resource="AssignHeapAllocation.tsv",format=(string, int, string,string, string,int)}.
 @import z_AssignLocal :- tsv{resource="AssignLocal.tsv",format=(string, int, string,string, string)}.
 @import z_AssignCast :- tsv{resource="AssignCast.tsv",format=(string, int, string,string, string,string)}.
@@ -38,17 +36,11 @@ true("true"^^xsd:boolean).
 @import z_LoadArrayIndex :- tsv{resource="LoadArrayIndex.tsv",format=(string, int, string, string, string)}.
 @import z_Return :- tsv{resource="Return.tsv",format=(string, int, string, string)}.
 
-
-%Method_Descriptor(?method, ?descriptor) :-
-%  Method_ReturnType(?method, ?returnType),
-%  Method_ParamTypes(?method, ?params),
-%  ?descriptor = CONCAT(?returnType, "(", ?params, ")").
   
-
 MainClass(?b):-
   ClassModifier(_,?b),
-  MainClass(?a),
-  true(CONTAINS(?a,?b)).
+  MainClass(_).
+
 
 % imports
 isType(?class):-
@@ -84,9 +76,6 @@ ThisVar(?method, ?var):-
 isType(?type),
 HeapAllocation_Type(?id, ?type):-
   z_NormalHeap(?id, ?type).
-
-HeapAllocation_Type(?id, "java.lang.String"):-
-  z_StringConstant(?id).
 
 Instruction_Method(?instruction, ?method),
 AssignInstruction_To(?instruction, ?to),
@@ -228,10 +217,6 @@ StaticMethodInvocation(?invocation, ?signature, ?inmethod):-
   Instruction_Method(?invocation, ?inmethod),
   MethodInvocation_Method(?invocation, ?signature).
 
-HeapAllocation_Type("<<main method array>>", "java.lang.String[]").
-
-
-HeapAllocation_Type("<<main method array content>>","java.lang.String").
 
 VirtualMethodInvocation_Descriptor(?invocation, ?descriptor),
 VirtualMethodInvocation_SimpleName(?invocation, ?simplename):-
@@ -245,19 +230,16 @@ MethodLookup(?simplename, ?descriptor, ?type, ?method):-
 
 MethodLookup(?simplename, ?descriptor, ?type, ?method):-
    DirectSuperinterface(?type, ?supertype),
-  MethodLookup(?simplename, ?descriptor, ?supertype, ?method),
-  ~ MethodImplemented(?simplename, ?descriptor, ?type, _).
+  MethodLookup(?simplename, ?descriptor, ?supertype, ?method).
 
 MethodLookup(?simplename, ?descriptor, ?type, ?method):-
   DirectSuperclass(?type, ?supertype),
-  MethodLookup(?simplename, ?descriptor, ?supertype, ?method),
-  ~MethodImplemented(?simplename, ?descriptor, ?type, _).
+  MethodLookup(?simplename, ?descriptor, ?supertype, ?method).
 
 MethodImplemented(?simplename, ?descriptor, ?type, ?method):-
   Method_SimpleName(?method, ?simplename),
   Method_Descriptor(?method, ?descriptor),
-  Method_DeclaringType(?method, ?type),
-  ~Method_Modifier("abstract", ?method).
+  Method_DeclaringType(?method, ?type).
 
 DirectSubclass(?a, ?c):-
   DirectSuperclass(?a, ?c). % ok
@@ -296,10 +278,10 @@ SubtypeOf(?s, ?t):-
   isClassType(?s),
   Superinterface(?t, ?s).
 
+% either this org.apache.commons.logging.Log
 SubtypeOf(?s, ?t):-
   isInterfaceType(?s),
-  isType(?t),
-  ?t = "java.lang.Object".
+  isType(?t).
 
 SubtypeOf(?s, ?s):-
   isInterfaceType(?s).
@@ -308,10 +290,10 @@ SubtypeOf(?s, ?t):-
   isInterfaceType(?s),
   Superinterface(?t, ?s).
 
+% or this org.apache.commons.logging.Log
 SubtypeOf(?s, ?t):-
   isArrayType(?s),
-  isType(?t),
-  ?t = "java.lang.Object".
+  isType(?t).
 
 SubtypeOf(?s, ?t):-
   ComponentType(?s, ?sc),
@@ -323,33 +305,26 @@ SubtypeOf(?s, ?t):-
 SubtypeOf(?s, ?t):-
   isArrayType(?s),
   isInterfaceType(?t),
-  isType(?t),
-  ?t = "java.lang.Cloneable".
+  isType(?t).
 
 SubtypeOf(?s, ?t):-
   isArrayType(?s),
   isInterfaceType(?t),
-  isType(?t),
-  ?t = "java.io.Serializable".
+  isType(?t).
 
 SubtypeOf(?t, ?t):-
   isType(?t).
 
-SameMethod("<java.util.prefs.Base64: void main(java.lang.String[])>").
-SameMethod("<sun.java2d.loops.GraphicsPrimitiveMgr: void main(java.lang.String[])>").
-SameMethod("<sun.security.provider.PolicyParser: void main(java.lang.String[])>").
-
 MainMethodDeclaration(?method):-
   MainClass(?type),
   Method_DeclaringType(?method, ?type),
-  Method_SimpleName(?method, "main"),
-  ~ SameMethod(?method),
-  Method_Descriptor(?method, "void(java.lang.String[])"),
-  Method_Modifier("public", ?method),
-  Method_Modifier("static", ?method).
+  Method_SimpleName(?method,_),
+  ~SameMethod(?method),
+  Method_Descriptor(?method, _),
+  Method_Modifier(_, ?method).
 
 ClassInitializer(?type, ?method):-
-   MethodImplemented("<clinit>", "void()", ?type, ?method).
+   MethodImplemented(_, _, ?type, ?method).
 
 InitializedClass(?superclass):-
    InitializedClass(?class),
@@ -500,20 +475,18 @@ VarPointsTo(?heap, ?this):-
 Reachable(?method):-
   MainMethodDeclaration(?method).
 
-@export Reachable :- tsv{resource="Reachable.tsv",format=(string)}.
+@export Reachable :- tsv{resource="Reachable.tsv",format=(string,)}.
 @export VarPointsTo :- tsv{resource="VarPointsTo.tsv",format=(string,string)}.
 @export CallGraphEdge :- tsv{resource="CallGraphEdge.tsv",format=(string,string)}.
 @export Assign :- tsv{resource="Assign.tsv",format=(string,string)}.
 @export AssignReturnValue :- tsv{resource="AssignReturnValue.tsv",format=(string,string)}.
-
-@export MainClass :- tsv{resource="MainClass.tsv",format=(string)}.
 @export MethodLookup :- tsv{resource="MethodLookup.tsv",format=(string,string,string,string)}.
-@export isType :- tsv{resource="isType.tsv",format=(string)}.
-@export isReferenceType :- tsv{resource="isReferenceType.tsv",format=(string)}.
-@export isArrayType :- tsv{resource="isArrayType.tsv",format=(string)}.
-@export isClassType :- tsv{resource="isClassType.tsv",format=(string)}.
-@export isInterfaceType :- tsv{resource="isInterfaceType.tsv",format=(string)}.
-@export ApplicationClass :- tsv{resource="ApplicationClass.tsv",format=(string)}.
+@export isType :- tsv{resource="isType.tsv",format=(string,)}.
+@export isReferenceType :- tsv{resource="isReferenceType.tsv",format=(string,)}.
+@export isArrayType :- tsv{resource="isArrayType.tsv",format=(string,)}.
+@export isClassType :- tsv{resource="isClassType.tsv",format=(string,)}.
+@export isInterfaceType :- tsv{resource="isInterfaceType.tsv",format=(string,)}.
+@export ApplicationClass :- tsv{resource="ApplicationClass.tsv",format=(string,)}.
 @export Field_DeclaringType :- tsv{resource="Field_DeclaringType.tsv",format=(string,string)}.
 @export Method_DeclaringType :- tsv{resource="Method_DeclaringType.tsv",format=(string,string)}.
 @export Method_ReturnType :- tsv{resource="Method_ReturnType.tsv",format=(string,string)}.
@@ -523,8 +496,8 @@ Reachable(?method):-
 @export Var_DeclaringMethod :- tsv{resource="Var_DeclaringMethod.tsv",format=(string,string)}.
 @export HeapAllocation_Type :- tsv{resource="HeapAllocation_Type.tsv",format=(string,string)}.
 @export Instruction_Method :- tsv{resource="Instruction_Method.tsv",format=(string,string)}.
-@export isVirtualMethodInvocation_Insn :- tsv{resource="isVirtualMethodInvocation_Insn.tsv",format=(string)}.
-@export isStaticMethodInvocation_Insn :- tsv{resource="isStaticMethodInvocation_Insn.tsv",format=(string)}.
+@export isVirtualMethodInvocation_Insn :- tsv{resource="isVirtualMethodInvocation_Insn.tsv",format=(string,)}.
+@export isStaticMethodInvocation_Insn :- tsv{resource="isStaticMethodInvocation_Insn.tsv",format=(string,)}.
 @export FieldInstruction_Signature :- tsv{resource="FieldInstruction_Signature.tsv",format=(string,string)}.
 @export LoadInstanceField_Base :- tsv{resource="LoadInstanceField_Base.tsv",format=(string,string)}.
 @export LoadInstanceField_To :- tsv{resource="LoadInstanceField_To.tsv",format=(string,string)}.
@@ -557,7 +530,7 @@ Reachable(?method):-
 @export Superinterface :- tsv{resource="Superinterface.tsv",format=(string,string)}.
 @export SubtypeOf :- tsv{resource="SubtypeOf.tsv",format=(string,string)}.
 @export SupertypeOf :- tsv{resource="SupertypeOf.tsv",format=(string,string)}.
-@export MainMethodDeclaration :- tsv{resource="MainMethodDeclaration.tsv",format=(string)}.
+@export MainMethodDeclaration :- tsv{resource="MainMethodDeclaration.tsv",format=(string,)}.
 @export LoadInstanceField :- tsv{resource="LoadInstanceField.tsv",format=(string,string,string,string)}.
 @export StoreInstanceField :- tsv{resource="StoreInstanceField.tsv",format=(string,string,string,string)}.
 @export LoadStaticField :- tsv{resource="LoadStaticField.tsv",format=(string,string,string)}.
@@ -569,9 +542,10 @@ Reachable(?method):-
 @export AssignHeapAllocation :- tsv{resource="AssignHeapAllocation.tsv",format=(string,string,string)}.
 @export ReturnVar :- tsv{resource="ReturnVar.tsv",format=(string,string)}.
 @export StaticMethodInvocation :- tsv{resource="StaticMethodInvocation.tsv",format=(string,string,string)}.
-@export SameMethod :- tsv{resource="SameMethod.tsv",format=(string)}.
+@export SameMethod :- tsv{resource="SameMethod.tsv",format=(string,)}.
 @export ClassInitializer :- tsv{resource="ClassInitializer.tsv",format=(string,string)}.
-@export InitializedClass :- tsv{resource="InitializedClass.tsv",format=(string)}.
+@export InitializedClass :- tsv{resource="InitializedClass.tsv",format=(string,)}.
 @export InstanceFieldPointsTo :- tsv{resource="InstanceFieldPointsTo.tsv",format=(string,string,string)}.
 @export StaticFieldPointsTo :- tsv{resource="StaticFieldPointsTo.tsv",format=(string,string)}.
 @export ArrayIndexPointsTo :- tsv{resource="ArrayIndexPointsTo.tsv",format=(string,string)}.
+@export MainClass :- tsv{resource="MainClass.tsv",format=(string,)}.

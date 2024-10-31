@@ -1,2 +1,0 @@
-org.springframework.boot.loader.jar.NestedJarFile$JarEntriesEnumeration	java.util.Enumeration
-org.springframework.boot.loader.launch.ExplodedArchive$FileArchiveEntry	org.springframework.boot.loader.launch.Archive$Entry

@@ -1,0 +1,2 @@
+SELECT MappingSetup.mapping_id,MappingSetup.metric,MappingSetup.dynamic,StructuralResults.db_config_id,StructuralResults.overlap_perc,StructuralResults.uncertain_mappings from MappingSetup 
+INNER JOIN StructuralResults ON MappingSetup.mapping_id=StructuralResults.mapping_id WHERE MappingSetup.dynamic="True";

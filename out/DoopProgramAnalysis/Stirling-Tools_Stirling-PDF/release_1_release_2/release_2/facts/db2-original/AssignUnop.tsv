@@ -1,2 +1,0 @@
-<org.springframework.boot.loader.zip.ByteArrayDataBlock: long size()>/assign/1	2	<org.springframework.boot.loader.zip.ByteArrayDataBlock: long size()>/$stack2	<org.springframework.boot.loader.zip.ByteArrayDataBlock: long size()>
-<org.springframework.boot.loader.zip.ByteArrayDataBlock: int read(java.nio.ByteBuffer,int)>/assign/4	5	<org.springframework.boot.loader.zip.ByteArrayDataBlock: int read(java.nio.ByteBuffer,int)>/$stack6	<org.springframework.boot.loader.zip.ByteArrayDataBlock: int read(java.nio.ByteBuffer,int)>

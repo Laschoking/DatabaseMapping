@@ -6,7 +6,7 @@ gen_fact_file() {
         return 1
     fi
     
-    file_name=$1
+    file=$1
     output_dir=$2
     
     # Create the output directory if it doesn't exist

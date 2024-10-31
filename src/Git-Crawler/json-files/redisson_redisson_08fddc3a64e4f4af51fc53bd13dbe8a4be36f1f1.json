@@ -1,0 +1,108 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/redisson/redisson.git",
+	"sha1": "08fddc3a64e4f4af51fc53bd13dbe8a4be36f1f1",
+	"url": "https://github.com/redisson/redisson/commit/08fddc3a64e4f4af51fc53bd13dbe8a4be36f1f1",
+	"refactorings": [{
+	"type": "Add Class Annotation",
+	"description": "Add Class Annotation @Deprecated in class io.quarkus.redisson.client.runtime.graal.MarshallingCodecSubstitute",
+	"leftSideLocations": [{
+		"filePath": "redisson-quarkus/redisson-quarkus-16/runtime/src/main/java/io/quarkus/redisson/client/runtime/graal/CodecsSubstitutions.java",
+		"startLine": 42,
+		"endLine": 49,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "io.quarkus.redisson.client.runtime.graal.MarshallingCodecSubstitute"
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson-quarkus/redisson-quarkus-16/runtime/src/main/java/io/quarkus/redisson/client/runtime/graal/CodecsSubstitutions.java",
+		"startLine": 42,
+		"endLine": 42,
+		"startColumn": 0,
+		"endColumn": 12,
+		"codeElementType": "ANNOTATION",
+		"description": "added annotation",
+		"codeElement": "@Deprecated"
+}, {
+		"filePath": "redisson-quarkus/redisson-quarkus-16/runtime/src/main/java/io/quarkus/redisson/client/runtime/graal/CodecsSubstitutions.java",
+		"startLine": 42,
+		"endLine": 50,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with added annotation",
+		"codeElement": "io.quarkus.redisson.client.runtime.graal.MarshallingCodecSubstitute"
+}]
+},
+{
+	"type": "Add Class Annotation",
+	"description": "Add Class Annotation @Deprecated in class io.quarkus.redisson.client.runtime.graal.MarshallingCodecSubstitute",
+	"leftSideLocations": [{
+		"filePath": "redisson-quarkus/redisson-quarkus-20/runtime/src/main/java/io/quarkus/redisson/client/runtime/graal/CodecsSubstitutions.java",
+		"startLine": 42,
+		"endLine": 49,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "io.quarkus.redisson.client.runtime.graal.MarshallingCodecSubstitute"
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson-quarkus/redisson-quarkus-20/runtime/src/main/java/io/quarkus/redisson/client/runtime/graal/CodecsSubstitutions.java",
+		"startLine": 42,
+		"endLine": 42,
+		"startColumn": 0,
+		"endColumn": 12,
+		"codeElementType": "ANNOTATION",
+		"description": "added annotation",
+		"codeElement": "@Deprecated"
+}, {
+		"filePath": "redisson-quarkus/redisson-quarkus-20/runtime/src/main/java/io/quarkus/redisson/client/runtime/graal/CodecsSubstitutions.java",
+		"startLine": 42,
+		"endLine": 50,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with added annotation",
+		"codeElement": "io.quarkus.redisson.client.runtime.graal.MarshallingCodecSubstitute"
+}]
+},
+{
+	"type": "Add Class Annotation",
+	"description": "Add Class Annotation @Deprecated in class io.quarkus.redisson.client.runtime.graal.MarshallingCodecSubstitute",
+	"leftSideLocations": [{
+		"filePath": "redisson-quarkus/redisson-quarkus-30/cdi/runtime/src/main/java/io/quarkus/redisson/client/runtime/graal/CodecsSubstitutions.java",
+		"startLine": 42,
+		"endLine": 49,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "io.quarkus.redisson.client.runtime.graal.MarshallingCodecSubstitute"
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson-quarkus/redisson-quarkus-30/cdi/runtime/src/main/java/io/quarkus/redisson/client/runtime/graal/CodecsSubstitutions.java",
+		"startLine": 42,
+		"endLine": 42,
+		"startColumn": 0,
+		"endColumn": 12,
+		"codeElementType": "ANNOTATION",
+		"description": "added annotation",
+		"codeElement": "@Deprecated"
+}, {
+		"filePath": "redisson-quarkus/redisson-quarkus-30/cdi/runtime/src/main/java/io/quarkus/redisson/client/runtime/graal/CodecsSubstitutions.java",
+		"startLine": 42,
+		"endLine": 50,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with added annotation",
+		"codeElement": "io.quarkus.redisson.client.runtime.graal.MarshallingCodecSubstitute"
+}]
+}
+]
+}]
+}

@@ -1,6 +1,6 @@
 # Give a pointer to the Souffle instance --instance=/home/rdow6615/souffle/src/souffle
 # Give a .dl file as an argument also
-# Give a fact file with --facts=blah.facts or -F blah.facts 
+# Give a fact file with --facts=blah.facts or -F blah.facts
 # GLOBAL VARIABLES
 SOUFFLE=""
 DATALOG_FILE=""
@@ -8,7 +8,7 @@ FACTS=""
 PRETTY=false
 
 ## pretty() calls simple and just uses 
-## the data produced to print something readable.
+## the facts produced to print something readable.
 pretty() {
   local temp=$(mktemp /tmp/tmp.XXXXXX)
   simple > $temp
@@ -58,7 +58,7 @@ while true ; do
   case "$1" in
      --pretty|-p)   PRETTY=true 
                     ;;
-     --facts|-F)    FACTS=$2 
+     --facts|-F)    FACTS=$2
                     shift 
                     ;; 
      --instance|-I) SOUFFLE=$2 

@@ -1,0 +1,6 @@
+helper/$stack8	$stack8	0
+helper/$stack8	$stack8	0
+main/$stack8	$stack8	0
+main/$stack8	$stack8	0
+test/$stack6	$stack6	10
+test/$stack6	$stack8	1

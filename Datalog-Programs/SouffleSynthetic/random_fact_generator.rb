@@ -31,7 +31,7 @@ srand Random.new_seed
 # data generation
 num_rows.times do |i|
 
-    # print a record
+    # print a fact
     dist.length.times do |i|
 
         # print a value

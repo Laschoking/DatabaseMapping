@@ -1,3 +1,0 @@
-<handle <org.springframework.boot.loader.launch.JarFileArchive$JarArchiveEntry: void <init>(java.util.jar.JarEntry)>>	<org.springframework.boot.loader.launch.JarFileArchive$JarArchiveEntry: void <init>(java.util.jar.JarEntry)>	void	java.util.jar.JarEntry	1
-<handle <org.springframework.boot.loader.launch.JarFileArchive: java.net.URL getNestedJarUrl(org.springframework.boot.loader.launch.JarFileArchive$JarArchiveEntry)>>	<org.springframework.boot.loader.launch.JarFileArchive: java.net.URL getNestedJarUrl(org.springframework.boot.loader.launch.JarFileArchive$JarArchiveEntry)>	java.net.URL	org.springframework.boot.loader.launch.JarFileArchive$JarArchiveEntry	1
-<handle <java.util.LinkedHashSet: void <init>()>>	<java.util.LinkedHashSet: void <init>()>	void		0

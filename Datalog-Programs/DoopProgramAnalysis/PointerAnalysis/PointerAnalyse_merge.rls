@@ -1,0 +1,689 @@
+@import ClassModifier :- tsv{resource="ClassModifier.tsv",format=(string, string,int)}.
+@import MainClass :- tsv{resource="MainClass.tsv",format=(string,int)}. 
+
+@import z_NormalHeap :- tsv{resource="NormalHeap.tsv",format=(string, string,int)}.
+@import DirectSuperclass :- tsv{resource="DirectSuperclass.tsv",format=(string, string,int)}.
+@import DirectSuperinterface :- tsv{resource="DirectSuperinterface.tsv",format=(string, string,int)}.
+@import Method_Modifier :- tsv{resource="Method-Modifier.tsv",format=(string, string,int)}.
+@import FormalParam :- tsv{resource="FormalParam.tsv",format=(string, string,string,int)}.
+@import Var_Type :- tsv{resource="Var-Type.tsv",format=(string, string,int)}.
+@import ComponentType :- tsv{resource="ComponentType.tsv",format=(string, string,int)}.
+@import AssignReturnValue :- tsv{resource="AssignReturnValue.tsv",format=(string, string,int)}.
+@import ActualParam :- tsv{resource="ActualParam.tsv",format=(string,string, string,int)}.
+@import ClassType :- tsv{resource="ClassType.tsv",format=(string,int)}.
+@import z_ArrayType :- tsv{resource="ArrayType.tsv",format=(string,int)}.
+@import z_InterfaceType :- tsv{resource="InterfaceType.tsv",format=(string,int)}.
+@import z_Var_DeclaringMethod :- tsv{resource="Var-DeclaringMethod.tsv",format=(string, string,int)}.
+@import z_ApplicationClass :- tsv{resource="ApplicationClass.tsv",format=(string,int)}.
+@import z_ThisVar :- tsv{resource="ThisVar.tsv",format=(string, string,int)}.
+@import z_StringConstant :- tsv{resource="StringConstant.tsv",format=(string,int)}.
+@import z_AssignHeapAllocation :- tsv{resource="AssignHeapAllocation.tsv",format=(string, string, string,string, string,string,int)}.
+@import z_AssignLocal :- tsv{resource="AssignLocal.tsv",format=(string, string, string,string, string,int)}.
+@import z_AssignCast :- tsv{resource="AssignCast.tsv",format=(string, string, string,string, string,string,int)}.
+@import z_Field :- tsv{resource="Field.tsv",format=(string, string,string, string,int)}.
+@import z_StaticMethodInvocation :- tsv{resource="StaticMethodInvocation.tsv",format=(string,string, string, string,int)}.
+@import z_SpecialMethodInvocation :- tsv{resource="SpecialMethodInvocation.tsv",format=(string,string, string,string, string,int)}.
+@import z_VirtualMethodInvocation :- tsv{resource="VirtualMethodInvocation.tsv",format=(string, string, string,string, string,int)}.
+@import z_Method :- tsv{resource="Method.tsv",format=(string, string,string, string,string, string,string,int)}.
+@import z_StoreInstanceField :- tsv{resource="StoreInstanceField.tsv",format=(string, string, string,string, string,string,int)}.
+@import z_LoadInstanceField :- tsv{resource="LoadInstanceField.tsv",format=(string, string, string, string, string, string,int)}.
+@import z_StoreStaticField :- tsv{resource="StoreStaticField.tsv",format=(string, string, string, string, string,int)}.
+@import z_LoadStaticField :- tsv{resource="LoadStaticField.tsv",format=(string, string, string, string, string,int)}.
+@import z_StoreArrayIndex :- tsv{resource="StoreArrayIndex.tsv",format=(string, string, string, string, string,int)}.
+@import z_LoadArrayIndex :- tsv{resource="LoadArrayIndex.tsv",format=(string, string, string, string, string,int)}.
+@import z_Return :- tsv{resource="Return.tsv",format=(string, string, string, string,int)}.
+
+
+% Fat schema
+MainClass(?b,?id):-
+  ClassModifier(_,?b,?id),
+  MainClass(_,_).
+
+% imports
+isType(?class,?id):-    
+  ClassType(?class,?id).
+
+isReferenceType(?class,?id):-
+  ClassType(?class,?id).
+
+isClassType(?class,?id):-
+  ClassType(?class,?id).
+
+isType(?arrayType,?id),
+isReferenceType(?arrayType,?id),
+isArrayType(?arrayType,?id):-
+  z_ArrayType(?arrayType,?id).
+
+isType(?interface,?id),
+isReferenceType(?interface,?id),
+isInterfaceType(?interface,?id):-
+  z_InterfaceType(?interface,?id).
+
+Var_DeclaringMethod(?var, ?method,?id):-
+  z_Var_DeclaringMethod(?var, ?method,?id).
+
+isType(?type,?id),
+isReferenceType(?type,?id),
+ApplicationClass(?type,?id):-
+  z_ApplicationClass(?type,?id).
+
+ThisVar(?method, ?var,?id):-
+  z_ThisVar(?method, ?var,?id).
+
+isType(?type,?id),
+HeapAllocation_Type(?idx, ?type,?id):-
+  z_NormalHeap(?idx, ?type,?id).
+
+
+Instruction_Method(?instruction, ?method,?id),
+AssignInstruction_To(?instruction, ?to,?id),
+AssignHeapAllocation_Heap(?instruction, ?heap,?id):-
+  z_AssignHeapAllocation(?instruction, _, ?heap, ?to, ?method, _,?id).
+
+Instruction_Method(?instruction, ?method,?id),
+AssignLocal_From(?instruction, ?from,?id),
+AssignInstruction_To(?instruction, ?to,?id):-
+  z_AssignLocal(?instruction, _, ?from, ?to, ?method,?id).
+
+Instruction_Method(?instruction, ?method,?id),
+AssignCast_Type(?instruction, ?type,?id),
+AssignCast_From(?instruction, ?from,?id),
+AssignInstruction_To(?instruction, ?to,?id):-
+  z_AssignCast(?instruction, _, ?from, ?to, ?type, ?method,?id).
+
+Field_DeclaringType(?signature, ?declaringType,?id):-
+  z_Field(?signature, ?declaringType, _, _,?id).
+
+MethodInvocation_Base(?invocation, ?base,?id):-
+  VirtualMethodInvocation_Base(?invocation, ?base,?id).
+
+MethodInvocation_Base(?invocation, ?base,?id):-
+  SpecialMethodInvocation_Base(?invocation, ?base,?id).
+
+Instruction_Method(?instruction, ?method,?id),
+isStaticMethodInvocation_Insn(?instruction,?id),
+MethodInvocation_Method(?instruction, ?signature,?id):-
+  z_StaticMethodInvocation(?instruction, _, ?signature, ?method,?id).
+
+Instruction_Method(?instruction, ?method,?id),
+SpecialMethodInvocation_Base(?instruction, ?base,?id),
+MethodInvocation_Method(?instruction, ?signature,?id):-
+  z_SpecialMethodInvocation(?instruction, _, ?signature, ?base, ?method,?id).
+
+Instruction_Method(?instruction, ?method,?id),
+isVirtualMethodInvocation_Insn(?instruction,?id),
+VirtualMethodInvocation_Base(?instruction, ?base,?id),
+MethodInvocation_Method(?instruction, ?signature,?id):-
+  z_VirtualMethodInvocation(?instruction, _, ?signature, ?base, ?method,?id).
+
+
+Method_SimpleName(?method, ?simplename,?id),
+Method_ParamTypes(?method, ?params,?id),
+Method_DeclaringType(?method, ?declaringType,?id),
+Method_ReturnType(?method, ?returnType,?id):-
+  z_Method(?method, ?simplename, ?params, ?declaringType, ?returnType, _, _,?id).
+  
+Instruction_Method(?instruction, ?method,?id),
+FieldInstruction_Signature(?instruction, ?signature,?id),
+StoreInstanceField_Base(?instruction, ?base,?id),
+StoreInstanceField_From(?instruction, ?from,?id):-
+  z_StoreInstanceField(?instruction, _, ?from, ?base, ?signature, ?method,?id).
+
+Instruction_Method(?instruction, ?method,?id),
+FieldInstruction_Signature(?instruction, ?signature,?id),
+LoadInstanceField_Base(?instruction, ?base,?id),
+LoadInstanceField_To(?instruction, ?to,?id):-
+  z_LoadInstanceField(?instruction, _, ?to, ?base, ?signature, ?method,?id).
+
+Instruction_Method(?instruction, ?method,?id),
+FieldInstruction_Signature(?instruction, ?signature,?id),
+StoreStaticField_From(?instruction, ?from,?id):-
+  z_StoreStaticField(?instruction, _, ?from, ?signature, ?method,?id).
+
+Instruction_Method(?instruction, ?method,?id),
+FieldInstruction_Signature(?instruction, ?signature,?id),
+LoadStaticField_To(?instruction, ?to,?id):-
+  z_LoadStaticField(?instruction, _, ?to, ?signature, ?method,?id).
+
+Instruction_Method(?instruction, ?method,?id),
+StoreArrayIndex_Base(?instruction, ?base,?id),
+StoreArrayIndex_From(?instruction, ?from,?id):-
+  z_StoreArrayIndex(?instruction, _, ?from, ?base, ?method,?id).
+
+Instruction_Method(?instruction, ?method,?id),
+LoadArrayIndex_Base(?instruction, ?base,?id),
+LoadArrayIndex_To(?instruction, ?to,?id):-
+  z_LoadArrayIndex(?instruction, _, ?to, ?base, ?method,?id).
+
+
+
+Instruction_Method(?instruction, ?method,?id),
+ReturnNonvoid_Var(?instruction, ?var,?id):-
+  z_Return(?instruction, _, ?var, ?method,?id).
+
+
+% fat schema population
+LoadInstanceField(?base, ?sig, ?to, ?inmethod,?id):-
+  Instruction_Method(?insn, ?inmethod,?id_1),
+  LoadInstanceField_Base(?insn, ?base,?id_2),
+  FieldInstruction_Signature(?insn, ?sig,?id_3),
+  LoadInstanceField_To(?insn, ?to,?id_4),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4),
+  ?id <= 2.
+
+StoreInstanceField(?from, ?base, ?sig, ?inmethod,?id):-
+  Instruction_Method(?insn, ?inmethod,?id_1),
+  StoreInstanceField_From(?insn, ?from,?id_2),
+  StoreInstanceField_Base(?insn, ?base,?id_3),
+  FieldInstruction_Signature(?insn, ?sig,?id_4),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4),
+  ?id <= 2.
+
+LoadStaticField(?sig, ?to, ?inmethod,?id):-
+  Instruction_Method(?insn, ?inmethod,?id_1),
+  FieldInstruction_Signature(?insn, ?sig,?id_2),
+  LoadStaticField_To(?insn, ?to,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+StoreStaticField(?from, ?sig, ?inmethod,?id):-
+  Instruction_Method(?insn, ?inmethod,?id_1),
+  StoreStaticField_From(?insn, ?from,?id_2),
+  FieldInstruction_Signature(?insn, ?sig,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+LoadArrayIndex(?base, ?to, ?inmethod,?id):-
+  Instruction_Method(?insn, ?inmethod,?id_1),
+  LoadArrayIndex_Base(?insn, ?base,?id_2),
+  LoadArrayIndex_To(?insn, ?to,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+StoreArrayIndex(?from, ?base, ?inmethod,?id):-
+  Instruction_Method(?insn, ?inmethod,?id_1),
+  StoreArrayIndex_From(?insn, ?from,?id_2),
+  StoreArrayIndex_Base(?insn, ?base,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+AssignCast(?type, ?from, ?to, ?inmethod,?id):-
+  Instruction_Method(?insn, ?inmethod,?id_1),
+  AssignCast_From(?insn, ?from,?id_2),
+  AssignInstruction_To(?insn, ?to,?id_3),
+  AssignCast_Type(?insn, ?type,?id_4),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4),
+  ?id <= 2.
+
+AssignLocal(?from, ?to, ?inmethod,?id):-
+  AssignInstruction_To(?insn, ?to,?id_1),
+  Instruction_Method(?insn, ?inmethod,?id_2),
+  AssignLocal_From(?insn,?from,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+AssignHeapAllocation(?heap, ?to, ?inmethod,?id):-
+  Instruction_Method(?insn, ?inmethod,?id_1),
+  AssignHeapAllocation_Heap(?insn, ?heap,?id_2),
+  AssignInstruction_To(?insn, ?to,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+
+ReturnVar(?var, ?method,?id):-
+  Instruction_Method(?insn, ?method,?id_1),
+  ReturnNonvoid_Var(?insn, ?var,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+StaticMethodInvocation(?invocation, ?signature, ?inmethod,?id):-
+  isStaticMethodInvocation_Insn(?invocation,?id_1),
+  Instruction_Method(?invocation, ?inmethod,?id_2),
+  MethodInvocation_Method(?invocation, ?signature,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+
+VirtualMethodInvocation_Descriptor(?invocation, ?descriptor,?id),
+VirtualMethodInvocation_SimpleName(?invocation, ?simplename,?id):-
+  isVirtualMethodInvocation_Insn(?invocation,?id_1),
+  MethodInvocation_Method(?invocation, ?signature,?id_2),
+  Method_SimpleName(?signature, ?simplename,?id_3),
+  Method_Descriptor(?signature, ?descriptor,?id_4),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4),
+  ?id <= 2.
+
+
+
+MethodLookup(?simplename, ?descriptor, ?type, ?method,?id):-
+  MethodImplemented(?simplename, ?descriptor, ?type, ?method,?id).
+
+% TODO: observe
+MethodLookup(?simplename, ?descriptor, ?type, ?method,?id):-
+  DirectSuperinterface(?type, ?supertype,?id_1),
+  MethodLookup(?simplename, ?descriptor, ?supertype, ?method,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+
+MethodLookup(?simplename, ?descriptor, ?type, ?method,?id):-
+  DirectSuperclass(?type, ?supertype,?id_1),
+  MethodLookup(?simplename, ?descriptor, ?supertype, ?method,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+MethodImplemented(?simplename, ?descriptor, ?type, ?method,?id):-
+  Method_SimpleName(?method, ?simplename,?id_1),
+  Method_Descriptor(?method, ?descriptor,?id_2),
+  Method_DeclaringType(?method, ?type,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+DirectSubclass(?a, ?c,?id):-
+  DirectSuperclass(?a, ?c,?id).
+
+Subclass(?c, ?a,?id):-
+  DirectSubclass(?a, ?c,?id).
+
+Subclass(?c, ?a,?id):-
+  Subclass(?b, ?a,?id_1),
+  DirectSubclass(?b, ?c,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+Superclass(?c, ?a,?id):-
+  Subclass(?a, ?c,?id).
+Superinterface(?k, ?c,?id):-
+  DirectSuperinterface(?c, ?k,?id).
+
+Superinterface(?k, ?c,?id):-
+  DirectSuperinterface(?c, ?j,?id_1),
+  Superinterface(?k, ?j,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+Superinterface(?k, ?c,?id):-
+  DirectSuperclass(?c, ?super,?id_1),
+  Superinterface(?k, ?super,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+SupertypeOf(?s, ?t,?id):-
+  SubtypeOf(?t, ?s,?id).
+
+SubtypeOf(?s, ?s,?id):-
+  isClassType(?s,?id).
+  
+SubtypeOf(?s, ?t,?id):-
+  Subclass(?t, ?s,?id).
+
+SubtypeOf(?s, ?t,?id):-
+  isClassType(?s,?id_1),
+  Superinterface(?t, ?s,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+SubtypeOf(?s, ?t,?id):-
+  isInterfaceType(?s,?id_1),
+  isType(?t,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+SubtypeOf(?s, ?s,?id):-
+  isInterfaceType(?s,?id).
+
+SubtypeOf(?s, ?t,?id):-
+  isInterfaceType(?s,?id_1),
+  Superinterface(?t, ?s,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+SubtypeOf(?s, ?t,?id):-
+  isArrayType(?s,?id_1),
+  isType(?t,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+
+SubtypeOf(?s, ?t,?id):-
+  ComponentType(?s, ?sc,?id_1),
+  ComponentType(?t, ?tc,?id_2),
+  isReferenceType(?sc,?id_3),
+  isReferenceType(?tc,?id_4),
+  SubtypeOf(?sc, ?tc,?id_5),
+  ?id = BITOR(?id_1,?id_2, ?id_3, ?id_4, ?id_5),
+  ?id <= 2.
+
+
+SubtypeOf(?s, ?t,?id):-
+  isArrayType(?s,?id_1),
+  isInterfaceType(?t,?id_2),
+  isType(?t,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+
+SubtypeOf(?s, ?t,?id):-
+  isArrayType(?s,?id_1),
+  isInterfaceType(?t,?id_2),
+  isType(?t,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+
+SubtypeOf(?t, ?t,?id):-
+  isType(?t,?id).
+  
+
+MainMethodDeclaration(?method,?id):-
+  MainClass(?type,?id),
+  Method_DeclaringType(?method, ?type,?id_1),
+  Method_SimpleName(?method, _,?id_2),
+  Method_Descriptor(?method, _,?id_3),
+  Method_Modifier(_, ?method,?id_4),
+  Method_Modifier(_, ?method,?id_5),
+  ~SameMethod(?method,?id),
+  ~SameMethod(?method,0),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4,?id_5),
+  ?id <= 2.
+
+
+ClassInitializer(?type, ?method,?id):-
+  MethodImplemented(_,_, ?type, ?method,?id).
+
+
+InitializedClass(?superclass,?id):-
+  InitializedClass(?class,?id_1),
+  DirectSuperclass(?class, ?superclass,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+InitializedClass(?superinterface,?id):-
+  InitializedClass(?classOrInterface,?id_1),
+  DirectSuperinterface(?classOrInterface, ?superinterface,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+
+InitializedClass(?class,?id):-
+  MainMethodDeclaration(?method,?id_1),
+  Method_DeclaringType(?method, ?class,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+
+InitializedClass(?class,?id):-
+  Reachable(?inmethod,?id_1),
+  AssignHeapAllocation(?heap, _, ?inmethod,?id_2),
+  HeapAllocation_Type(?heap, ?class,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+
+InitializedClass(?class,?id):-
+  Reachable(?inmethod,?id_1),
+  Instruction_Method(?invocation, ?inmethod,?id_2),
+  isStaticMethodInvocation_Insn(?invocation,?id_3),
+  MethodInvocation_Method(?invocation, ?signature,?id_4),
+  Method_DeclaringType(?signature, ?class,?id_5),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4,?id_5),
+  ?id <= 2.
+
+
+InitializedClass(?classOrInterface,?id):-
+ Reachable(?inmethod,?id_1),
+ StoreStaticField(_, ?signature, ?inmethod,?id_2),
+ Field_DeclaringType(?signature, ?classOrInterface,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+
+InitializedClass(?classOrInterface,?id):-
+ Reachable(?inmethod,?id_1),
+ LoadStaticField(?signature, _, ?inmethod,?id_2),
+ Field_DeclaringType(?signature, ?classOrInterface, ?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+
+Reachable(?clinit,?id):-
+ InitializedClass(?class,?id_1),
+ ClassInitializer(?class, ?clinit,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+
+Assign(?actual, ?formal,?id):-
+  CallGraphEdge(?invocation, ?method,?id_1),
+  FormalParam(?index, ?method, ?formal,?id_2),
+  ActualParam(?index, ?invocation, ?actual,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+
+Assign(?return, ?local,?id):-
+  CallGraphEdge(?invocation, ?method,?id_1),
+  ReturnVar(?return, ?method,?id_2),
+  AssignReturnValue(?invocation, ?local,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+VarPointsTo(?heap, ?var,?id):-
+  AssignHeapAllocation(?heap, ?var, ?inMethod,?id_1),
+  Reachable(?inMethod,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+
+VarPointsTo(?heap, ?to,?id):-
+  Assign(?from, ?to,?id_1),
+  VarPointsTo(?heap, ?from,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+
+VarPointsTo(?heap, ?to,?id):-
+  Reachable(?inmethod,?id_1),
+  AssignLocal(?from, ?to, ?inmethod,?id_2),
+  VarPointsTo(?heap, ?from,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+ 
+VarPointsTo(?heap, ?to,?id):-
+  Reachable(?method,?id_1),
+  AssignCast(?type, ?from, ?to, ?method,?id_2),
+  SupertypeOf(?type, ?heaptype,?id_3),
+  HeapAllocation_Type(?heap, ?heaptype,?id_4),
+  VarPointsTo(?heap, ?from,?id_5),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4,?id_5),
+  ?id <= 2.
+
+ 
+ArrayIndexPointsTo(?baseheap, ?heap,?id):-
+  Reachable(?inmethod,?id_1),
+  StoreArrayIndex(?from, ?base, ?inmethod,?id_2),
+  VarPointsTo(?baseheap, ?base,?id_3),
+  VarPointsTo(?heap, ?from,?id_4),
+  HeapAllocation_Type(?heap, ?heaptype,?id_5),
+  HeapAllocation_Type(?baseheap, ?baseheaptype,?id_6),
+  ComponentType(?baseheaptype, ?componenttype,?id_7),
+  SupertypeOf(?componenttype, ?heaptype,?id_8),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4,?id_5,?id_6,?id_7,?id_8),
+  ?id <= 2.
+
+
+VarPointsTo(?heap, ?to,?id):-
+  Reachable(?inmethod,?id_1),
+  LoadArrayIndex(?base, ?to, ?inmethod,?id_2),
+  VarPointsTo(?baseheap, ?base,?id_3),
+  ArrayIndexPointsTo(?baseheap, ?heap,?id_4),
+  Var_Type(?to, ?type,?id_5),
+  HeapAllocation_Type(?baseheap, ?baseheaptype,?id_6),
+  ComponentType(?baseheaptype, ?basecomponenttype,?id_7),
+  SupertypeOf(?type, ?basecomponenttype,?id_8),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4,?id_5,?id_6,?id_7,?id_8),
+  ?id <= 2.
+
+VarPointsTo(?heap, ?to,?id):-
+  Reachable(?inmethod,?id_1),
+  LoadInstanceField(?base, ?signature, ?to, ?inmethod,?id_2),
+  VarPointsTo(?baseheap, ?base,?id_3),
+  InstanceFieldPointsTo(?heap, ?signature, ?baseheap,?id_4),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4 ),
+  ?id <= 2.
+ 
+InstanceFieldPointsTo(?heap, ?fld, ?baseheap,?id):-
+  Reachable(?inmethod,?id_1),
+  StoreInstanceField(?from, ?base, ?fld, ?inmethod,?id_2),
+  VarPointsTo(?heap, ?from,?id_3),
+  VarPointsTo(?baseheap, ?base,?id_4),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4),
+  ?id <= 2.
+ 
+VarPointsTo(?heap, ?to,?id):-
+  Reachable(?inmethod,?id_1),
+  LoadStaticField(?fld, ?to, ?inmethod,?id_2),
+  StaticFieldPointsTo(?heap, ?fld,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+  
+StaticFieldPointsTo(?heap, ?fld,?id):-
+  Reachable(?inmethod,?id_1),
+  StoreStaticField(?from, ?fld, ?inmethod,?id_2),
+  VarPointsTo(?heap, ?from,?id_3),
+  ?id = BITOR(?id_1,?id_2,?id_3),
+  ?id <= 2.
+
+
+VarPointsTo(?heap, ?this,?id):-
+  Reachable(?inMethod,?id_1),
+  Instruction_Method(?invocation, ?inMethod,?id_2),
+  VirtualMethodInvocation_Base(?invocation, ?base,?id_3),
+  VarPointsTo(?heap, ?base,?id_4),
+  HeapAllocation_Type(?heap, ?heaptype,?id_5),
+  VirtualMethodInvocation_SimpleName(?invocation, ?simplename,?id_6),
+  VirtualMethodInvocation_Descriptor(?invocation, ?descriptor,?id_7),
+  MethodLookup(?simplename, ?descriptor, ?heaptype, ?toMethod,?id_8),
+  ThisVar(?toMethod, ?this,?id_9),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4,?id_5,?id_6,?id_7,?id_8,?id_9),
+  ?id <= 2.
+ 
+% Problem:  VirtualMethodInvocation introduces sides 1 and 10 through new variables
+% the ?base-variable is compared in the rule but never added
+% so we need to fold bc. both side have different ?base values but the are not included in the result
+
+Reachable(?toMethod,?id),
+CallGraphEdge(?invocation, ?toMethod,?id):-
+  Reachable(?inMethod,?id_1),
+  Instruction_Method(?invocation, ?inMethod,?id_2),
+  VirtualMethodInvocation_Base(?invocation, ?base,?id_3),
+  VarPointsTo(?heap, ?base,?id_4),
+  HeapAllocation_Type(?heap, ?heaptype,?id_5),
+  VirtualMethodInvocation_SimpleName(?invocation, ?simplename,?id_6),
+  VirtualMethodInvocation_Descriptor(?invocation, ?descriptor,?id_7),
+  MethodLookup(?simplename, ?descriptor, ?heaptype, ?toMethod,?id_8),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4,?id_5,?id_6,?id_7,?id_8),
+  ?id <= 2.
+ 
+
+Reachable(?tomethod,?id),
+CallGraphEdge(?invocation, ?tomethod,?id):-
+  Reachable(?inmethod,?id_1),
+  StaticMethodInvocation(?invocation, ?tomethod, ?inmethod,?id_2),
+  ?id = BITOR(?id_1,?id_2),
+  ?id <= 2.
+
+Reachable(?tomethod,?id),
+CallGraphEdge(?invocation, ?tomethod,?id),
+VarPointsTo(?heap, ?this,?id):-
+  Reachable(?inmethod,?id_1),
+  Instruction_Method(?invocation, ?inmethod,?id_2),
+  SpecialMethodInvocation_Base(?invocation, ?base,?id_3),
+  VarPointsTo(?heap, ?base,?id_4),
+  MethodInvocation_Method(?invocation, ?tomethod,?id_5),
+  ThisVar(?tomethod, ?this,?id_6),
+  ?id = BITOR(?id_1,?id_2,?id_3,?id_4,?id_5,?id_6 ),
+  ?id <= 2.
+ 
+Reachable(?method,?id):-
+  MainMethodDeclaration(?method,?id).
+
+
+
+@export Reachable :- tsv{resource="Reachable.tsv",format=(string,int)}.
+@export VarPointsTo :- tsv{resource="VarPointsTo.tsv",format=(string,string,int)}.
+@export CallGraphEdge :- tsv{resource="CallGraphEdge.tsv",format=(string,string,int)}.
+@export Assign :- tsv{resource="Assign.tsv",format=(string,string,int)}.
+@export AssignReturnValue :- tsv{resource="AssignReturnValue.tsv",format=(string,string,int)}.
+
+
+@export MethodLookup :- tsv{resource="MethodLookup.tsv",format=(string,string,string,string,int)}.
+@export isType :- tsv{resource="isType.tsv",format=(string,int)}.
+@export isReferenceType :- tsv{resource="isReferenceType.tsv",format=(string,int)}.
+@export isArrayType :- tsv{resource="isArrayType.tsv",format=(string,int)}.
+@export isClassType :- tsv{resource="isClassType.tsv",format=(string,int)}.
+@export isInterfaceType :- tsv{resource="isInterfaceType.tsv",format=(string,int)}.
+@export ApplicationClass :- tsv{resource="ApplicationClass.tsv",format=(string,int)}.
+@export Field_DeclaringType :- tsv{resource="Field_DeclaringType.tsv",format=(string,string,int)}.
+@export Method_DeclaringType :- tsv{resource="Method_DeclaringType.tsv",format=(string,string,int)}.
+@export Method_ReturnType :- tsv{resource="Method_ReturnType.tsv",format=(string,string,int)}.
+@export Method_SimpleName :- tsv{resource="Method_SimpleName.tsv",format=(string,string,int)}.
+@export Method_ParamTypes :- tsv{resource="Method_ParamTypes.tsv",format=(string,string,int)}.
+@export ThisVar :- tsv{resource="ThisVar.tsv",format=(string,string,int)}.
+@export Var_DeclaringMethod :- tsv{resource="Var_DeclaringMethod.tsv",format=(string,string,int)}.
+@export HeapAllocation_Type :- tsv{resource="HeapAllocation_Type.tsv",format=(string,string,int)}.
+@export Instruction_Method :- tsv{resource="Instruction_Method.tsv",format=(string,string,int)}.
+@export isVirtualMethodInvocation_Insn :- tsv{resource="isVirtualMethodInvocation_Insn.tsv",format=(string,int)}.
+@export isStaticMethodInvocation_Insn :- tsv{resource="isStaticMethodInvocation_Insn.tsv",format=(string,int)}.
+@export FieldInstruction_Signature :- tsv{resource="FieldInstruction_Signature.tsv",format=(string,string,int)}.
+@export LoadInstanceField_Base :- tsv{resource="LoadInstanceField_Base.tsv",format=(string,string,int)}.
+@export LoadInstanceField_To :- tsv{resource="LoadInstanceField_To.tsv",format=(string,string,int)}.
+@export StoreInstanceField_From :- tsv{resource="StoreInstanceField_From.tsv",format=(string,string,int)}.
+@export StoreInstanceField_Base :- tsv{resource="StoreInstanceField_Base.tsv",format=(string,string,int)}.
+@export LoadStaticField_To :- tsv{resource="LoadStaticField_To.tsv",format=(string,string,int)}.
+@export StoreStaticField_From :- tsv{resource="StoreStaticField_From.tsv",format=(string,string,int)}.
+@export LoadArrayIndex_Base :- tsv{resource="LoadArrayIndex_Base.tsv",format=(string,string,int)}.
+@export LoadArrayIndex_To :- tsv{resource="LoadArrayIndex_To.tsv",format=(string,string,int)}.
+@export StoreArrayIndex_From :- tsv{resource="StoreArrayIndex_From.tsv",format=(string,string,int)}.
+@export StoreArrayIndex_Base :- tsv{resource="StoreArrayIndex_Base.tsv",format=(string,string,int)}.
+@export AssignInstruction_To :- tsv{resource="AssignInstruction_To.tsv",format=(string,string,int)}.
+@export AssignCast_From :- tsv{resource="AssignCast_From.tsv",format=(string,string,int)}.
+@export AssignCast_Type :- tsv{resource="AssignCast_Type.tsv",format=(string,string,int)}.
+@export AssignLocal_From :- tsv{resource="AssignLocal_From.tsv",format=(string,string,int)}.
+@export AssignHeapAllocation_Heap :- tsv{resource="AssignHeapAllocation_Heap.tsv",format=(string,string,int)}.
+@export ReturnNonvoid_Var :- tsv{resource="ReturnNonvoid_Var.tsv",format=(string,string,int)}.
+@export MethodInvocation_Method :- tsv{resource="MethodInvocation_Method.tsv",format=(string,string,int)}.
+@export VirtualMethodInvocation_Base :- tsv{resource="VirtualMethodInvocation_Base.tsv",format=(string,string,int)}.
+@export VirtualMethodInvocation_SimpleName :- tsv{resource="VirtualMethodInvocation_SimpleName.tsv",format=(string,string,int)}.
+@export VirtualMethodInvocation_Descriptor :- tsv{resource="VirtualMethodInvocation_Descriptor.tsv",format=(string,string,int)}.
+@export SpecialMethodInvocation_Base :- tsv{resource="SpecialMethodInvocation_Base.tsv",format=(string,string,int)}.
+@export MethodInvocation_Base :- tsv{resource="MethodInvocation_Base.tsv",format=(string,string,int)}.
+@export Method_Descriptor :- tsv{resource="Method_Descriptor.tsv",format=(string,string,int)}.
+@export MethodImplemented :- tsv{resource="MethodImplemented.tsv",format=(string,string,string,string,int)}.
+@export DirectSubclass :- tsv{resource="DirectSubclass.tsv",format=(string,string,int)}.
+@export Subclass :- tsv{resource="Subclass.tsv",format=(string,string,int)}.
+@export Superclass :- tsv{resource="Superclass.tsv",format=(string,string,int)}.
+@export DirectSuperclass :- tsv{resource="DirectSuperclass.tsv",format=(string,string,int)}.
+@export Superinterface :- tsv{resource="Superinterface.tsv",format=(string,string,int)}.
+@export SubtypeOf :- tsv{resource="SubtypeOf.tsv",format=(string,string,int)}.
+@export SupertypeOf :- tsv{resource="SupertypeOf.tsv",format=(string,string,int)}.
+@export MainMethodDeclaration :- tsv{resource="MainMethodDeclaration.tsv",format=(string,int)}.
+@export LoadInstanceField :- tsv{resource="LoadInstanceField.tsv",format=(string,string,string,string,int)}.
+@export StoreInstanceField :- tsv{resource="StoreInstanceField.tsv",format=(string,string,string,string,int)}.
+@export LoadStaticField :- tsv{resource="LoadStaticField.tsv",format=(string,string,string,int)}.
+@export StoreStaticField :- tsv{resource="StoreStaticField.tsv",format=(string,string,string,int)}.
+@export LoadArrayIndex :- tsv{resource="LoadArrayIndex.tsv",format=(string,string,string,int)}.
+@export StoreArrayIndex :- tsv{resource="StoreArrayIndex.tsv",format=(string,string,string,int)}.
+@export AssignCast :- tsv{resource="AssignCast.tsv",format=(string,string,string,string,int)}.
+@export AssignLocal :- tsv{resource="AssignLocal.tsv",format=(string,string,string,int)}.
+@export AssignHeapAllocation :- tsv{resource="AssignHeapAllocation.tsv",format=(string,string,string,int)}.
+@export ReturnVar :- tsv{resource="ReturnVar.tsv",format=(string,string,int)}.
+@export StaticMethodInvocation :- tsv{resource="StaticMethodInvocation.tsv",format=(string,string,string,int)}.
+@export SameMethod :- tsv{resource="SameMethod.tsv",format=(string,int)}.
+@export ClassInitializer :- tsv{resource="ClassInitializer.tsv",format=(string,string,int)}.
+@export InitializedClass :- tsv{resource="InitializedClass.tsv",format=(string,int)}.
+@export InstanceFieldPointsTo :- tsv{resource="InstanceFieldPointsTo.tsv",format=(string,string,string,int)}.
+@export StaticFieldPointsTo :- tsv{resource="StaticFieldPointsTo.tsv",format=(string,string,int)}.
+@export ArrayIndexPointsTo :- tsv{resource="ArrayIndexPointsTo.tsv",format=(string,string,int)}.
+@export MainClass :- tsv{resource="MainClass.tsv",format=(string,int)}.

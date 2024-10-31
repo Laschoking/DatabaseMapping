@@ -40,11 +40,7 @@ true("true"^^xsd:boolean).
 
 % assume that no relations with more than 9 relations exist
 
-%Method_Descriptor(?method, ?descriptor, ?side) :-
-%  Method_ReturnType(?method, ?returnType,?side_1),
-%  Method_ParamTypes(?method, ?params,?side_2),
-%  ?descriptor = CONCAT(?returnType, CONCAT( "(", CONCAT(?params, ")"))),
-%  merge_strat(2, ?side_1 + ?side_2,?side).
+
 
 
 MainClass(?b,?side):-
@@ -321,9 +317,9 @@ MethodImplemented(?simplename, ?descriptor, ?type, ?method,?side):-
   Method_SimpleName(?method, ?simplename,?side_1),
   Method_Descriptor(?method, ?descriptor,?side_2),
   Method_DeclaringType(?method, ?type,?side_3),
-  ~Method_Modifier("abstract", ?method,?side_1),
-  ~Method_Modifier("abstract", ?method,?side_2),
-  ~Method_Modifier("abstract", ?method,?side_3),
+  ~Method_Modifier(_, ?method,?side_1),
+  ~Method_Modifier(_, ?method,?side_2),
+  ~Method_Modifier(_, ?method,?side_3),
   ?sum = ?side_1 + ?side_2 +?side_3,
   merge_strat(3,?sum,?side).
 
@@ -371,8 +367,7 @@ SubtypeOf(?s, ?t,?side):-
 
 SubtypeOf(?s, ?t,?side):-
   isInterfaceType(?s,?side),
-  isType(?t,?side),
-  ?t = "java.lang.Object".
+  isType(?t,?side).
 
 SubtypeOf(?s, ?s,?side):-
   isInterfaceType(?s,?side).
@@ -387,7 +382,6 @@ SubtypeOf(?s, ?t,?side):-
 SubtypeOf(?s, ?t,?side):-
   isArrayType(?s,?side_1),
   isType(?t,?side_2),
-  ?t = "java.lang.Object",
   ?sum = ?side_1 + ?side_2,
   merge_strat(2,?sum,?side).
 
@@ -406,7 +400,7 @@ SubtypeOf(?s, ?t,?side):-
   isArrayType(?s,?side_1),
   isInterfaceType(?t,?side_2),
   isType(?t,?side_3),
-  ?t = "java.lang.Cloneable",
+  ?t = _,
   ?sum = ?side_1 + ?side_2 + ?side_3,
   merge_strat(3,?sum,?side).
 
@@ -415,7 +409,7 @@ SubtypeOf(?s, ?t,?side):-
   isArrayType(?s,?side_1),
   isInterfaceType(?t,?side_2),
   isType(?t,?side_3),
-  ?t = "java.io.Serializable",
+  ?t = _,
   ?sum = ?side_1 + ?side_2 + ?side_3,
   merge_strat(3,?sum,?side).
 
@@ -436,10 +430,10 @@ SameMethod("<sun.security.provider.PolicyParser: void main(java.lang.String[])>"
 MainMethodDeclaration(?method,?side):-
   MainClass(?type,?side),
   Method_DeclaringType(?method, ?type,?side_1),
-  Method_SimpleName(?method, "main",?side_2),
-  Method_Descriptor(?method, "void(java.lang.String[])",?side_3),
-  Method_Modifier("public", ?method,?side_4),
-  Method_Modifier("static", ?method,?side_5),
+  Method_SimpleName(?method, _,?side_2),
+  Method_Descriptor(?method, _,?side_3),
+  Method_Modifier(_, ?method,?side_4),
+  Method_Modifier(_, ?method,?side_5),
   ~SameMethod(?method,?side_1),~SameMethod(?method,?side_2),
   ~SameMethod(?method,?side_3),~SameMethod(?method,?side_4),
   ~SameMethod(?method,?side_5),  
@@ -448,7 +442,7 @@ MainMethodDeclaration(?method,?side):-
 
 
 ClassInitializer(?type, ?method,?side):-
-  MethodImplemented("<clinit>", "void()", ?type, ?method,?side).
+  MethodImplemented(_, _, ?type, ?method,?side).
 
 
 InitializedClass1(?superclass,?side):-

@@ -1,6 +1,0 @@
-<org.springframework.boot.loader.net.protocol.jar.UrlJarFileFactory: java.lang.Runtime$Version getVersion(java.net.URL)>
-<org.springframework.boot.loader.net.protocol.jar.UrlJarFileFactory: java.util.jar.JarFile createJarFileForLocalFile(java.net.URL,java.lang.Runtime$Version,java.util.function.Consumer)>
-<org.springframework.boot.loader.net.protocol.jar.UrlJarFileFactory: java.util.jar.JarFile createJarFileForNested(java.net.URL,java.lang.Runtime$Version,java.util.function.Consumer)>
-<org.springframework.boot.loader.net.protocol.jar.UrlJarFileFactory: java.util.jar.JarFile createJarFileForStream(java.net.URL,java.lang.Runtime$Version,java.util.function.Consumer)>
-<org.springframework.boot.loader.net.protocol.jar.UrlJarFileFactory: java.util.jar.JarFile createJarFileForStream(java.io.InputStream,java.lang.Runtime$Version,java.util.function.Consumer)>
-<org.springframework.boot.loader.net.protocol.jar.UrlNestedJarFile: void <init>(java.io.File,java.lang.String,java.lang.Runtime$Version,java.util.function.Consumer)>

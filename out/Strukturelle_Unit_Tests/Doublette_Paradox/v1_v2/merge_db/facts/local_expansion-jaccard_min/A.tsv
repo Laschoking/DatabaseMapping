@@ -1,3 +1,6 @@
 A	B	B	0
+A	B	B	0
 A	I	J	0
-A	J	I	0
+A	I	J	0
+A	J	I	1
+A	J	J	10

@@ -1,0 +1,51 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/alibaba/spring-cloud-alibaba.git",
+	"sha1": "34459161ae336ababed87db529127c3ac91d59f4",
+	"url": "https://github.com/alibaba/spring-cloud-alibaba/commit/34459161ae336ababed87db529127c3ac91d59f4",
+	"refactorings": [{
+	"type": "Modify Class Annotation",
+	"description": "Modify Class Annotation @ConditionalOnClass({MessageManager.class,TongYiChatModel.class,TongYiImagesModel.class,TongYiAudioSpeechModel.class,TongYiTextEmbeddingModel.class,TongYiAudioTranscriptionModel.class}) to @ConditionalOnClass({TongYiChatModel.class,TongYiImagesModel.class,TongYiAudioSpeechModel.class,TongYiTextEmbeddingModel.class,TongYiAudioTranscriptionModel.class}) in class com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration",
+	"leftSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 60,
+		"endLine": 67,
+		"startColumn": 0,
+		"endColumn": 3,
+		"codeElementType": "ANNOTATION",
+		"description": "original annotation",
+		"codeElement": "@ConditionalOnClass({MessageManager.class,TongYiChatModel.class,TongYiImagesModel.class,TongYiAudioSpeechModel.class,TongYiTextEmbeddingModel.class,TongYiAudioTranscriptionModel.class})"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 53,
+		"endLine": 254,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "original class declaration",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration"
+}],
+	"rightSideLocations": [{
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 59,
+		"endLine": 65,
+		"startColumn": 0,
+		"endColumn": 3,
+		"codeElementType": "ANNOTATION",
+		"description": "modified annotation",
+		"codeElement": "@ConditionalOnClass({TongYiChatModel.class,TongYiImagesModel.class,TongYiAudioSpeechModel.class,TongYiTextEmbeddingModel.class,TongYiAudioTranscriptionModel.class})"
+}, {
+		"filePath": "spring-cloud-alibaba-starters/spring-cloud-starter-alibaba-ai/src/main/java/com/alibaba/cloud/ai/tongyi/TongYiAutoConfiguration.java",
+		"startLine": 52,
+		"endLine": 244,
+		"startColumn": 0,
+		"endColumn": 2,
+		"codeElementType": "TYPE_DECLARATION",
+		"description": "class declaration with modified annotation",
+		"codeElement": "com.alibaba.cloud.ai.tongyi.TongYiAutoConfiguration"
+}]
+}
+]
+}]
+}

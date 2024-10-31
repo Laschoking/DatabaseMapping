@@ -1,6 +1,0 @@
-<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handle(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>/assign-cast/0	com.thoughtworks.go.plugin.api.response.GoPluginApiResponse	10
-<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handle(com.thoughtworks.go.plugin.api.request.GoPluginApiRequest)>/assign-cast/1	com.thoughtworks.go.plugin.api.response.GoPluginApiResponse	10
-<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: com.google.gson.JsonElement downloadPipelineInstanceDetails(java.lang.String)>/assign-cast/0	java.net.HttpURLConnection	10
-<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: com.google.gson.JsonElement downloadPipelineInstanceDetails(java.lang.String)>/assign-cast/1	java.io.InputStream	10
-<com.matt_richardson.gocd.websocket_notifier.PipelineDetailsPopulator: java.lang.String extendMessageToIncludePipelineDetails(java.lang.String)>/assign-cast/0	com.google.gson.JsonElement	10
-<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void sendToAll(java.lang.String)>/assign-cast/0	org.java_websocket.WebSocket	0

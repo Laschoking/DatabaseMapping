@@ -1,4 +1,0 @@
-<org.springframework.boot.loader.Launcher: java.lang.ClassLoader createClassLoader(java.util.List)>/new java.net.URL[]/0
-<org.springframework.boot.loader.jar.CentralDirectoryFileHeader: void <clinit>()>/new byte[]/0
-<org.springframework.boot.loader.PropertiesLauncher: java.lang.ClassLoader createClassLoader(java.util.List)>/new java.net.URL[]/0
-<org.springframework.boot.loader.PropertiesLauncher: java.lang.ClassLoader wrapWithCustomClassLoader(java.lang.ClassLoader,java.lang.String)>/new java.net.URL[]/0

@@ -1,5 +1,0 @@
-<com.matt_richardson.gocd.websocket_notifier.WebSocketPipelineListener: void <init>(com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer)>/com.thoughtworks.go.plugin.api.logging.Logger.getLoggerFor/0
-<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: com.thoughtworks.go.plugin.api.response.GoPluginApiResponse handleNotificationsInterestedIn()>/java.util.Arrays.asList/0
-<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void <clinit>()>/com.thoughtworks.go.plugin.api.logging.Logger.getLoggerFor/0
-<com.matt_richardson.gocd.websocket_notifier.GoNotificationPlugin: void <clinit>()>/java.util.Arrays.asList/0
-<com.matt_richardson.gocd.websocket_notifier.PipelineWebSocketServer: void <init>(int)>/com.thoughtworks.go.plugin.api.logging.Logger.getLoggerFor/0

@@ -1,0 +1,510 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/YunaiV/ruoyi-vue-pro.git",
+	"sha1": "2f38261de837b55c86b34053768bed05139e1743",
+	"url": "https://github.com/YunaiV/ruoyi-vue-pro/commit/2f38261de837b55c86b34053768bed05139e1743",
+	"refactorings": [{
+	"type": "Change Method Access Modifier",
+	"description": "Change Method Access Modifier package to private in method private request(apiName String, queryParams TreeMap<String,Object>) : JSONObject from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 75,
+		"endLine": 165,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "package sendSmsRequest(queryParam TreeMap<String,Object>, apiName String) : JSONObject"
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 130,
+		"endLine": 185,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with changed access modifier",
+		"codeElement": "private request(apiName String, queryParams TreeMap<String,Object>) : JSONObject"
+}]
+},
+{
+	"type": "Change Variable Type",
+	"description": "Change Variable Type statuses : List<SmsReceiveStatus> to statuses : JSONArray in method public parseSmsReceiveStatus(text String) : List<SmsReceiveRespDTO> from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 169,
+		"endLine": 169,
+		"startColumn": 32,
+		"endColumn": 93,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "original variable declaration",
+		"codeElement": "statuses : List<SmsReceiveStatus>"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 170,
+		"endLine": 173,
+		"startColumn": 9,
+		"endColumn": 92,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 82,
+		"endLine": 82,
+		"startColumn": 19,
+		"endColumn": 55,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "changed-type variable declaration",
+		"codeElement": "statuses : JSONArray"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 84,
+		"endLine": 94,
+		"startColumn": 9,
+		"endColumn": 12,
+		"codeElementType": "RETURN_STATEMENT",
+		"description": "statement referencing the variable with changed type",
+		"codeElement": null
+}]
+},
+{
+	"type": "Extract Attribute",
+	"description": "Extract Attribute private VERSION : String in class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 100,
+		"endLine": 100,
+		"startColumn": 9,
+		"endColumn": 52,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement with the initializer of the extracted attribute",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 44,
+		"endLine": 44,
+		"startColumn": 33,
+		"endColumn": 55,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "extracted attribute declaration",
+		"codeElement": "private VERSION : String"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 147,
+		"endLine": 147,
+		"startColumn": 9,
+		"endColumn": 47,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement with the name of the extracted attribute",
+		"codeElement": null
+}]
+},
+{
+	"type": "Inline Variable",
+	"description": "Inline Variable httpMethod : String in method package sendSmsRequest(queryParam TreeMap<String,Object>, apiName String) : JSONObject from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 79,
+		"endLine": 79,
+		"startColumn": 16,
+		"endColumn": 35,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "inlined variable declaration",
+		"codeElement": "httpMethod : String"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 121,
+		"endLine": 121,
+		"startColumn": 9,
+		"endColumn": 174,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement with the name of the inlined variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 170,
+		"endLine": 170,
+		"startColumn": 9,
+		"endColumn": 152,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement with the initializer of the inlined variable",
+		"codeElement": null
+}]
+},
+{
+	"type": "Inline Variable",
+	"description": "Inline Variable response : HttpResponse in method package sendSmsRequest(queryParam TreeMap<String,Object>, apiName String) : JSONObject from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 140,
+		"endLine": 143,
+		"startColumn": 22,
+		"endColumn": 27,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "inlined variable declaration",
+		"codeElement": "response : HttpResponse"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 162,
+		"endLine": 162,
+		"startColumn": 9,
+		"endColumn": 54,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement with the name of the inlined variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 181,
+		"endLine": 181,
+		"startColumn": 9,
+		"endColumn": 68,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement with the initializer of the inlined variable",
+		"codeElement": null
+}]
+},
+{
+	"type": "Remove Thrown Exception Type",
+	"description": "Remove Thrown Exception Type IOException in method package sendSmsRequest(queryParam TreeMap<String,Object>, apiName String) : JSONObject from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 75,
+		"endLine": 75,
+		"startColumn": 89,
+		"endColumn": 100,
+		"codeElementType": "TYPE",
+		"description": "removed thrown exception type",
+		"codeElement": "IOException"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 75,
+		"endLine": 165,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "package sendSmsRequest(queryParam TreeMap<String,Object>, apiName String) : JSONObject"
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 130,
+		"endLine": 185,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with removed thrown exception type",
+		"codeElement": "private request(apiName String, queryParams TreeMap<String,Object>) : JSONObject"
+}]
+},
+{
+	"type": "Remove Thrown Exception Type",
+	"description": "Remove Thrown Exception Type URISyntaxException in method package sendSmsRequest(queryParam TreeMap<String,Object>, apiName String) : JSONObject from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 75,
+		"endLine": 75,
+		"startColumn": 102,
+		"endColumn": 120,
+		"codeElementType": "TYPE",
+		"description": "removed thrown exception type",
+		"codeElement": "URISyntaxException"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 75,
+		"endLine": 165,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "package sendSmsRequest(queryParam TreeMap<String,Object>, apiName String) : JSONObject"
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 130,
+		"endLine": 185,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "method declaration with removed thrown exception type",
+		"codeElement": "private request(apiName String, queryParams TreeMap<String,Object>) : JSONObject"
+}]
+},
+{
+	"type": "Rename Method",
+	"description": "Rename Method package sendSmsRequest(queryParam TreeMap<String,Object>, apiName String) : JSONObject renamed to private request(apiName String, queryParams TreeMap<String,Object>) : JSONObject in class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 75,
+		"endLine": 165,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "original method declaration",
+		"codeElement": "package sendSmsRequest(queryParam TreeMap<String,Object>, apiName String) : JSONObject"
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 130,
+		"endLine": 185,
+		"startColumn": 5,
+		"endColumn": 6,
+		"codeElementType": "METHOD_DECLARATION",
+		"description": "renamed method declaration",
+		"codeElement": "private request(apiName String, queryParams TreeMap<String,Object>) : JSONObject"
+}]
+},
+{
+	"type": "Rename Parameter",
+	"description": "Rename Parameter queryParam : TreeMap<String,Object> to queryParams : TreeMap<String,Object> in method private request(apiName String, queryParams TreeMap<String,Object>) : JSONObject from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 75,
+		"endLine": 75,
+		"startColumn": 31,
+		"endColumn": 65,
+		"codeElementType": "SINGLE_VARIABLE_DECLARATION",
+		"description": "original variable declaration",
+		"codeElement": "queryParam : TreeMap<String,Object>"
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 138,
+		"endLine": 138,
+		"startColumn": 48,
+		"endColumn": 83,
+		"codeElementType": "SINGLE_VARIABLE_DECLARATION",
+		"description": "renamed variable declaration",
+		"codeElement": "queryParams : TreeMap<String,Object>"
+}]
+},
+{
+	"type": "Rename Variable",
+	"description": "Rename Variable body : String to requestBody : String in method private request(apiName String, queryParams TreeMap<String,Object>) : JSONObject from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 117,
+		"endLine": 117,
+		"startColumn": 16,
+		"endColumn": 25,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "original variable declaration",
+		"codeElement": "body : String"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 117,
+		"endLine": 117,
+		"startColumn": 9,
+		"endColumn": 26,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 118,
+		"endLine": 118,
+		"startColumn": 9,
+		"endColumn": 82,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 166,
+		"endLine": 166,
+		"startColumn": 16,
+		"endColumn": 32,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "renamed variable declaration",
+		"codeElement": "requestBody : String"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 166,
+		"endLine": 166,
+		"startColumn": 9,
+		"endColumn": 33,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 167,
+		"endLine": 167,
+		"startColumn": 9,
+		"endColumn": 70,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}]
+},
+{
+	"type": "Rename Variable",
+	"description": "Rename Variable signedHeadersSb : StringBuilder to signedHeadersBuilder : StringBuilder in method private request(apiName String, queryParams TreeMap<String,Object>) : JSONObject from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 108,
+		"endLine": 108,
+		"startColumn": 23,
+		"endColumn": 60,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "original variable declaration",
+		"codeElement": "signedHeadersSb : StringBuilder"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 108,
+		"endLine": 108,
+		"startColumn": 9,
+		"endColumn": 61,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 115,
+		"endLine": 115,
+		"startColumn": 9,
+		"endColumn": 91,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 113,
+		"endLine": 113,
+		"startColumn": 13,
+		"endColumn": 58,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 154,
+		"endLine": 154,
+		"startColumn": 23,
+		"endColumn": 65,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "renamed variable declaration",
+		"codeElement": "signedHeadersBuilder : StringBuilder"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 154,
+		"endLine": 154,
+		"startColumn": 9,
+		"endColumn": 66,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 163,
+		"endLine": 163,
+		"startColumn": 9,
+		"endColumn": 101,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 161,
+		"endLine": 161,
+		"startColumn": 21,
+		"endColumn": 71,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}]
+},
+{
+	"type": "Replace Variable With Attribute",
+	"description": "Replace Variable With Attribute SdfTime : String to HOST : String in method private request(apiName String, queryParams TreeMap<String,Object>) : JSONObject from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 94,
+		"endLine": 94,
+		"startColumn": 16,
+		"endColumn": 48,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "original variable declaration",
+		"codeElement": "SdfTime : String"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 101,
+		"endLine": 101,
+		"startColumn": 9,
+		"endColumn": 44,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 43,
+		"endLine": 43,
+		"startColumn": 33,
+		"endColumn": 63,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "renamed variable declaration",
+		"codeElement": "HOST : String"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 146,
+		"endLine": 146,
+		"startColumn": 9,
+		"endColumn": 35,
+		"codeElementType": "EXPRESSION_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}]
+},
+{
+	"type": "Replace Variable With Attribute",
+	"description": "Replace Variable With Attribute url : String to URL : String in method private request(apiName String, queryParams TreeMap<String,Object>) : JSONObject from class cn.iocoder.yudao.module.system.framework.sms.core.client.impl.AliyunSmsClient",
+	"leftSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 78,
+		"endLine": 78,
+		"startColumn": 16,
+		"endColumn": 53,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "original variable declaration",
+		"codeElement": "url : String"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 138,
+		"endLine": 138,
+		"startColumn": 9,
+		"endColumn": 81,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the original variable",
+		"codeElement": null
+}],
+	"rightSideLocations": [{
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 42,
+		"endLine": 42,
+		"startColumn": 33,
+		"endColumn": 70,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "renamed variable declaration",
+		"codeElement": "URL : String"
+}, {
+		"filePath": "yudao-module-system/yudao-module-system-biz/src/main/java/cn/iocoder/yudao/module/system/framework/sms/core/client/impl/AliyunSmsClient.java",
+		"startLine": 179,
+		"endLine": 179,
+		"startColumn": 9,
+		"endColumn": 56,
+		"codeElementType": "VARIABLE_DECLARATION_STATEMENT",
+		"description": "statement referencing the renamed variable",
+		"codeElement": null
+}]
+}
+]
+}]
+}

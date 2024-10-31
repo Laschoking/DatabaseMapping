@@ -1,0 +1,5 @@
+Da A als erstes gemappt wird, wird B danach expandiert.
+
+aus B -> B wird auch das mapping C -> C berechnet.
+Das rid-tupel 5,3 sollte allerdings nicht mit berücksichtigt werden
+, da es nie erfüllt werden könnte

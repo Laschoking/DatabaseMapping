@@ -1,0 +1,57 @@
+{
+"commits": [
+{
+	"repository": "https://github.com/redisson/redisson.git",
+	"sha1": "a505aac5110262720bd69ef4bb79c077986ad29f",
+	"url": "https://github.com/redisson/redisson/commit/a505aac5110262720bd69ef4bb79c077986ad29f",
+	"refactorings": [{
+	"type": "Remove Attribute Modifier",
+	"description": "Remove Attribute Modifier final in attribute private checkInterval : long from class org.redisson.client.FailedCommandsDetector",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/client/FailedCommandsDetector.java",
+		"startLine": 30,
+		"endLine": 30,
+		"startColumn": 24,
+		"endColumn": 37,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "original attribute declaration",
+		"codeElement": "private checkInterval : long"
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/client/FailedCommandsDetector.java",
+		"startLine": 30,
+		"endLine": 30,
+		"startColumn": 18,
+		"endColumn": 31,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "attribute declaration with removed modifier",
+		"codeElement": "private checkInterval : long"
+}]
+},
+{
+	"type": "Remove Attribute Modifier",
+	"description": "Remove Attribute Modifier final in attribute private checkInterval : long from class org.redisson.client.FailedConnectionDetector",
+	"leftSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/client/FailedConnectionDetector.java",
+		"startLine": 28,
+		"endLine": 28,
+		"startColumn": 24,
+		"endColumn": 37,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "original attribute declaration",
+		"codeElement": "private checkInterval : long"
+}],
+	"rightSideLocations": [{
+		"filePath": "redisson/src/main/java/org/redisson/client/FailedConnectionDetector.java",
+		"startLine": 28,
+		"endLine": 28,
+		"startColumn": 18,
+		"endColumn": 31,
+		"codeElementType": "FIELD_DECLARATION",
+		"description": "attribute declaration with removed modifier",
+		"codeElement": "private checkInterval : long"
+}]
+}
+]
+}]
+}
