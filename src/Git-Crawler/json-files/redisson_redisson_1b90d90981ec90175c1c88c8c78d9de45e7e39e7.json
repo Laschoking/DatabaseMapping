@@ -1,9 +1,0 @@
-{
-"commits": [
-{
-	"repository": "https://github.com/redisson/redisson.git",
-	"sha1": "1b90d90981ec90175c1c88c8c78d9de45e7e39e7",
-	"url": "https://github.com/redisson/redisson/commit/1b90d90981ec90175c1c88c8c78d9de45e7e39e7",
-	"refactorings": []
-}]
-}

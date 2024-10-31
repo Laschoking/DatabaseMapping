@@ -1,9 +1,0 @@
-{
-"commits": [
-{
-	"repository": "https://github.com/alibaba/spring-cloud-alibaba.git",
-	"sha1": "ea5182f53a128e61de8a4dabc40c87acb03ffcf7",
-	"url": "https://github.com/alibaba/spring-cloud-alibaba/commit/ea5182f53a128e61de8a4dabc40c87acb03ffcf7",
-	"refactorings": []
-}]
-}

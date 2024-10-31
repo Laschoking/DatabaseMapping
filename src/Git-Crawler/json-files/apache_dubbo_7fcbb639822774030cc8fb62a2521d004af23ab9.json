@@ -1,9 +1,0 @@
-{
-"commits": [
-{
-	"repository": "https://github.com/apache/dubbo.git",
-	"sha1": "7fcbb639822774030cc8fb62a2521d004af23ab9",
-	"url": "https://github.com/apache/dubbo/commit/7fcbb639822774030cc8fb62a2521d004af23ab9",
-	"refactorings": []
-}]
-}
