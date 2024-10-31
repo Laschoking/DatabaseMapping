@@ -161,7 +161,7 @@ def add_mappings_to_pq(new_mapping_tuples, tuples_loc_sim, elements_db1_pq_mirro
         # this check is currently not necessary but later, when adding struc-sim we need it
         if element_name_tuple not in tuples_loc_sim:
             join = occurrence_overlap(element1, element2)
-            common_occ, element1_record_ids, element2_record_ids = join
+            common_occ, element1_fact_ids, element2_fact_ids = join
             sim = similarity_metric(element1, element2, common_occ)
 
             tuples_loc_sim[element_name_tuple] = (sim, common_occ)
@@ -193,15 +193,15 @@ def add_mappings_to_pq(new_mapping_tuples, tuples_loc_sim, elements_db1_pq_mirro
 def occurrence_overlap(element1, element2):
     # intersection saves the key (file,col_nr): #common which is the minimum of occurrences for this key
     intersection = element1.occurrence_c & element2.occurrence_c
-    element1_record_ids = []
-    element2_record_ids = []
+    element1_fact_ids = []
+    element2_fact_ids = []
     # maybe it would be smarter to calculate this only after mapping_func has been accepted
     # on the other hand: when including the neighbour sim we need this info here
     # overlap consists of file, col_nr
     for overlap in intersection:
-        element1_record_ids.append(element1.occurrences[overlap])
-        element2_record_ids.append(element2.occurrences[overlap])
-    return intersection, element1_record_ids, element2_record_ids
+        element1_fact_ids.append(element1.occurrences[overlap])
+        element2_fact_ids.append(element2.occurrences[overlap])
+    return intersection, element1_fact_ids, element2_fact_ids
 
 
 def find_hubs_std(free_element_names, elements_occ):
@@ -217,7 +217,7 @@ def find_hubs_std(free_element_names, elements_occ):
     # print("std_dev: " + str(std_dev))
     hubs = [nodes[i] for i in range(len(degrees)) if degrees[i] > threshold]
     # print("anzahl der hubs: " + str(len(hubs)))
-    # print("anzahl der Terme: " + str(len(nodes)))
+    # print("anzahl der Elemente: " + str(len(nodes)))
     return hubs
 
 

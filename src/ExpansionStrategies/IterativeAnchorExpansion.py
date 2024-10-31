@@ -6,8 +6,8 @@ from src.Classes.ExpansionStrategy import  ExpansionStrategy
 import src.Classes.DomainElements
 
 class IterativeAnchorExpansion(ExpansionStrategy):
-    def __init__(self,anchor_quantile,DYNAMIC):
-        super().__init__("Local",anchor_quantile,DYNAMIC)
+    def __init__(self,anchor_quantile,DYNAMIC,sim_th=0.0):
+        super().__init__("Local",anchor_quantile,DYNAMIC,sim_th)
 
 
     def accept_expand_mappings(self, mapping_func, elements_db1, elements_db2, blocked_elements, similarity_metric):
@@ -32,6 +32,9 @@ class IterativeAnchorExpansion(ExpansionStrategy):
 
         while 1:
             if Q and not new_anchor_mappings:
+                if len(mapped_sims) % 100 == 0:
+                    print(f"mapped {len(mapped_sims)} element pairs, size of Q: {len(Q)}")
+
                 # The prio_dict is sorted in ascending order, so the last value has the highest similarity
                 accepted_mapping = Q.pop(index=-1)
 
@@ -43,10 +46,10 @@ class IterativeAnchorExpansion(ExpansionStrategy):
 
                 sub_fact_pairs = accepted_mapping.get_clean_fact_pairs()
 
-                # Accept_this_mapping also handles the deactivation of records, that cannot get matched anymore
+                # Accept_this_mapping also handles the deactivation of facts, that cannot get matched anymore
                 related_mappings, altered_mappings,finished_fact_pairs = accepted_mapping.accept_this_mapping(DYNAMIC=self.DYNAMIC)
 
-                # Save complete record tuples for efficient matching of databases
+                # Save complete fact tuples for efficient matching of databases
                 for file_name, fact_pairs in finished_fact_pairs.items():
                     mapping_func.final_fact_pairs.setdefault(file_name, set()).update(fact_pairs)
 
@@ -69,18 +72,18 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                 expansion_fact_pairs = set()
                 outdated_fact_pairs = set()
 
-                # Iterate through the subscribed record tuples by record (from DB1 or DB2), and connected fact_pairs
-                for record, mapped_fact_pairs in sub_fact_pairs.items():
+                # Iterate through the subscribed fact tuples by fact (from DB1 or DB2), and connected fact_pairs
+                for fact, mapped_fact_pairs in sub_fact_pairs.items():
 
-                    # Find fact_pairs that have record inside but are not fulfilled by the accepted mapping_func
-                    outdated_fact_pairs |= record.get_all_fact_pairs() - mapped_fact_pairs
+                    # Find fact_pairs that have fact inside but are not fulfilled by the accepted mapping_func
+                    outdated_fact_pairs |= fact.get_all_fact_pairs() - mapped_fact_pairs
 
-                    # If the record is not in_process, no elements within have been already mapped (except the current)
+                    # If the fact is not in_process, no elements within have been already mapped (except the current)
                     # Therefor the connected fact_pairs should be expanded
-                    if not record.is_in_process():
-                        record.in_process = True
+                    if not fact.is_in_process():
+                        fact.in_process = True
                         if DEBUG_TERMS:
-                            print(f"make record in process: {record.file, record.index}")
+                            print(f"make fact in process: {fact.file, fact.index}")
 
                         expansion_fact_pairs.update(mapped_fact_pairs - outdated_fact_pairs)
 
@@ -96,14 +99,14 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                 # Update the similarity score and possibly change the position of the updated mappings in the prio_dict
                 self.update_tuples_prio_dict(altered_mappings, Q)
 
-                # Reveal the two records of each expanded fact_pair and
+                # Reveal the two facts of each expanded fact_pair and
                 # add element-tuples in the same column as potential new mappings
 
                 new_mappings = set()
                 for fact_pair in expansion_fact_pairs:
                     if DEBUG_TERMS or fact_pair in debug_set:
                         print(
-                            f"expand record tuple: {fact_pair.fact1.file}({fact_pair.fact1.index},{fact_pair.fact2.index})")
+                            f"expand fact tuple: {fact_pair.fact1.file}({fact_pair.fact1.index},{fact_pair.fact2.index})")
                     new_cols = fact_pair.fact1.vacant_cols  # has the same result as fact2.vacant_cols, because both are updated at the same time
                     for col in new_cols:
                         element1 = fact_pair.fact1.elements[col]
@@ -130,12 +133,15 @@ class IterativeAnchorExpansion(ExpansionStrategy):
             elif c_free_elements_db1 > 0 and c_free_elements_db2 > 0 and new_anchor_mappings:
                 if DEBUG_TERMS or DEBUG_RECORDS:
                     print(f"Find new hubs: {c_free_elements_db1}")
+                #print(f"started anchor computation, len: {w_prio_len}")
+
                 new_anchor_mappings = False  # idea is to only find new hubs if in last iteration at least 1 mapping_func was added
                 mapping_func.c_hub_recomp += 1
 
                 # Find anchor elements for DB1 and DB2
                 anchor_elements1 = self.anchor_quantile.calc_anchor_elements(elements_db1)
                 anchor_elements2 = self.anchor_quantile.calc_anchor_elements(elements_db2)
+                print(f"anchor length: {len(anchor_elements1),len(anchor_elements2)}")
 
                 mapping_func.anchor_nodes[0] |= anchor_elements1
                 mapping_func.anchor_nodes[1] |= anchor_elements2
@@ -152,6 +158,7 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                     new_anchor_mappings = True
 
                 w_prio_len.append(len(Q))
+                #print(f"finished anchor computation, len: {w_prio_len}")
 
 
             # Exit Strategy
@@ -179,7 +186,7 @@ class IterativeAnchorExpansion(ExpansionStrategy):
                 break
 
         # Load all mappings into the dataframe at once
-        mapping_func.final_mapping = pd.DataFrame.from_records(mapping_dict, columns=['constant1', 'constant2', 'sim'])
+        mapping_func.final_mapping = pd.DataFrame.from_records(mapping_dict, columns=['element1', 'element2', 'sim'])
         if PLOT_STATISTICS:
             self.plot_statistics(similarity_metric.name,w_prio_len,w_exp_sim,mapped_sims)
 

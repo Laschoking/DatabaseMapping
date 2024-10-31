@@ -17,6 +17,9 @@ from src.Libraries.EvaluateMappings import compute_overlap_dbs
 
 import subprocess
 
+""" This generation file reads all jars in the directory maven_files, and runs doop on the to create databases 
+    the databases are saved under out, and prepared for the pairwise matching process """
+
 
 def get_jar_size(jar_file_path):
     if os.path.isfile(jar_file_path):
@@ -74,8 +77,8 @@ def create_dir(file_name,versions,MVN_PATH,db_config_df,db_finger_print_df):
             shutil.copytree(data.db1_original_facts.path,data.db2_original_facts.path,dirs_exist_ok=True)
 
             db1_facts = data.db1_original_facts.read_db_relations()
-            single_db_ser = db1_facts.get_nr_facts_constants()
-            single_db_ser['file'] = pair_db_ser['file']
+            single_db_ser = db1_facts.get_nr_facts_elements()
+            single_db_ser['file_name'] = pair_db_ser['file_name']
             single_db_ser['version'] = pair_db_ser['db1']
 
             # Insert the characteristics (nr_of_facts, nr_of_elements) of the database into a DB for single instances
@@ -96,7 +99,7 @@ def create_dir(file_name,versions,MVN_PATH,db_config_df,db_finger_print_df):
     db_pairs = itertools.combinations(versions,r=2)
     for (db1,db2) in db_pairs:
 
-        db_config = DbConfig(use='eval', type='DoopProgramAnalysis', file_name=file_name, db1_name=db1, db2_name=db2)
+        db_config = DbConfig(use='reasoning-evaluation', type='DoopProgramAnalysis', file_name=file_name, db1_name=db1, db2_name=db2)
         db_params = pd.Series(db_config.get_finger_print())
 
         data = DataContainerFile.OriginalFactsContainer(db_config.base_output_path, db_config.db1_path, db_config.db2_path)
@@ -115,7 +118,6 @@ def create_dir(file_name,versions,MVN_PATH,db_config_df,db_finger_print_df):
             db_params['equal_facts_perc'] = round(facts['overlap_perc'],2)
 
             # Insert combination into DbConfig, if it does not exist there:
-            # TODO exclude 'use'
             if not is_series_in_df(series=db_params, df=db_config_df):
                 new_pair_db_df = add_series_to_df(series=db_params,df=new_pair_db_df)
 

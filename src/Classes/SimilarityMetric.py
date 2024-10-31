@@ -33,7 +33,7 @@ class SimilarityMetric:
 
 class StructuralSimilarityMetric(SimilarityMetric):
     def __init__(self,name,imp_alpha):
-        super().__init__(name,imp_alpha,struct_ratio=1)
+        super().__init__(name,imp_alpha,struct_ratio=1.0)
 
 
     def compute_similarity(self,element1,element2,sub_fact_pairs):
@@ -53,7 +53,7 @@ class StructuralSimilarityMetric(SimilarityMetric):
 
 class LexicalSimilarityMetric(SimilarityMetric):
     def __init__(self,name,imp_alpha):
-        super().__init__(name,imp_alpha,struct_ratio=0)
+        super().__init__(name,imp_alpha,struct_ratio=0.0)
 
     def compute_similarity(self,element1,element2,sub_fact_pairs):
         nr_weight = 0.95
@@ -69,7 +69,6 @@ class LexicalSimilarityMetric(SimilarityMetric):
         nr_sim = self.number_similarity(nrs1,nrs2)
         mixed_sim = nr_weight * lex_sim + (1 - nr_weight) * nr_sim
         return self.weight_importance(element1, element2, mixed_sim)
-
 
     def compute_lexical_similarity(self,element_name1, element_name2):
         pass
@@ -114,10 +113,10 @@ class LexicalSimilarityMetric(SimilarityMetric):
 
 
 class MixedSimilarityMetric(SimilarityMetric):
-    def __init__(self,struct_metric, lex_metric,struct_ratio,imp_alpha):
+    def __init__(self, struct_ratio, lex_metric, imp_alpha, struct_metric):
         self.struct_metric = struct_metric
         self.lex_metric = lex_metric
-        self.name = f"{struct_metric.name}_{struct_ratio}_{lex_metric.name}"
+        self.name = f"{struct_metric.name}_{lex_metric.name}"
 
         super().__init__(self.name,imp_alpha,struct_ratio=struct_ratio)
 
@@ -144,7 +143,10 @@ class MixedSimilarityMetric(SimilarityMetric):
         self.lex_metric.set_max_deg2(self.max_deg2)
 
     def recompute_similarity(self,old_sim,element1,element2,sub_fact_pairs):
-        str_sim = self.struct_ratio * self.struct_metric.recompute_similarity(old_sim,element1, element2, sub_fact_pairs)
+        if self.struct_ratio:
+            str_sim = self.struct_ratio * self.struct_metric.recompute_similarity(old_sim,element1, element2, sub_fact_pairs)
+        else:
+            str_sim = 0
         lex_sim = (1 - self.struct_ratio) * self.lex_metric.recompute_similarity(old_sim,element1, element2,sub_fact_pairs)
         mixed_sim = str_sim + lex_sim
         return mixed_sim

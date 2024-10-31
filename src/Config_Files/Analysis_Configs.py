@@ -17,7 +17,7 @@ class DbConfig:
 
     def get_finger_print(self):
         return {'db_config_id': self.full_name, 'use': self.use, 'type': self.db_type,
-                'file': self.file_name, 'db1': self.db1_name, 'db2': self.db2_name}
+                'file_name': self.file_name, 'db1': self.db1_name, 'db2': self.db2_name}
 
 class DatalogProgram:
     def __init__(self, program_type, name, sep_dl, merge_dl, blocked_elements=None):
@@ -41,7 +41,7 @@ Syn_Po1_DL = DatalogProgram("SouffleSynthetic", "Po1", "Po1_separate.rls", "Po1_
 Doop_CFG = DatalogProgram("DoopProgramAnalysis", "CFG", "CFG_separate.rls", "CFG_merge.rls",
                           {'', ' ', "abstract", "<sun.misc.ProxyGenerator: byte[] generateClassFile()>"})
 Doop_PointerAnalysis = DatalogProgram("DoopProgramAnalysis", "PointerAnalysis", "PointerAnalyse_separate.rls",
-                                      "PointerAnalyse_merge_no_fold.rls",
+                                      "PointerAnalyse_merge.rls",
                                       {'', ' ', "<clinit>", "void()", "public", "static", "main",
                                        "void(java.lang.String[])", "java.io.Serializable", "java.lang.Cloneable",
                                        "java.lang.Object", "abstract"})

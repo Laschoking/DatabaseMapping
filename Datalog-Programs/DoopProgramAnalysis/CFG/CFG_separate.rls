@@ -1,11 +1,11 @@
-@import MainClass :- tsv{resource="MainClass.tsv",format=(string)}. 
-@import A_ArrayType :-tsv{resource="ArrayType.tsv",format=(string)} .
+@import MainClass :- tsv{resource="MainClass.tsv",format=(string,)}. 
+@import A_ArrayType :-tsv{resource="ArrayType.tsv",format=(string,)} .
 @import A_ActualParam :-tsv{resource="ActualParam.tsv",format=(string,string,string)} .
 @import A_Var_Type :-tsv{resource="Var-Type.tsv",format=(string,string )} .
 @import A_Var_DeclaringMethod :-tsv{resource="Var-DeclaringMethod.tsv",format=(string,string)} .
 @import A_Var_SimpleName :-tsv{resource="Var-SimpleName.tsv",format=(string,string)} .
-@import A_ApplicationClass :-tsv{resource="ApplicationClass.tsv",format=(string )} .
-@import A_ApplicationPackage :-tsv{resource="ApplicationPackage.tsv",format=(string)} .
+@import A_ApplicationClass :-tsv{resource="ApplicationClass.tsv",format=(string,)} .
+@import A_ApplicationPackage :-tsv{resource="ApplicationPackage.tsv",format=(string,)} .
 @import A_ThisVar :-tsv{resource="ThisVar.tsv",format=(string,string)} .
 @import A_ExceptionHandler_Previous :-tsv{resource="ExceptionHandler-Previous.tsv",format=(string,string)} .
 @import A_ArrayAllocation :-tsv{resource="ArrayAllocation.tsv",format=(string,string,string)} .
@@ -33,13 +33,13 @@
 @import A_ClassArtifact :- tsv{resource="Class-Artifact.tsv", format=(string, string, string, string)} .
 @import A_ClassHeap :- tsv{resource="ClassHeap.tsv", format=(string, string)} .
 @import A_ClassModifier :- tsv{resource="ClassModifier.tsv", format=(string, string)} .
-@import A_ClassType :- tsv{resource="ClassType.tsv", format=(string)} .
+@import A_ClassType :- tsv{resource="ClassType.tsv", format=(string,)} .
 @import A_ComponentType :- tsv{resource="ComponentType.tsv", format=(string, string)} .
 @import A_DirectSuperclass :- tsv{resource="DirectSuperclass.tsv", format=(string, string)} .
 @import A_DirectSuperinterface :- tsv{resource="DirectSuperinterface.tsv", format=(string, string)} .
 @import A_DummyIfVar :- tsv{resource="DummyIfVar.tsv", format=(string, string)} .
 @import A_DynamicMethodInvocation :- tsv{resource="DynamicMethodInvocation.tsv", format=(string, string, string, string, string, string, string,string, string)} .
-@import A_EmptyArray :- tsv{resource="EmptyArray.tsv", format=(string)} .
+@import A_EmptyArray :- tsv{resource="EmptyArray.tsv", format=(string,)} .
 @import A_EnterMonitor :- tsv{resource="EnterMonitor.tsv", format=(string, string, string, string)} .
 @import A_ExceptionHandler :- tsv{resource="ExceptionHandler.tsv", format=(string, string, string, string, string, string)} .
 @import A_ExitMonitor :- tsv{resource="ExitMonitor.tsv", format=(string, string, string, string)} .
@@ -50,7 +50,7 @@
 @import A_If :- tsv{resource="If.tsv", format=(string, string, string, string)} .
 @import A_IfConstant :- tsv{resource="IfConstant.tsv", format=(string, string, string)} .
 @import A_IfVar :- tsv{resource="IfVar.tsv", format=(string, string, string)} .
-@import A_InterfaceType :- tsv{resource="InterfaceType.tsv", format=(string)} .
+@import A_InterfaceType :- tsv{resource="InterfaceType.tsv", format=(string,)} .
 @import A_LoadArrayIndex :- tsv{resource="LoadArrayIndex.tsv", format=(string, string, string, string, string)} .
 @import A_LoadInstanceField :- tsv{resource="LoadInstanceField.tsv", format=(string, string, string, string, string, string)} .
 @import A_LoadStaticField :- tsv{resource="LoadStaticField.tsv", format=(string, string, string, string, string)} .
@@ -80,7 +80,7 @@
 @import A_StoreArrayIndex :- tsv{resource="StoreArrayIndex.tsv", format=(string, string, string, string, string)} .
 @import A_StoreInstanceField :- tsv{resource="StoreInstanceField.tsv", format=(string, string, string, string, string, string)} .
 @import A_StoreStaticField :- tsv{resource="StoreStaticField.tsv", format=(string, string, string, string, string)} .
-@import A_StringConstant :- tsv{resource="StringConstant.tsv", format=(string)} .
+@import A_StringConstant :- tsv{resource="StringConstant.tsv", format=(string,)} .
 @import A_StringRaw :- tsv{resource="StringRaw.tsv", format=(string, string)} .
 @import A_SuperMethodInvocation :- tsv{resource="SuperMethodInvocation.tsv", format=(string, string, string, string, string)} .
 @import A_TableSwitch :- tsv{resource="TableSwitch.tsv", format=(string, string, string, string)} .
@@ -805,9 +805,7 @@ ConcreteClass(?class) :-
 
 Method_FirstInstruction(?method, ?insn) :-
    Instruction_Method(?insn, ?method),
-   ~Instruction_Prev(?insn, _),
-   ~IsJumpTarget(?insn),
-   ~A_Throw(?insn, _, _, ?method).
+   ~IsJumpTarget(?insn).
 
 OptInstructionFromMethodIndex(?method, ?index, ?insn) :-
    Instruction_Method(?insn, ?method),
@@ -816,12 +814,12 @@ OptInstructionFromMethodIndex(?method, ?index, ?insn) :-
 Instruction_Next(?insn, ?next) :-
    Instruction_Method(?insn, ?inMethod),
    Instruction_Index(?insn, ?i),
-   OptInstructionFromMethodIndex(?inMethod, ?i + 1, ?next).
+   OptInstructionFromMethodIndex(?inMethod, ?i, ?next).
 
 Instruction_Prev(?insn, ?prev) :-
    Instruction_Method(?insn, ?inMethod),
    Instruction_Index(?insn, ?i),
-   OptInstructionFromMethodIndex(?inMethod, ?i - 1, ?prev).
+   OptInstructionFromMethodIndex(?inMethod, ?i, ?prev).
 
 JumpTarget(?insn, ?goto) :-
    Goto_Target(?goto, ?targetIndex),
@@ -1112,30 +1110,30 @@ ExistsPreviousNonDomPredecessorToSameBB(?pred, ?insn) :-
 
 @export Method_ReturnType :-tsv{resource="Method_ReturnType.tsv",format=(string,string)}.
 @export Method_ParamTypes :-tsv{resource="Method_ParamTypes.tsv",format=(string,string)}.
-@export Method_Descriptor :- tsv{resource="Method_Descriptor.csv",format=(string,string)}.
-@export Instruction_Method :- tsv{resource="Instruction_Method.csv",format=(string, string)} .
-@export Instruction_Index :- tsv{resource="Instruction_Index.csv",format=(string, string)} .
-@export isReturnInstruction :- tsv{resource="isReturnInstruction.csv",format=(string)} .
-@export isAssignLocal_Insn :- tsv{resource="isAssignLocal_Insn.csv",format=(string)} .
-@export isThrow_Insn :- tsv{resource="isThrow_Insn.csv",format=(string)} .
-@export isSwitch_Insn :- tsv{resource="isSwitch_Insn.csv",format=(string)} .
-@export isGoto_Insn :- tsv{resource="isGoto_Insn.csv",format=(string)} .
-@export ExceptionHandler_Method :- tsv{resource="ExceptionHandler_Method.csv",format=(string, string)} .
-@export ExceptionHandler_Index :- tsv{resource="ExceptionHandler_Index.csv",format=(string, string)} .
-@export Switch_Target :- tsv{resource="Switch_Target.csv",format=(string, string, string)} .
-@export If_Target :- tsv{resource="If_Target.csv",format=(string, string)} .
-@export Goto_Target :- tsv{resource="Goto_Target.csv",format=(string, string)} .
-@export isInstruction :- tsv{resource="isInstruction.csv",format=(string)} .
-@export isIf_Insn :- tsv{resource="isIf_Insn.csv",format=(string)} .
-@export Switch_DefaultTarget :- tsv{resource="Switch_DefaultTarget.csv",format=(string, string)} .
-@export AssignInstruction_To :- tsv{resource="AssignInstruction_To.csv",format=(string, string)} .
-@export A_ArrayType :-tsv{resource="ArrayType.tsv",format=(string)} .
+@export Method_Descriptor :- tsv{resource="Method_Descriptor.tsv",format=(string,string)}.
+@export Instruction_Method :- tsv{resource="Instruction_Method.tsv",format=(string, string)} .
+@export Instruction_Index :- tsv{resource="Instruction_Index.tsv",format=(string, string)} .
+@export isReturnInstruction :- tsv{resource="isReturnInstruction.tsv",format=(string,)} .
+@export isAssignLocal_Insn :- tsv{resource="isAssignLocal_Insn.tsv",format=(string,)} .
+@export isThrow_Insn :- tsv{resource="isThrow_Insn.tsv",format=(string,)} .
+@export isSwitch_Insn :- tsv{resource="isSwitch_Insn.tsv",format=(string,)} .
+@export isGoto_Insn :- tsv{resource="isGoto_Insn.tsv",format=(string,)} .
+@export ExceptionHandler_Method :- tsv{resource="ExceptionHandler_Method.tsv",format=(string, string)} .
+@export ExceptionHandler_Index :- tsv{resource="ExceptionHandler_Index.tsv",format=(string, string)} .
+@export Switch_Target :- tsv{resource="Switch_Target.tsv",format=(string, string, string)} .
+@export If_Target :- tsv{resource="If_Target.tsv",format=(string, string)} .
+@export Goto_Target :- tsv{resource="Goto_Target.tsv",format=(string, string)} .
+@export isInstruction :- tsv{resource="isInstruction.tsv",format=(string,)} .
+@export isIf_Insn :- tsv{resource="isIf_Insn.tsv",format=(string,)} .
+@export Switch_DefaultTarget :- tsv{resource="Switch_DefaultTarget.tsv",format=(string, string)} .
+@export AssignInstruction_To :- tsv{resource="AssignInstruction_To.tsv",format=(string, string)} .
+@export A_ArrayType :-tsv{resource="ArrayType.tsv",format=(string,)} .
 @export A_ActualParam :-tsv{resource="ActualParam.tsv",format=(string,string,string)} .
 @export A_Var_Type :-tsv{resource="Var-Type.tsv",format=(string,string )} .
 @export A_Var_DeclaringMethod :-tsv{resource="Var-DeclaringMethod.tsv",format=(string,string)} .
 @export A_Var_SimpleName :-tsv{resource="Var-SimpleName.tsv",format=(string,string)} .
-@export A_ApplicationClass :-tsv{resource="ApplicationClass.tsv",format=(string )} .
-@export A_ApplicationPackage :-tsv{resource="ApplicationPackage.tsv",format=(string)} .
+@export A_ApplicationClass :-tsv{resource="ApplicationClass.tsv",format=(string,)} .
+@export A_ApplicationPackage :-tsv{resource="ApplicationPackage.tsv",format=(string,)} .
 @export A_ExceptionHandler_Previous :-tsv{resource="ExceptionHandler-Previous.tsv",format=(string,string)} .
 @export A_ArrayAllocation :-tsv{resource="ArrayAllocation.tsv",format=(string,string,string)} .
 @export A_ArrayInsnIndex :-tsv{resource="ArrayInsnIndex.tsv",format=(string,string)} .
@@ -1162,13 +1160,13 @@ ExistsPreviousNonDomPredecessorToSameBB(?pred, ?insn) :-
 @export A_ClassArtifact :- tsv{resource="Class-Artifact.tsv", format=(string, string, string, string)} .
 @export A_ClassHeap :- tsv{resource="ClassHeap.tsv", format=(string, string)} .
 @export A_ClassModifier :- tsv{resource="ClassModifier.tsv", format=(string, string)} .
-@export A_ClassType :- tsv{resource="ClassType.tsv", format=(string)} .
+@export A_ClassType :- tsv{resource="ClassType.tsv", format=(string,)} .
 @export A_ComponentType :- tsv{resource="ComponentType.tsv", format=(string, string)} .
 @export A_DirectSuperclass :- tsv{resource="DirectSuperclass.tsv", format=(string, string)} .
 @export A_DirectSuperinterface :- tsv{resource="DirectSuperinterface.tsv", format=(string, string)} .
 @export A_DummyIfVar :- tsv{resource="DummyIfVar.tsv", format=(string, string)} .
 @export A_DynamicMethodInvocation :- tsv{resource="DynamicMethodInvocation.tsv", format=(string, string, string, string, string, string, string,string, string)} .
-@export A_EmptyArray :- tsv{resource="EmptyArray.tsv", format=(string)} .
+@export A_EmptyArray :- tsv{resource="EmptyArray.tsv", format=(string,)} .
 @export A_EnterMonitor :- tsv{resource="EnterMonitor.tsv", format=(string, string, string, string)} .
 @export A_ExceptionHandler :- tsv{resource="ExceptionHandler.tsv", format=(string, string, string, string, string, string)} .
 @export A_ExitMonitor :- tsv{resource="ExitMonitor.tsv", format=(string, string, string, string)} .
@@ -1179,7 +1177,7 @@ ExistsPreviousNonDomPredecessorToSameBB(?pred, ?insn) :-
 @export A_If :- tsv{resource="If.tsv", format=(string, string, string, string)} .
 @export A_IfConstant :- tsv{resource="IfConstant.tsv", format=(string, string, string)} .
 @export A_IfVar :- tsv{resource="IfVar.tsv", format=(string, string, string)} .
-@export A_InterfaceType :- tsv{resource="InterfaceType.tsv", format=(string)} .
+@export A_InterfaceType :- tsv{resource="InterfaceType.tsv", format=(string,)} .
 @export A_LoadArrayIndex :- tsv{resource="LoadArrayIndex.tsv", format=(string, string, string, string, string)} .
 @export A_LoadInstanceField :- tsv{resource="LoadInstanceField.tsv", format=(string, string, string, string, string, string)} .
 @export A_LoadStaticField :- tsv{resource="LoadStaticField.tsv", format=(string, string, string, string, string)} .
@@ -1208,7 +1206,7 @@ ExistsPreviousNonDomPredecessorToSameBB(?pred, ?insn) :-
 @export A_StoreArrayIndex :- tsv{resource="StoreArrayIndex.tsv", format=(string, string, string, string, string)} .
 @export A_StoreInstanceField :- tsv{resource="StoreInstanceField.tsv", format=(string, string, string, string, string, string)} .
 @export A_StoreStaticField :- tsv{resource="StoreStaticField.tsv", format=(string, string, string, string, string)} .
-@export A_StringConstant :- tsv{resource="StringConstant.tsv", format=(string)} .
+@export A_StringConstant :- tsv{resource="StringConstant.tsv", format=(string,)} .
 @export A_StringRaw :- tsv{resource="StringRaw.tsv", format=(string, string)} .
 @export A_SuperMethodInvocation :- tsv{resource="SuperMethodInvocation.tsv", format=(string, string, string, string, string)} .
 @export A_TableSwitch :- tsv{resource="TableSwitch.tsv", format=(string, string, string, string)} .
@@ -1224,14 +1222,14 @@ ExistsPreviousNonDomPredecessorToSameBB(?pred, ?insn) :-
 %@export Instruction_Next :- tsv{resource="Instruction_Next.tsv",format=(string, string)} .
 %@export Instruction_Prev :- tsv{resource="Instruction_Prev.tsv",format=(string, string)} .
 %@export JumpTarget :- tsv{resource="JumpTarget.tsv",format=(string, string)} .
-%@export IsJumpTarget :- tsv{resource="IsJumpTarget.tsv",format=(string)} .
-%@export ExceptionHandlerFirstInstruction :- tsv{resource="ExceptionHandlerFirstInstruction.tsv",format=(string)} .
-%@export FallThrough :- tsv{resource="FallThrough.tsv",format=(string)} .
-%@export BasicBlockBegin :- tsv{resource="BasicBlockBegin.tsv",format=(string)} .
+%@export IsJumpTarget :- tsv{resource="IsJumpTarget.tsv",format=(string,)} .
+%@export ExceptionHandlerFirstInstruction :- tsv{resource="ExceptionHandlerFirstInstruction.tsv",format=(string,)} .
+%@export FallThrough :- tsv{resource="FallThrough.tsv",format=(string,)} .
+%@export BasicBlockBegin :- tsv{resource="BasicBlockBegin.tsv",format=(string,)} .
 %@export BasicBlockHead :- tsv{resource="BasicBlockHead.tsv",format=(string, string)} .
 %@export BasicBlockTail :- tsv{resource="BasicBlockTail.tsv",format=(string, string)} .
-%@export BasicBlockEnd :- tsv{resource="BasicBlockEnd.tsv",format=(string)} .
-%@export UnconditionalControlTransfer :- tsv{resource="UnconditionalControlTransfer.tsv",format=(string)} .
+%@export BasicBlockEnd :- tsv{resource="BasicBlockEnd.tsv",format=(string,)} .
+%@export UnconditionalControlTransfer :- tsv{resource="UnconditionalControlTransfer.tsv",format=(string,)} .
 %@export MaySuccessorModuloThrow :- tsv{resource="MaySuccessorModuloThrow.tsv",format=(string, string)} .
 %@export MayPredecessorModuloThrow :- tsv{resource="MayPredecessorModuloThrow.tsv",format=(string, string)} .
 %@export MaySuccessorBBModuloThrow :- tsv{resource="MaySuccessorBBModuloThrow.tsv",format=(string, string)} .
@@ -1246,12 +1244,12 @@ ExistsPreviousNonDomPredecessorToSameBB(?pred, ?insn) :-
 %@export NextInSameBasicBlock :- tsv{resource="NextInSameBasicBlock.tsv",format=(string, string)} .
 %@export PrevInSameBasicBlock :- tsv{resource="PrevInSameBasicBlock.tsv",format=(string, string)} .
 %@export CFGRoot :- tsv{resource="CFGRoot.tsv",format=(string, string)} .
-%@export ExistsMayPredecessorBBModuloThrow :- tsv{resource="ExistsMayPredecessorBBModuloThrow.tsv",format=(string)} .
+%@export ExistsMayPredecessorBBModuloThrow :- tsv{resource="ExistsMayPredecessorBBModuloThrow.tsv",format=(string,)} .
 %@export DoesNotDominate :- tsv{resource="DoesNotDominate.tsv",format=(string, string)} .
 %@export OptReturnInsn :- tsv{resource="OptReturnInsn.tsv",format=(string, string)} .
 %@export HigherReturnIndex :- tsv{resource="HigherReturnIndex.tsv",format=(string, string)} .
 %@export NextReturnIndex :- tsv{resource="NextReturnIndex.tsv",format=(string, string)} .
-%@export ExistsPreviousReturn :- tsv{resource="ExistsPreviousReturn.tsv",format=(string)} .
+%@export ExistsPreviousReturn :- tsv{resource="ExistsPreviousReturn.tsv",format=(string,)} .
 %@export BBHeadInMethod :- tsv{resource="BBHeadInMethod.tsv",format=(string, string)} .
 %@export SameMethodBBHeads :- tsv{resource="SameMethodBBHeads.tsv",format=(string, string)} .
 %@export PredecessorBBsToSameBB :- tsv{resource="PredecessorBBsToSameBB.tsv",format=(string, string, string)} .

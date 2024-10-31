@@ -22,7 +22,7 @@ class DbInstance:
             else:
                 try:
                     df = pd.read_csv(rel_path, sep='\t', keep_default_na=False, dtype='string', header=None,
-                                     on_bad_lines='warn', lineelementinator='\n')
+                                     on_bad_lines='warn', lineterminator='\n')
                 except pd.errors.ParserError as e:
                     print(f"{e} parser error for path: {rel_path}")
             self.insert_df(file_name, df)
@@ -31,9 +31,9 @@ class DbInstance:
     def insert_df(self, file_name, df):
         self.files[file_name] = df
 
-    def get_nr_facts_constants(self):
-        """ Returns nr of facts and the number of constants
-            Finding the number of constants is not very elaborate, because only the mapping_obj
+    def get_nr_facts_elements(self):
+        """ Returns nr of facts and the number of elements
+            Finding the number of elements is not very elaborate, because only the mapping_obj
             has normally access to them
         """
         elements = set()
@@ -43,7 +43,7 @@ class DbInstance:
             for col in file_df.columns:
                 elements.update(file_df[col].unique())
 
-        return pd.Series({'nr_facts': nr_facts, 'nr_constants': len(elements)})
+        return pd.Series({'nr_facts': nr_facts, 'nr_elements': len(elements)})
 
     def log_db_relations(self):
         ShellLib.clear_directory(self.path)

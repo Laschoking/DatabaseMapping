@@ -12,7 +12,7 @@ import pandas as pd
 def run_mappings_on_dbs(db_config_use,res_table,expansions,metrics,nr_runs):
 
     # Retrieve relevant facts from Database
-    query = f"SELECT * FROM  DbConfig WHERE Use LIKE \"{db_config_use}\";"
+    query = f"SELECT * FROM  DbConfig WHERE Use LIKE \"{db_config_use}%\";"
     db_config_df = sql_con.query_table(query, ind_col='db_config_id')
 
     # Setup mapping_func dataframes
@@ -20,10 +20,9 @@ def run_mappings_on_dbs(db_config_use,res_table,expansions,metrics,nr_runs):
 
     existing_result_df = sql_con.get_table(res_table)
 
-    # Iterate through all relevant database pairs that are used for the structural-evaluation
+    # Iterate through all relevant database pairs that are used for the evaluation
     for curr_db_config_id, db_pair in db_config_df.iterrows():
-        print(f"file: {curr_db_config_id}")
-        db_config = DbConfig(*db_pair[['use', 'type', 'file', 'db1', 'db2']])
+        db_config = DbConfig(*db_pair[['use', 'type', 'file_name', 'db1', 'db2']])
         data = OriginalFactsContainer(db_config.base_output_path, db_config.db1_path, db_config.db2_path)
 
 
@@ -34,7 +33,7 @@ def run_mappings_on_dbs(db_config_use,res_table,expansions,metrics,nr_runs):
         for expansion, metric in itertools.product(expansions, metrics):
             new_mapping = pd.Series({"expansion": expansion.name, "dynamic": str(expansion.DYNAMIC),
                            "anchor_quantile": expansion.anchor_quantile.initial_q, "metric": metric.name,
-                           "importance_weight": metric.imp_alpha, "struct_ratio": metric.struct_ratio})
+                           "importance_parameter": metric.imp_alpha, "struct_ratio": metric.struct_ratio, 'sim_th' : expansion.sim_th})
 
             curr_mapping_id, MAPPING_EXISTS = get_mapping_id(new_mapping, existing_mappings_df)
             new_mapping['mapping_id'] = curr_mapping_id
@@ -48,11 +47,12 @@ def run_mappings_on_dbs(db_config_use,res_table,expansions,metrics,nr_runs):
                 if not left_runs:
                     continue
             else:
-                # Otherwise, add the new mapping_func setup to local res_df and database
+                # Otherwise, add the new mapping_func setup to local res_df_w_alpha and database
                 left_runs = nr_runs
                 existing_mappings_df = add_series_to_df(series=new_mapping, df=existing_mappings_df)
 
             print("--------------------------")
+            print(f"file: {curr_db_config_id}")
             print(f" mapping_id: {curr_mapping_id}")
 
             for run_nr in left_runs:
@@ -62,8 +62,8 @@ def run_mappings_on_dbs(db_config_use,res_table,expansions,metrics,nr_runs):
                 # Add combinations as new Mapping Container
                 mapping = MappingContainer(data.paths, expansion, metric,mapping_id=curr_mapping_id,run_nr=run_nr)
                 #facts.add_mapping(mapping_func)
-                mapping.init_records_elements_db1(data.db1_original_facts)
-                mapping.init_records_elements_db2(data.db2_original_facts)
+                mapping.init_facts_elements_db1(data.db1_original_facts)
+                mapping.init_facts_elements_db2(data.db2_original_facts)
                 c_max_tuples = len(mapping.elements_db1) * len(mapping.elements_db2)
 
 

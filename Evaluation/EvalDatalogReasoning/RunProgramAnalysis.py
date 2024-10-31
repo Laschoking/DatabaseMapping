@@ -7,7 +7,7 @@ from src.Config_Files.Analysis_Configs import *
 from src.ExpansionStrategies.IterativeAnchorExpansion import IterativeAnchorExpansion
 from src.Libraries.EvaluateMappings import *
 from src.Libraries import ShellLib
-from src.Classes.QuantileAnchorTerms import QuantileAnchorTerms
+from src.Classes.QuantileAnchorElements import QuantileAnchorElements
 from src.StructuralSimilarityMetrics.FactSimilarity import FactSimilarity
 from src.LexicalSimilarityMetrics.Dice import Dice
 import itertools
@@ -15,6 +15,10 @@ import gc
 import pandas as pd
 import src.Libraries.PandasUtility as pd_util
 from src.Libraries.EvaluateMappings import verify_merge_results,count_overlap_merge_db
+from src.StructuralSimilarityMetrics.FactPairSimilarity import FactPairSimilarity
+from src.Classes.SimilarityMetric import MixedSimilarityMetric
+from src.LexicalSimilarityMetrics.Dice import Dice
+from src.Config_Files.Setup import run_mappings_on_dbs
 
 def run_separate_program_analyses(fact_container, result_container, dl_program):
     nemo_rt_df = pd.DataFrame()
@@ -52,13 +56,28 @@ def run_merged_program_analyses(mapping):
 
 if __name__ == "__main__":
 
-    # Retrieve relevant fact_container from Database
-    query = "SELECT * FROM  DbConfig WHERE Use=\"expansion-same-lib\" ORDER BY file;"
+
+    # Step 1: Retrieve more MVN-Libs
+    # Step 2: Generate DBs: DOOP-Generation.py
+    # Step 3: Run best Mapping function (mapping_id=92	Local	quantile=0.95	metric=FactPair-Sim_Dice	gamma=0.7)
+    sim_th = [0.0,0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    fp_sim = FactPairSimilarity(imp_alpha=0)
+    dice = Dice(n=2, imp_alpha=0)
+    mixed_metric = MixedSimilarityMetric(struct_ratio=0.6, lex_metric=dice, imp_alpha=0, struct_metric=fp_sim)
+    expansions = [IterativeAnchorExpansion(anchor_quantile=QuantileAnchorElements(0.95),DYNAMIC=True,sim_th=s) for s in sim_th]
+    USE = "reasoning-evaluation"
+    run_mappings_on_dbs(USE, 'FinalMappingResults', expansions, [mixed_metric],
+                        nr_runs=[1])
+    '''
+    # Step 4: Evaluate the Datalog Programs
+
+    # Retrieve relevant fact_container from Database Use=\"reasoning-evaluation\" OR U
+    query = "SELECT * FROM  DbConfig WHERE Use LIKE \"reasoning-evaluation%\" ORDER BY file_name;"
     db_config_df = sql_con.query_table(query, ind_col='db_config_id')
 
     # Setup mapping_func dataframes
     mapping_df = sql_con.get_table('MappingSetup')
-    merged_facts_df = sql_con.get_table('ExpansionResults')
+    merged_facts_df = sql_con.query_table("SELECT * FROM  FinalMappingResults WHERE mapping_id=91;")
 
     result_df = sql_con.get_table('DLResults')
 
@@ -67,7 +86,7 @@ if __name__ == "__main__":
 
     #########################################################
     # Important parameters:
-    dl_programs = [Doop_CFG] #[Doop_CFG,Doop_PointerAnalysis]
+    dl_programs = [Doop_CFG,Doop_PointerAnalysis]
     #########################################################
 
     # Log Results:
@@ -78,7 +97,7 @@ if __name__ == "__main__":
     for db_id, db_pair in db_config_df.iterrows():
         # Setup fact_container bases
         print(f"file: {db_id}")
-        db_config = DbConfig(*db_pair[['use','type','file','db1','db2']])
+        db_config = DbConfig(*db_pair[['use','type','file_name','db1','db2']])
         fact_container = OriginalFactsContainer(db_config.base_output_path, db_config.db1_path, db_config.db2_path)
 
         # Load fact_container into the fact_container structure
@@ -86,7 +105,6 @@ if __name__ == "__main__":
         db2_facts = fact_container.db2_original_facts.read_db_relations()
 
         for dl_program in dl_programs:
-            print(f"Run datalog program: {dl_program.name}")
             dl_sep_container = DlSeparateResultsContainer(db_config.base_output_path,  db_config.db1_path,
                                                           db_config.db2_path,dl_name=dl_program.name)
 
@@ -94,32 +112,44 @@ if __name__ == "__main__":
 
             # Run the single Dl analysis on Db1 and Db2 if results are not in DB
             if not is_series_in_df(series=sep_results_fp,df=result_df):
+                print(f"Run datalog program separate: {dl_program.name}")
+
                 nemo_rt = run_separate_program_analyses(fact_container, dl_sep_container, dl_program)
                 sep_results_overlap = compute_overlap_dbs(dl_sep_container.db1_original_results,dl_sep_container.db2_original_results)
                 sep_results = pd.concat([sep_results_fp,sep_results_overlap,nemo_rt])
                 result_df = add_series_to_df(series=sep_results,df=result_df)
+                sql_con.insert_series(table='DLResults', series=sep_results)
+
             
-        else:
-            dl_sep_container.db1_original_results.read_db_relations()
-            dl_sep_container.db2_original_results.read_db_relations()
+            else:
+                dl_sep_container.db1_original_results.read_db_relations()
+                dl_sep_container.db2_original_results.read_db_relations()
             
             
             # Retrieve all mapping_func configuration that were used in the ReasoningDB
             mapping_results = merged_facts_df[merged_facts_df['db_config_id'] == db_id]
 
             for index,mapping_res in mapping_results.iterrows():
-                print(f"mapping_id: {mapping_res['mapping_id']}")
 
+
+                m_results_fp = pd.Series(
+                    {'db_config_id': db_id, 'mapping_id': mapping_res['mapping_id'], 'dl_program': dl_program.name,'run':mapping_res['run_nr']})
+
+                # If result was already computed skip the DL-run
+                if is_series_in_df(series=m_results_fp, df=result_df):
+                    continue
+
+                print(f"mapping_id: {mapping_res['mapping_id']}")
+                print(f"Run datalog program merged: {dl_program.name}")
                 mapping = MappingContainer(fact_paths=fact_container.paths, expansion_strategy=None,
                                            similarity_metric=None,mapping_id=mapping_res['mapping_id'],
                                            run_nr=mapping_res['run_nr'], dl_program=dl_program
                                            )
 
-                # Read mapping_func dl_sep_container, that were already computed before
-                mapping.read_mapping()
 
-                # Merge db1_renamed_facts and db2_facts into db_merged_facts
-                mapping.merge_dbs(mapping.db1_renamed_facts, db2_facts, mapping.db_merged_facts)
+                # Read mapping_func dl_sep_container, that were already computed before
+                # This is used for the inverse operation (during unravelling)
+                mapping.read_mapping()
 
                 # Execute the common analysis on the merged database
                 nemo_rt = run_merged_program_analyses(mapping)
@@ -130,12 +160,5 @@ if __name__ == "__main__":
                 merge_overlap = pd.concat([pd.Series({'db_config_id': db_id,'mapping_id' : mapping_res['mapping_id'],
                                                       'run' : mapping_res['run_nr'],'dl_program' : dl_program.name}), merge_overlap, nemo_rt])
                 result_df = add_series_to_df(series=merge_overlap,df=result_df)
-
-
-                break
-            break
-        sql_con.insert_df(table='DLResults', df=result_df)
-        result_df = result_df[0:0]
-
-# for merged DB results: mapping_id & run, db_config,dl_program, overlap (4 stats), nemo runtime
-# for single Db results: mapping_id=None,run=None,Dbconfig_id,dl_program,basic overlap (of both dbs individually) ,runtime
+                sql_con.insert_series(table='DLResults', series=merge_overlap)
+'''

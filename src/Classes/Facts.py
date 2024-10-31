@@ -6,14 +6,14 @@ class Fact:
         self.index = index
         self.file = file
         self.col_len = col_len
-        self.db = db  # denotes, if record belongs to db1 or db2
+        self.db = db  # denotes, if fact belongs to db1 or db2
         self.vacant_cols = list(range(col_len))
         self.fact_pairs = set()
         self.in_process = False
         self.gen_active = True
 
-        self.active_fact_pairs = set()  # of all record-tuple-objects that are active atm and contain (self)
-        self.elements = [None] * col_len  # we note all elements that contribute to the record
+        self.active_fact_pairs = set()  # of all fact-tuple-objects that are active atm and contain (self)
+        self.elements = [None] * col_len  # we note all elements that contribute to the fact
 
     def add_element(self, element, cols):
         # if cols contains more than one col, we need to insert the element at the correct place
@@ -44,7 +44,7 @@ class Fact:
         # reduce vacant cols by checking in which coll the mapped element appears
         self.vacant_cols = [i for i in self.vacant_cols if self.elements[i] != mapped_elem]
 
-        # check if the record is finised (matched with another one), then we can deactivate it
+        # check if the fact is finised (matched with another one), then we can deactivate it
         if not self.vacant_cols:
             # if debug: print(f"deactivate Record: {self.db,self.index}")
             self.gen_active = False
@@ -52,15 +52,15 @@ class Fact:
         else:
             return False
 
-    # if a record can not be matched anymore due to a recent mapping_func, we want to delete the occurrences of the elements within
+    # if a fact can not be matched anymore due to a recent mapping_func, we want to delete the occurrences of the elements within
     def deactivate_self_and_all_rt(self):
         self.gen_active = False
         self.in_process = False
         altered_mappings = set()
         # if debug: print(f"delete Record ({self.db,self.index})")
-        # make all connected record-tuples inactive and save the element-tuples that were subscribed to them
+        # make all connected fact-tuples inactive and save the element-tuples that were subscribed to them
         for fact_pair in self.fact_pairs:
-            altered_mappings |= fact_pair.make_inactive()  # only sets bool (so element-tuple still may hold inactive record-tuples)
+            altered_mappings |= fact_pair.make_inactive()  # only sets bool (so element-tuple still may hold inactive fact-tuples)
         element_cols = dict()
 
         i = 0
@@ -71,11 +71,11 @@ class Fact:
                 element_cols.setdefault(element, list()).append(i)
             i += 1
 
-        # denotes all record_objs where the element is subscribed
-        # we want to remove this (self) record from the occurrences
+        # denotes all fact_objs where the element is subscribed
+        # we want to remove this (self) fact from the occurrences
         for element, cols in element_cols.items():
             if element.is_active():
-                # remove this record_obj from the occurrences of the element, because it is now obsolete
+                # remove this fact_obj from the occurrences of the element, because it is now obsolete
                 if DEBUG_RECORDS or element in debug_element_names1 or element in debug_element_names2:
                     print(f"delete occurrence ({self.file},{self.index}) from {element.name} at col {cols}")
                 element.remove_occurrence(self.file, tuple(cols), self)

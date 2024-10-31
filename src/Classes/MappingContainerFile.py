@@ -34,8 +34,8 @@ class MappingContainer:
         self.expansion_strategy = expansion_strategy
         self.similarity_metric = similarity_metric
 
-        self.records_db1 = bidict()
-        self.records_db2 = bidict()
+        self.facts_db1 = bidict()
+        self.facts_db2 = bidict()
 
         self.elements_db1 = dict()
         self.elements_db2 = dict()
@@ -51,26 +51,26 @@ class MappingContainer:
         self.mapping_id = mapping_id
         self.run_nr = run_nr
 
-    def init_records_elements_db1(self, db1):
-        max_deg1 = self.init_records_elements_db(db1, self.elements_db1, self.records_db1)
+    def init_facts_elements_db1(self, db1):
+        max_deg1 = self.init_facts_elements_db(db1, self.elements_db1, self.facts_db1)
         self.similarity_metric.set_max_deg1(max_deg1)
 
-    def init_records_elements_db2(self, db2):
-        max_deg2 = self.init_records_elements_db(db2, self.elements_db2, self.records_db2)
+    def init_facts_elements_db2(self, db2):
+        max_deg2 = self.init_facts_elements_db(db2, self.elements_db2, self.facts_db2)
         self.similarity_metric.set_max_deg2(max_deg2)
 
-    # elements and records need to be initialised together because element.occurrences points to record_obj
-    # and record.elements points to element
+    # elements and facts need to be initialised together because element.occurrences points to fact_obj
+    # and fact.elements points to element
     @staticmethod
-    def init_records_elements_db(db_instance, elements, records):
+    def init_facts_elements_db(db_instance, elements, facts):
 
         multi_col_elements = set()
         for file_name, df in db_instance.files.items():
             col_len = df.shape[1]
             for row_ind, row in df.iterrows():
 
-                curr_record = Records.Fact(row_ind, file_name, db_instance.name, col_len)
-                records[row_ind, file_name] = curr_record
+                curr_fact = Facts.Fact(row_ind, file_name, db_instance.name, col_len)
+                facts[row_ind, file_name] = curr_fact
 
                 temp_dict = dict()
                 for col_ind, element_name in row.items():
@@ -83,12 +83,12 @@ class MappingContainer:
                         multi_col_elements.add(element_name)
                     if element_name in elements:
                         element = elements[element_name]
-                        element.update(file_name, cols, curr_record)
+                        element.update(file_name, cols, curr_fact)
                     else:
-                        element = Terms.Element(element_name, file_name, cols, curr_record)
+                        element = DomainElements.Element(element_name, file_name, cols, curr_fact)
                         elements[element_name] = element
 
-                    curr_record.add_element(element, cols)
+                    curr_fact.add_element(element, cols)
         max_deg_node = max(elements.values(), key=attrgetter('degree'))
         return max_deg_node.degree
 
@@ -100,8 +100,8 @@ class MappingContainer:
                                                                     DL_blocked_elements, self.similarity_metric)
         self.c_mappings = c_mappings
 
-        # do the renaming of Terms1 & matching of records
-        # this could also be avoided through implementation of the record-objs, but is too much work rn
+        # do the renaming of Elements1 & matching of facts
+        # this could also be avoided through implementation of the fact-objs, but is too much work rn
         for file_name, df1_original in db1.files.items():
             df2_original = db2.files[file_name]
             df1 = df1_original.copy(deep=True)
@@ -110,30 +110,30 @@ class MappingContainer:
                 matched_fact_pairs = self.final_fact_pairs[file_name]
             else:
                 matched_fact_pairs = []
-            mapped_df = self.map_df(matched_fact_pairs, df1, df2, self.final_mapping['constant1'],
-                                    self.final_mapping['constant2'])
+            mapped_df = self.map_df(matched_fact_pairs, df1, df2, self.final_mapping['element1'],
+                                    self.final_mapping['element2'])
             self.db1_renamed_facts.insert_df(file_name, mapped_df)
         return
 
-    def map_df(self, matched_fact_pairs, df1, df2, old_constants_ser, new_constants_ser):
+    def map_df(self, matched_fact_pairs, df1, df2, old_elements_ser, new_elements_ser):
         # assuming that keys & values are unpacked according to insertion order
-        matched_records = list()
+        matched_facts = list()
 
-        # Simplify the renaming if we have information from the expansion strategy, that certain records are equal now
+        # Simplify the renaming if we have information from the expansion strategy, that certain facts are equal now
         # Then we can take them out before renaming
         if matched_fact_pairs:
             rec1_indices = list()
             rec2_indices = list()
-            for record1, record2 in matched_fact_pairs:
-                if record1 in rec1_indices or record2 in rec2_indices:
-                    raise ValueError(f"record already in indices {record1, record2}")
-                rec1_indices.append(record1)
-                rec2_indices.append(record2)
+            for fact1, fact2 in matched_fact_pairs:
+                if fact1 in rec1_indices or fact2 in rec2_indices:
+                    raise ValueError(f"fact already in indices {fact1, fact2}")
+                rec1_indices.append(fact1)
+                rec2_indices.append(fact2)
 
             merged_df = df2.iloc[rec2_indices].reset_index(drop=True)
             df1.drop(rec1_indices, inplace=True)
 
-        df1_replaced = df1.replace(old_constants_ser.to_list(), new_constants_ser.to_list())
+        df1_replaced = df1.replace(old_elements_ser.to_list(), new_elements_ser.to_list())
 
         # Concatenate the DataFrames
         if matched_fact_pairs:
@@ -147,8 +147,8 @@ class MappingContainer:
         if self.mapping_id is None:
             raise ValueError(f"expected mapping_id{self.mapping_path, self.mapping_id}")
         if self.mapping_path.exists():
-            df = pd.read_csv(self.mapping_path, sep='\t', header=None, names=['constant1', 'constant2', 'sim'],
-                             keep_default_na=False, lineelementinator='\n')
+            df = pd.read_csv(self.mapping_path, sep='\t', header=None, names=['element1', 'element2', 'sim'],
+                             keep_default_na=False, lineterminator='\n')
             # check how many elements have been mapped to synthetic element
             syn_counter = df.iloc[:, 1].str.startswith("new_var").value_counts()
             if True in syn_counter:
@@ -171,20 +171,21 @@ class MappingContainer:
         for file_name in db1.files.keys():
             df1 = db1.files[file_name]
             df2 = db2.files[file_name]
+
             if not df1.empty and not df2.empty:
                 l_cols = len(df1.columns)
                 cols = list(range(l_cols))
                 df = pd.merge(df1, df2, how='outer', on=cols, indicator=str(l_cols))
                 df[str(l_cols)] = df[str(l_cols)].astype(str).replace(
-                    {'both': '0', 'left_only': '1', "right_only": '10'})
+                    {'both': '0', 'left_only': '1', "right_only": '2'})
             elif not df1.empty:
                 l_cols = len(df1.columns)
-                df = df1
+                df = df1.copy()
                 df[l_cols] = '1'
             elif not df2.empty:
                 l_cols = len(df2.columns)
-                df = df2
-                df[l_cols] = '10'
+                df = df2.copy()
+                df[l_cols] = '2'
             else:
                 df = pd.DataFrame()
             to_db.insert_df(file_name, df)
@@ -200,14 +201,14 @@ class MappingContainer:
             if not df.empty:
                 df0 = df[df.iloc[:, -1] == '0']
                 df1 = df[df.iloc[:, -1] == '1']
-                df2 = df[df.iloc[:, -1] == '10']
+                df2 = df[df.iloc[:, -1] == '2']
                 df1 = pd.concat([df1, df0], axis=0, ignore_index=True)
                 df1 = df1.iloc[:, :-1]
                 df2 = pd.concat([df2, df0], axis=0, ignore_index=True)
                 df2 = df2.iloc[:, :-1]
 
                 # reverse columns of mapping_func to inverse the mapping_func
-                df1 = self.map_df([], df1, df2, self.final_mapping['constant2'], self.final_mapping['constant1'])
+                df1 = self.map_df([], df1, df2, self.final_mapping['element2'], self.final_mapping['element1'])
                 self.db1_unravelled_results.insert_df(file_name, df1)
                 self.db2_unravelled_results.insert_df(file_name, df2)
             else:
@@ -218,7 +219,7 @@ class MappingContainer:
         return {"expansion": self.expansion_strategy.name, "dynamic": str(self.expansion_strategy.DYNAMIC),
                 "anchor_quantile": self.expansion_strategy.anchor_quantile.initial_q,
                 "metric": self.similarity_metric.name,
-                "importance_weight": self.similarity_metric.imp_alpha}
+                "importance_parameter": self.similarity_metric.imp_alpha}
 
     def get_result_finger_print(self):
         return {"synthetic_elements": self.syn_counter, "hub_computations": self.c_hub_recomp,

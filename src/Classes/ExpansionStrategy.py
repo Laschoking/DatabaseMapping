@@ -5,10 +5,11 @@ from src.Classes.DomainElements import Mapping
 
 
 class ExpansionStrategy:
-    def __init__(self,name,anchor_quantile,DYNAMIC):
+    def __init__(self,name,anchor_quantile,DYNAMIC,sim_th):
         self.name = name
         self.anchor_quantile = anchor_quantile
         self.DYNAMIC = DYNAMIC
+        self.sim_th = sim_th
 
 
     def accept_expand_mappings(self,mapping, elements_db1, elements_db2, blocked_elements,
@@ -38,12 +39,12 @@ class ExpansionStrategy:
                 continue
 
             # Remove mappings that are now obsolete
-            if new_sim == 0:
+            if new_sim <= self.sim_th:
                 sub_mapping.gen_active = False
 
                 if DEBUG_TERMS or sub_mapping.element1 in debug_set or sub_mapping.element2 in debug_set:
                     print(
-                        f" deleted Term Tuple {sub_mapping.element1.name},{sub_mapping.element2.name} with Similarity = 0")
+                        f" deleted Element Tuple {sub_mapping.element1.name},{sub_mapping.element2.name} with Similarity = 0")
 
             # Insert mapping_func in prio_dict with updated similarity score
             else:
@@ -86,7 +87,7 @@ class ExpansionStrategy:
 
             sim = new_mapping.compute_similarity()
             exp_mappings.add((element1, element2))
-            if sim > 0:
+            if sim > self.sim_th:
                 # Insert mapping_func into priority_queue
                 if DEBUG_TERMS or element1 in debug_set or element2 in debug_set:
                     print(f"expanded tuple: {new_mapping.element1.name},{new_mapping.element2.name}, sim: {sim}")

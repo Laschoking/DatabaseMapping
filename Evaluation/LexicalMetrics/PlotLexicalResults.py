@@ -86,7 +86,7 @@ def lineplot_alpha_metrics():
         new_avg_list.append(metric + "_avg")
 
     df = df.melt(id_vars=['ALPHA'],value_vars=new_avg_list,value_name='precision',var_name='metric')
-    #fig = px.box(res_df,x='nr_fake_pairs',y='metric_res')
+    #fig = px.box(res_df_w_alpha,x='nr_fake_pairs',y='metric_res')
     #fig.write_image("plots/fake_pair_box_plots.png")
 
     #fig.show()
@@ -107,7 +107,7 @@ def lineplot_fake_pairs_metrics():
         new_avg_list.append(metric + "_avg")
 
     df = df.melt(id_vars=['nr_fake_pairs'],value_vars=new_avg_list,value_name='precision',var_name='metric')
-    #fig = px.box(res_df,x='nr_fake_pairs',y='metric_res')
+    #fig = px.box(res_df_w_alpha,x='nr_fake_pairs',y='metric_res')
     #fig.write_image("plots/fake_pair_box_plots.png")
 
     #fig.show()

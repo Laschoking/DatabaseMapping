@@ -1,7 +1,0 @@
-delete   from DbConfig
-where    ROWID not in
-         (
-         select  min(ROWID)
-         from    DbConfig
-         group by db_config_id
-         );

@@ -52,7 +52,7 @@ simple() {
 #  timeout 15m $SOUFFLE $PROGRAM \
 #  -F $FACTS -w -g $output.cpp $OPTIONS ||
 #  echo "0,0,0,0" > $temp_file
-  ## get rid of the bloody trailing newline that time causes
+  ## get index of the bloody trailing newline that time causes
 #  perl -pi -e 'chomp if eof' $temp_file
 
   /usr/bin/time -f "%e,%U,%S,%M" -o $result \
@@ -102,7 +102,7 @@ while true ; do
   case "$1" in
      --pretty|-p)   PRETTY=true 
                     ;;
-     --facts|-F)    FACTS=$2 
+     --facts|-F)    FACTS=$2
                     shift 
                     ;; 
      --instance|-I) SOUFFLE=$2 

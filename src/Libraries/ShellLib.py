@@ -26,7 +26,7 @@ def clear_file(file_path):
 
 
 def init_synth_souffle_database(db_config, db_name, fact_path,force_gen):
-    gen_facts_path = PathLib.datalog_programs_path.joinpath(db_config.db_type).joinpath(db_config.file)
+    gen_facts_path = PathLib.datalog_programs_path.joinpath(db_config.db_type).joinpath(db_config.file_name)
     os.chdir(gen_facts_path)
     command = ["./gen_facts.sh", "small", str(fact_path)]
     p = subprocess.run(command, capture_output=True)
@@ -45,11 +45,11 @@ def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen)
     os.chdir(PathLib.DOOP_BASE)
     clear_directory(fact_path)
 
-    java_path = Path.joinpath(PathLib.java_source_dir, db_config.file).joinpath(db_version).joinpath(
+    java_path = Path.joinpath(PathLib.java_source_dir, db_config.file_name).joinpath(db_version).joinpath(
         db_file_name + ".java")
-    jar_path1 = Path.joinpath(PathLib.java_source_dir, db_config.file).joinpath(db_version).joinpath(
+    jar_path1 = Path.joinpath(PathLib.java_source_dir, db_config.file_name).joinpath(db_version).joinpath(
         db_version + ".jar")
-    jar_path2 = Path.joinpath(PathLib.java_source_dir, db_config.file).joinpath(db_version).joinpath(
+    jar_path2 = Path.joinpath(PathLib.java_source_dir, db_config.file_name).joinpath(db_version).joinpath(
         db_file_name + db_version + ".jar")
 
     # Check if .java file exists
@@ -64,7 +64,7 @@ def create_doop_facts(db_config, db_version, db_file_name, fact_path, force_gen)
         raise FileNotFoundError("Java & Jar File do not exist: \n" + str(java_path) + "\n"+ str(jar_path1) + "\n"+ str(jar_path2))
 
     # cannot name the java or jar files appart bc. javac would complain that Class name & file-name differ
-    doop_out_name = db_config.file + "_" + db_version
+    doop_out_name = db_config.file_name + "_" + db_version
     doop_out_path = PathLib.DOOP_OUT.joinpath(doop_out_name).joinpath("database")
 
     # Skip fact-generation, if the target directory contains facts already
@@ -111,6 +111,8 @@ def chase_nemo(dl_rule_path, fact_path, result_path):
         raise ChildProcessError(res.stderr.decode("utf-8"))
 
     nemo_runtime = split_nemo_stdout(res.stdout)
+    # Convert milliseconds to seconds
+    nemo_runtime /= 1000
     os.chdir(PathLib.DOOP_BASE)
     return nemo_runtime
 

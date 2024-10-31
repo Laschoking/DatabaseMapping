@@ -1,4 +1,4 @@
-from src.Classes.QuantileAnchorTerms import QuantileAnchorTerms
+from src.Classes.QuantileAnchorElements import QuantileAnchorElements
 from src.ExpansionStrategies.IterativeAnchorExpansion import IterativeAnchorExpansion
 from src.StructuralSimilarityMetrics.FactPairSimilarity import FactPairSimilarity
 from src.StructuralSimilarityMetrics.FactSimilarity import FactSimilarity
@@ -18,7 +18,7 @@ if __name__ == "__main__":
     RES_TABLE = 'StructuralResults'
 
     # Set Anchor Quantile to 0, so the cartesian product is expanded (all possible combinations)
-    q_0 = QuantileAnchorTerms(0)
+    q_0 = QuantileAnchorElements(0)
 
     # Set Expansion Strategies
     stat_cross_product = IterativeAnchorExpansion(anchor_quantile=q_0, DYNAMIC=False)

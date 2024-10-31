@@ -28,7 +28,7 @@ base_dir = "/out/"
 
 Engine = Enum("Engine", ["SOUFFLE", "NEMO"])
 NR_LEFT = 1
-NR_RIGHT = 10
+NR_RIGHT = 2
 NR_TARGET = 0
 
 

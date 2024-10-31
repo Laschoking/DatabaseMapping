@@ -141,7 +141,7 @@ if __name__ == "__main__":
         for (NR_FAKE_PAIRS, USE_NR_SIM, ALPHA) in combinations:
             new_res = pd.Series({'resource' : SQL_TABLE, 'nr_pairs' : MAX_PAIRS, 'nr_fake_pairs' : NR_FAKE_PAIRS,
                                  'use_nr_sim' : str(USE_NR_SIM),'ALPHA' : ALPHA})
-            # Convert the bool USE_NR_SIM to string, because comparison with res_df is difficult due to facts-type issues
+            # Convert the bool USE_NR_SIM to string, because comparison with res_df_w_alpha is difficult due to facts-type issues
 
             # Skip this combination, if it was already computed for the database
             reduced_df = existing_lex_res[['resource','nr_pairs','nr_fake_pairs','use_nr_sim','ALPHA']]

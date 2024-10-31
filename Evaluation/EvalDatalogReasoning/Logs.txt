@@ -1,5 +1,50 @@
-/home/kotname/Documents/Diplom/Code/DatabaseMapping/venv10/lib/python3.10/site-packages/pandas/io/sql.py:1725: SAWarning: Skipped unsupported reflection of expression-based index ix_DLResults_index
-  self.meta.reflect(bind=self.con, only=[table_name], views=True)
-file: aws-lambda-java-log_4j2-1.0.0_4j2-1.6.0
-Run datalog program: CFG
-mapping_id: 8
+file: annotations-_13.0_26.0.1
+mapping_id: 91
+Run datalog program merged: CFG
+mapping_id: 91
+Run datalog program merged: PointerAnalysis
+file: checker-qual-_3.0.0_3.48.1
+mapping_id: 91
+Run datalog program merged: CFG
+mapping_id: 91
+Run datalog program merged: PointerAnalysis
+file: commons-logging-api-_1.0.3_1.1
+mapping_id: 91
+Run datalog program merged: CFG
+mapping_id: 91
+Run datalog program merged: PointerAnalysis
+file: groovy-datetime-_2.5.0_3.0.22
+mapping_id: 91
+Run datalog program merged: CFG
+mapping_id: 91
+Run datalog program merged: PointerAnalysis
+file: jakarta.validation-api-_2.0.1_3.1.0
+mapping_id: 91
+Run datalog program merged: CFG
+mapping_id: 91
+Run datalog program merged: PointerAnalysis
+file: jamm-_0.3.3_0.4.0
+mapping_id: 91
+Run datalog program merged: CFG
+mapping_id: 91
+Run datalog program merged: PointerAnalysis
+file: jmh-generator-annprocess-_1.37_1.9
+mapping_id: 91
+Run datalog program merged: CFG
+mapping_id: 91
+Run datalog program merged: PointerAnalysis
+file: noark-game-_3.2.0.Final_3.4.0-Final
+mapping_id: 91
+Run datalog program merged: CFG
+mapping_id: 91
+Run datalog program merged: PointerAnalysis
+file: org.osgi.service.component.annotations-_1.3.0_1.5.1
+mapping_id: 91
+Run datalog program merged: CFG
+mapping_id: 91
+Run datalog program merged: PointerAnalysis
+file: scala-guice__2.9.2-3.0.1_3-7.0.0
+mapping_id: 91
+Run datalog program merged: CFG
+mapping_id: 91
+Run datalog program merged: PointerAnalysis
