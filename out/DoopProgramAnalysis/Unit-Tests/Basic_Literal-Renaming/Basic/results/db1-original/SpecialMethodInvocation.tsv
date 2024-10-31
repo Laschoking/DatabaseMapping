@@ -1,5 +1,0 @@
-<BasicMethod: void <init>()>/java.lang.Object.<init>/0	1	<java.lang.Object: void <init>()>	<BasicMethod: void <init>()>/this#_0	<BasicMethod: void <init>()>
-<BasicMethod: void main(java.lang.String[])>/BasicMethod.<init>/0	2	<BasicMethod: void <init>()>	<BasicMethod: void main(java.lang.String[])>/$stack4	<BasicMethod: void main(java.lang.String[])>
-<BasicMethod: void main(java.lang.String[])>/java.io.InputStreamReader.<init>/0	8	<java.io.InputStreamReader: void <init>(java.io.InputStream)>	<BasicMethod: void main(java.lang.String[])>/$stack7	<BasicMethod: void main(java.lang.String[])>
-<BasicMethod: void main(java.lang.String[])>/java.io.BufferedReader.<init>/0	9	<java.io.BufferedReader: void <init>(java.io.Reader)>	<BasicMethod: void main(java.lang.String[])>/$stack6	<BasicMethod: void main(java.lang.String[])>
-<BasicMethod: void main(java.lang.String[])>/java.lang.StringBuilder.<init>/0	13	<java.lang.StringBuilder: void <init>()>	<BasicMethod: void main(java.lang.String[])>/$stack9	<BasicMethod: void main(java.lang.String[])>

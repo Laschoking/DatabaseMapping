@@ -1,4 +1,0 @@
-<BasicMethod: void main(java.lang.String[])>/java.io.BufferedReader.readLine/0	<BasicMethod: void main(java.lang.String[])>/s#_12
-<BasicMethod: void main(java.lang.String[])>/java.lang.StringBuilder.append/0	<BasicMethod: void main(java.lang.String[])>/$stack11
-<BasicMethod: void main(java.lang.String[])>/java.lang.StringBuilder.append/1	<BasicMethod: void main(java.lang.String[])>/$stack12
-<BasicMethod: void main(java.lang.String[])>/java.lang.StringBuilder.toString/0	<BasicMethod: void main(java.lang.String[])>/ret#_14

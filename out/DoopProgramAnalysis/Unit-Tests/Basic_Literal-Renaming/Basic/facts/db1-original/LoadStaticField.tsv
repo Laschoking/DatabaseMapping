@@ -1,2 +1,0 @@
-<BasicMethod: void main(java.lang.String[])>/read-field-in/0	7	<BasicMethod: void main(java.lang.String[])>/$stack8	<java.lang.System: java.io.InputStream in>	<BasicMethod: void main(java.lang.String[])>
-<BasicMethod: void main(java.lang.String[])>/read-field-out/0	18	<BasicMethod: void main(java.lang.String[])>/$stack13	<java.lang.System: java.io.PrintStream out>	<BasicMethod: void main(java.lang.String[])>

@@ -1,8 +1,0 @@
-<simplejavacalculator.UI: void <init>()>/assign/1	new_var_1	10	1
-<simplejavacalculator.UI: void <init>()>/assign/25	new_var_1	10	1
-<simplejavacalculator.Calculator$BiOperatorModes: void <clinit>()>/assign/6	new_var_1	new_var_2	1
-<simplejavacalculator.Calculator$MonoOperatorModes: void <clinit>()>/assign/9	new_var_1	new_var_3	1
-<simplejavacalculator.Calculator$MonoOperatorModes: void <clinit>()>/assign/9	0	9	10
-<simplejavacalculator.UI: void <init>()>/assign/1	0	10	10
-<simplejavacalculator.UI: void <init>()>/assign/27	0	10	10
-<simplejavacalculator.Calculator$BiOperatorModes: void <clinit>()>/assign/6	0	6	10
