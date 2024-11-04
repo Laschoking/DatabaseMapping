@@ -2,7 +2,7 @@ import pandas as pd
 from prettytable import PrettyTable
 from typing import Dict, Union
 import pandas as pd
-
+from PathLib import ID_BOTH,ID_RIGHT,ID_LEFT
 
 def compute_overlap_dbs(db1, db2, print_flag=False) -> pd.Series:
     l_facts_db1 = 0
@@ -67,12 +67,13 @@ def count_overlap_merge_db(merge_db) -> Dict[str,Union[int,float]]:
         # access last column that holds db_config_id for each fact
         val_count = df.iloc[:, -1].value_counts()
         ind = val_count.index
-        if '1' in ind:
-            c_left += val_count.at['1']
-        if '2' in ind:
-            c_right += val_count.at['2']
-        if '0' in ind:
-            c_both += val_count.at['0']
+        # ID_LEFT = 1, ID_RIGHT = 2, NR_BOTH_0
+        if ID_LEFT in ind:
+            c_left += val_count.at[ID_LEFT]
+        if ID_RIGHT in ind:
+            c_right += val_count.at[ID_RIGHT]
+        if ID_BOTH in ind:
+            c_both += val_count.at[ID_BOTH]
     # the intuition is that matching 5 rows from 7 in each db is a success of 5/7
     total_facts = min(c_left, c_right) + c_both
     if total_facts > 0:

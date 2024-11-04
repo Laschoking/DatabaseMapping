@@ -13,7 +13,7 @@ if __name__ == "__main__":
     # Important parameters:
     RUN_NR = [1]
     USE = 'expansion-same-lib%'
-    #RES_TABLE = 'ExpansionResults_MIX_Weight1'
+    #RES_TABLE = 'ExpansionResults_MIX_No_Gamma'
 
     # Setup 3 Anchor values: (this will expand the 10/5/2% of elements with the highest degree)
     quantiles = [QuantileAnchorElements(0.95)] #[QuantileAnchorElements(0.9), QuantileAnchorElements(0.95), QuantileAnchorElements(0.98)]
@@ -40,5 +40,5 @@ if __name__ == "__main__":
     dice = Dice(n=2, imp_alpha=0)  # best value 0.1
     metrics = [MixedSimilarityMetric(struct_ratio=s, lex_metric=dice, imp_alpha=0, struct_metric=fp_sim) for s in
                ratios]
-    run_mappings_on_dbs(USE, 'ExpansionResults_MIX_Weight1', expansions, metrics, nr_runs=RUN_NR)
+    run_mappings_on_dbs(USE, 'ExpansionResults_MIX_No_Gamma', expansions, metrics, nr_runs=RUN_NR)
 

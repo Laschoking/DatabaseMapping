@@ -33,7 +33,7 @@ def plot_grouped_overlap_mixed_metrics(overlap_df):
               )                      ,
     legend_title_text = 'Importance Weight',
     xaxis_title='Gamma',
-    yaxis_title='Overlap'
+    yaxis_title='Overlap in %'
 
                       )
 
@@ -102,16 +102,16 @@ if __name__ == "__main__":
     db_config_df = sql_con.query_table(query="SELECT * FROM DbConfig WHERE use LIKE \'expansion-same-lib\' ;")
     single_db_char_df = sql_con.get_table(table="DbFingerPrint")
     res_df_w_alpha = sql_con.query_table(query="SELECT * FROM  ExpansionResults ")
-    res_df_wo_alpha = sql_con.query_table(query="SELECT * FROM  ExpansionResults_MIX_Weight1 ")
+    res_df_wo_alpha = sql_con.query_table(query="SELECT * FROM  ExpansionResults_MIX_No_Gamma ")
     res_df_w_alpha['alpha_weight'] = True
     res_df_wo_alpha['alpha_weight'] = False
     res_df_w_alpha = pd.concat([res_df_w_alpha, res_df_wo_alpha], axis=0)
     # for runtimes only
     final_result_df = sql_con.get_table('FinalMappingResults')
-    plot_runtime(res_df_w_alpha,final_result_df)
-    '''
+    #plot_runtime(res_df_w_alpha,final_result_df)
 
-    # ExpansionResults_MIX_Weight1
+
+    # ExpansionResults_MIX_No_Gamma
     #res_df_w_alpha = sql_con.get_table(table="ExpansionResults")
     mapping_df = sql_con.query_table(query="SELECT * FROM MappingSetup WHERE metric=\"FactPair-Sim_Dice\"")
 
@@ -148,4 +148,3 @@ if __name__ == "__main__":
     print(overlap_df[['metric','alpha_weight','struct_ratio', 'overlap_perc','perc_c_m', 'computed_mappings','runtime']].to_latex())
 
 
-'''

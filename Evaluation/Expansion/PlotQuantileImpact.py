@@ -26,7 +26,7 @@ if __name__ == "__main__":
     single_db_char_df = sql_con.get_table(table="DbFingerPrint")
     res_df = sql_con.query_table(query="SELECT * FROM  \'ExpansionResults\' ")
 
-    # ExpansionResults_MIX_Weight1
+    # ExpansionResults_MIX_No_Gamma
     #res_df_w_alpha = sql_con.get_table(table="ExpansionResults")
 
     mapping_df =sql_con.query_table(query="SELECT * FROM MappingSetup WHERE metric=\"Dice\" or metric=\"FactPair-Sim\"; ")

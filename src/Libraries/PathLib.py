@@ -1,16 +1,24 @@
-# This file defines all necessary fact_paths for the comparison pipeline
+
 from pathlib import Path
 from enum import Enum
 import pandas as pd
 from src.Libraries import SqlConnector
-# create path to doop base and its output dir
+
+""" Define the  directory structure of this project """
+
+# create path to doop and its output dir and to the Nemo-Engine
+# INSERT YOUR OWN PATHS HERE
 DOOP_BASE = Path("/home/kotname/Documents/Diplom/Code/doop/")
 DOOP_OUT = Path("/home/kotname/Documents/Diplom/Code/doop/out/")
+
+# from this path we will call $NEMO_ENGINE/target/release/nmo
 NEMO_ENGINE = Path("/home/kotname/Documents/Diplom/Code/nemo/nemo")
 
 
-# this path will be the base for all of our file manipulation
+# This path will be the foundation of this project
 base_diff_path = Path("/home/kotname/Documents/Diplom/Code/DatabaseMapping")
+
+# Setup internal structure
 datalog_programs_path = base_diff_path.joinpath("Datalog-Programs")
 base_out_path = base_diff_path.joinpath("out")
 java_source_dir = base_diff_path.joinpath("Java-Programs")
@@ -21,26 +29,14 @@ eval_db_path = eval_dir.joinpath('Evaluation.db')
 sql_con = SqlConnector.SqlConnector(eval_db_path)
 
 
-SOUFFLE_ANALYSIS_BASE = Path("/home/kotname/Documents/Diplom/Code/ex_souffle/Analysis")
-DOOP_PA_BASE = Path("/home/kotname/Documents/Diplom/Code/DiffAnalysis/Datalog-Programs/DoopProgramAnalysis")
-SYNTHETIC_EXAMPLES_BASE = Path("/home/kotname/Documents/Diplom/Code/DiffAnalysis/Datalog-Programs/SouffleSynthetic")
 base_dir = "/out/"
 
 Engine = Enum("Engine", ["SOUFFLE", "NEMO"])
-NR_LEFT = 1
-NR_RIGHT = 2
-NR_TARGET = 0
 
-
-def add_run_nr_to_path(file_path, run_nr):
-    stem = file_path.stem
-    suffix = file_path.suffix
-    new_stem = f"{stem}_{run_nr}"
-    return file_path.with_name(new_stem).with_suffix(suffix)
-
-
-def get_mapping_dir(path,mapping_id,run_nr):
-    return path.joinpath(f"id_{mapping_id}_run_{run_nr}")
+# The 3 identifiers that are added to the merged databases
+ID_BOTH = 0
+ID_LEFT = 1
+ID_RIGHT = 2
 
 
 

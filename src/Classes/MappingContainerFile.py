@@ -1,12 +1,10 @@
 import pandas as pd
 from bidict import bidict
-
 from src.Classes.DataContainerFile import DbInstance
 from src.Classes import DomainElements, Facts
 from src.Libraries import ShellLib
 from operator import attrgetter
-from src.Libraries import PathLib
-import copy
+from src.Libraries.PathLib import ID_BOTH,ID_LEFT,ID_RIGHT
 
 
 # each MappingContainer has a Strategy and a similarity metric
@@ -177,15 +175,15 @@ class MappingContainer:
                 cols = list(range(l_cols))
                 df = pd.merge(df1, df2, how='outer', on=cols, indicator=str(l_cols))
                 df[str(l_cols)] = df[str(l_cols)].astype(str).replace(
-                    {'both': '0', 'left_only': '1', "right_only": '2'})
+                    {'both': ID_BOTH, 'left_only': ID_LEFT, "right_only": ID_RIGHT})
             elif not df1.empty:
                 l_cols = len(df1.columns)
                 df = df1.copy()
-                df[l_cols] = '1'
+                df[l_cols] = ID_LEFT
             elif not df2.empty:
                 l_cols = len(df2.columns)
                 df = df2.copy()
-                df[l_cols] = '2'
+                df[l_cols] = ID_RIGHT
             else:
                 df = pd.DataFrame()
             to_db.insert_df(file_name, df)
@@ -199,9 +197,9 @@ class MappingContainer:
         # pa_additionally_elements = set()
         for file_name, df in self.db_merged_results.files.items():
             if not df.empty:
-                df0 = df[df.iloc[:, -1] == '0']
-                df1 = df[df.iloc[:, -1] == '1']
-                df2 = df[df.iloc[:, -1] == '2']
+                df0 = df[df.iloc[:, -1] == ID_BOTH]
+                df1 = df[df.iloc[:, -1] == ID_LEFT]
+                df2 = df[df.iloc[:, -1] == ID_RIGHT]
                 df1 = pd.concat([df1, df0], axis=0, ignore_index=True)
                 df1 = df1.iloc[:, :-1]
                 df2 = pd.concat([df2, df0], axis=0, ignore_index=True)
