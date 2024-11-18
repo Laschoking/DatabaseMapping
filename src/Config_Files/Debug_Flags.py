@@ -1,5 +1,5 @@
-DEBUG_TERMS = False
-DEBUG_RECORDS = False
+DEBUG_TERMS = True
+DEBUG_RECORDS = True
 debug_element_names1 = set()  # set(["gocd"])
 debug_element_names2 = set()  # set(["gocd"])
 debug_set = set()  # set(["A","B","C","D","E","F","G","H"])
