@@ -12,7 +12,7 @@ if __name__ == "__main__":
     #########################################################
     # Important parameters:
     RUN_NR = [1]
-    USE = 'latex'
+    USE = 'test_Del_Record1'
 
     # Set Expansion Strategies
     expansions = [IterativeAnchorExpansion(anchor_quantile=QuantileAnchorElements(0.8),DYNAMIC=True)]
@@ -24,4 +24,4 @@ if __name__ == "__main__":
     # Use classical weight for both metrics
     fp_sim = FactPairSimilarity(imp_alpha=0.2)
 
-    run_mappings_on_dbs(USE, 'Testcases', expansions, [fp_sim],nr_runs=RUN_NR)
+    run_mappings_on_dbs(USE, 'TestCases', expansions, [fp_sim],nr_runs=RUN_NR)
